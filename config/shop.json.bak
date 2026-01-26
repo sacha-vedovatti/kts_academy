@@ -1,0 +1,340 @@
+{
+  "items": [
+    {
+      "key": "pokeball",
+      "category": "BALLS",
+      "itemId": "cobblemon:poke_ball",
+      "displayName": "Poké Ball",
+      "buyPrice": 1000.0,
+      "sellPrice": 500.0
+    },
+    {
+      "key": "greatball",
+      "category": "BALLS",
+      "itemId": "cobblemon:great_ball",
+      "displayName": "Great Ball",
+      "buyPrice": 2500.0,
+      "sellPrice": 1250.0
+    },
+    {
+      "key": "ultraball",
+      "category": "BALLS",
+      "itemId": "cobblemon:ultra_ball",
+      "displayName": "Ultra Ball",
+      "buyPrice": 7500.0,
+      "sellPrice": 3750.0
+    },
+    {
+      "key": "premierball",
+      "category": "BALLS",
+      "itemId": "cobblemon:premier_ball",
+      "displayName": "Premier Ball",
+      "buyPrice": 1500.0,
+      "sellPrice": 750.0
+    },
+    {
+      "key": "luxuryball",
+      "category": "BALLS",
+      "itemId": "cobblemon:luxury_ball",
+      "displayName": "Luxury Ball",
+      "buyPrice": 8000.0,
+      "sellPrice": 4000.0
+    },
+    {
+      "key": "healball",
+      "category": "BALLS",
+      "itemId": "cobblemon:heal_ball",
+      "displayName": "Heal Ball",
+      "buyPrice": 3000.0,
+      "sellPrice": 1500.0
+    },
+    {
+      "key": "quickball",
+      "category": "BALLS",
+      "itemId": "cobblemon:quick_ball",
+      "displayName": "Quick Ball",
+      "buyPrice": 4000.0,
+      "sellPrice": 2000.0
+    },
+    {
+      "key": "duskball",
+      "category": "BALLS",
+      "itemId": "cobblemon:dusk_ball",
+      "displayName": "Dusk Ball",
+      "buyPrice": 4500.0,
+      "sellPrice": 2250.0
+    },
+    {
+      "key": "timerball",
+      "category": "BALLS",
+      "itemId": "cobblemon:timer_ball",
+      "displayName": "Timer Ball",
+      "buyPrice": 4500.0,
+      "sellPrice": 2250.0
+    },
+    {
+      "key": "repeatball",
+      "category": "BALLS",
+      "itemId": "cobblemon:repeat_ball",
+      "displayName": "Repeat Ball",
+      "buyPrice": 4500.0,
+      "sellPrice": 2250.0
+    },
+    {
+      "key": "netball",
+      "category": "BALLS",
+      "itemId": "cobblemon:net_ball",
+      "displayName": "Net Ball",
+      "buyPrice": 4500.0,
+      "sellPrice": 2250.0
+    },
+    {
+      "key": "diveball",
+      "category": "BALLS",
+      "itemId": "cobblemon:dive_ball",
+      "displayName": "Dive Ball",
+      "buyPrice": 4500.0,
+      "sellPrice": 2250.0
+    },
+    {
+      "key": "nestball",
+      "category": "BALLS",
+      "itemId": "cobblemon:nest_ball",
+      "displayName": "Nest Ball",
+      "buyPrice": 4500.0,
+      "sellPrice": 2250.0
+    },
+    {
+      "key": "levelball",
+      "category": "BALLS",
+      "itemId": "cobblemon:level_ball",
+      "displayName": "Level Ball",
+      "buyPrice": 6000.0,
+      "sellPrice": 3000.0
+    },
+    {
+      "key": "lureball",
+      "category": "BALLS",
+      "itemId": "cobblemon:lure_ball",
+      "displayName": "Lure Ball",
+      "buyPrice": 6000.0,
+      "sellPrice": 3000.0
+    },
+    {
+      "key": "moonball",
+      "category": "BALLS",
+      "itemId": "cobblemon:moon_ball",
+      "displayName": "Moon Ball",
+      "buyPrice": 6000.0,
+      "sellPrice": 3000.0
+    },
+    {
+      "key": "friendball",
+      "category": "BALLS",
+      "itemId": "cobblemon:friend_ball",
+      "displayName": "Friend Ball",
+      "buyPrice": 6000.0,
+      "sellPrice": 3000.0
+    },
+    {
+      "key": "loveball",
+      "category": "BALLS",
+      "itemId": "cobblemon:love_ball",
+      "displayName": "Love Ball",
+      "buyPrice": 6000.0,
+      "sellPrice": 3000.0
+    },
+    {
+      "key": "fastball",
+      "category": "BALLS",
+      "itemId": "cobblemon:fast_ball",
+      "displayName": "Fast Ball",
+      "buyPrice": 6000.0,
+      "sellPrice": 3000.0
+    },
+    {
+      "key": "heavyball",
+      "category": "BALLS",
+      "itemId": "cobblemon:heavy_ball",
+      "displayName": "Heavy Ball",
+      "buyPrice": 6000.0,
+      "sellPrice": 3000.0
+    },
+    {
+      "key": "pokebag_small",
+      "category": "BAGS",
+      "itemId": "cobblemon:small_pokebag",
+      "displayName": "Small Pokébag",
+      "buyPrice": 2000.0,
+      "sellPrice": 1000.0
+    },
+    {
+      "key": "pokebag_medium",
+      "category": "BAGS",
+      "itemId": "cobblemon:medium_pokebag",
+      "displayName": "Medium Pokébag",
+      "buyPrice": 5000.0,
+      "sellPrice": 2500.0
+    },
+    {
+      "key": "pokebag_large",
+      "category": "BAGS",
+      "itemId": "cobblemon:large_pokebag",
+      "displayName": "Large Pokébag",
+      "buyPrice": 12000.0,
+      "sellPrice": 6000.0
+    },
+    {
+      "key": "pokebag_huge",
+      "category": "BAGS",
+      "itemId": "cobblemon:huge_pokebag",
+      "displayName": "Huge Pokébag",
+      "buyPrice": 25000.0,
+      "sellPrice": 12500.0
+    },
+    {
+      "key": "pokebag_small_alt",
+      "category": "BAGS",
+      "itemId": "cobblemon:small_poke_bag",
+      "displayName": "Small Pokébag",
+      "buyPrice": 2000.0,
+      "sellPrice": 1000.0
+    },
+    {
+      "key": "pokebag_medium_alt",
+      "category": "BAGS",
+      "itemId": "cobblemon:medium_poke_bag",
+      "displayName": "Medium Pokébag",
+      "buyPrice": 5000.0,
+      "sellPrice": 2500.0
+    },
+    {
+      "key": "pokebag_large_alt",
+      "category": "BAGS",
+      "itemId": "cobblemon:large_poke_bag",
+      "displayName": "Large Pokébag",
+      "buyPrice": 12000.0,
+      "sellPrice": 6000.0
+    },
+    {
+      "key": "pokebag_huge_alt",
+      "category": "BAGS",
+      "itemId": "cobblemon:huge_poke_bag",
+      "displayName": "Huge Pokébag",
+      "buyPrice": 25000.0,
+      "sellPrice": 12500.0
+    },
+    {
+      "key": "pokebag_small_alt2",
+      "category": "BAGS",
+      "itemId": "cobblemon:poke_bag_small",
+      "displayName": "Small Pokébag",
+      "buyPrice": 2000.0,
+      "sellPrice": 1000.0
+    },
+    {
+      "key": "pokebag_medium_alt2",
+      "category": "BAGS",
+      "itemId": "cobblemon:poke_bag_medium",
+      "displayName": "Medium Pokébag",
+      "buyPrice": 5000.0,
+      "sellPrice": 2500.0
+    },
+    {
+      "key": "pokebag_large_alt2",
+      "category": "BAGS",
+      "itemId": "cobblemon:poke_bag_large",
+      "displayName": "Large Pokébag",
+      "buyPrice": 12000.0,
+      "sellPrice": 6000.0
+    },
+    {
+      "key": "pokebag_huge_alt2",
+      "category": "BAGS",
+      "itemId": "cobblemon:poke_bag_huge",
+      "displayName": "Huge Pokébag",
+      "buyPrice": 25000.0,
+      "sellPrice": 12500.0
+    },
+    {
+      "key": "fire_stone",
+      "category": "STONES",
+      "itemId": "cobblemon:fire_stone",
+      "displayName": "Fire Stone",
+      "buyPrice": 3000.0,
+      "sellPrice": 1500.0
+    },
+    {
+      "key": "water_stone",
+      "category": "STONES",
+      "itemId": "cobblemon:water_stone",
+      "displayName": "Water Stone",
+      "buyPrice": 3000.0,
+      "sellPrice": 1500.0
+    },
+    {
+      "key": "thunder_stone",
+      "category": "STONES",
+      "itemId": "cobblemon:thunder_stone",
+      "displayName": "Thunder Stone",
+      "buyPrice": 3000.0,
+      "sellPrice": 1500.0
+    },
+    {
+      "key": "leaf_stone",
+      "category": "STONES",
+      "itemId": "cobblemon:leaf_stone",
+      "displayName": "Leaf Stone",
+      "buyPrice": 3000.0,
+      "sellPrice": 1500.0
+    },
+    {
+      "key": "moon_stone",
+      "category": "STONES",
+      "itemId": "cobblemon:moon_stone",
+      "displayName": "Moon Stone",
+      "buyPrice": 3500.0,
+      "sellPrice": 1750.0
+    },
+    {
+      "key": "sun_stone",
+      "category": "STONES",
+      "itemId": "cobblemon:sun_stone",
+      "displayName": "Sun Stone",
+      "buyPrice": 3500.0,
+      "sellPrice": 1750.0
+    },
+    {
+      "key": "dawn_stone",
+      "category": "STONES",
+      "itemId": "cobblemon:dawn_stone",
+      "displayName": "Dawn Stone",
+      "buyPrice": 4000.0,
+      "sellPrice": 2000.0
+    },
+    {
+      "key": "dusk_stone",
+      "category": "STONES",
+      "itemId": "cobblemon:dusk_stone",
+      "displayName": "Dusk Stone",
+      "buyPrice": 4000.0,
+      "sellPrice": 2000.0
+    },
+    {
+      "key": "ice_stone",
+      "category": "STONES",
+      "itemId": "cobblemon:ice_stone",
+      "displayName": "Ice Stone",
+      "buyPrice": 4000.0,
+      "sellPrice": 2000.0
+    },
+    {
+      "key": "shiny_stone",
+      "category": "STONES",
+      "itemId": "cobblemon:shiny_stone",
+      "displayName": "Shiny Stone",
+      "buyPrice": 4000.0,
+      "sellPrice": 2000.0
+    }
+  ]
+}
