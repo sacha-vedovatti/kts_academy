@@ -29,6 +29,8 @@ public final class QuestManager {
 	private static final Map<String, QuestDef> QUESTS = new LinkedHashMap<>();
 	private static final Map<String, QuestCategory> CATEGORIES = new LinkedHashMap<>();
 	private static final Map<UUID, QuestProfile> PROFILES = new ConcurrentHashMap<>();
+	private static final Map<UUID, Long> LAST_HARVEST_DEBUG_MS = new ConcurrentHashMap<>();
+	private static final long HARVEST_DEBUG_MS = 2000L;
 
 	private static volatile boolean INITIALIZED = false;
 	private static Path questsFile;
@@ -114,6 +116,45 @@ public final class QuestManager {
 		}
 	}
 
+	/**
+	 * Resets all quest progress for all players.
+	 * This clears in-memory profiles and rewrites quests_progress.json.
+	 */
+	public static void resetAllProgress() {
+		init();
+		PROFILES.clear();
+		try {
+			if (progressFile != null) {
+				Files.deleteIfExists(progressFile);
+			}
+		} catch (IOException ignored) {
+		}
+		save();
+		LOGGER.warn("[CobbleEconomy] Quests progress reset for ALL players");
+	}
+
+	/**
+	 * Resets quest progress for a single player.
+	 */
+	public static void resetProgress(UUID playerId) {
+		init();
+		if (playerId == null) return;
+		PROFILES.remove(playerId);
+		save();
+		LOGGER.warn("[CobbleEconomy] Quests progress reset for player={}", playerId);
+	}
+
+	/**
+	 * Overwrites quests.json with the built-in defaults and reloads quests.
+	 */
+	public static void resetConfigToDefaults() {
+		init();
+		if (questsFile == null) return;
+		writeDefaultConfig(questsFile);
+		reload();
+		LOGGER.warn("[CobbleEconomy] Quests config reset to defaults");
+	}
+
 	public static QuestProfile profile(ServerPlayerEntity player) {
 		init();
 		return PROFILES.computeIfAbsent(player.getUuid(), id -> new QuestProfile());
@@ -151,6 +192,7 @@ public final class QuestManager {
 		if (speciesKey.isBlank()) {
 			return;
 		}
+		final boolean isShiny = isPokemonShiny(pokemon);
 
 		QuestProfile profile = profile(player);
 		boolean changed = false;
@@ -171,6 +213,17 @@ public final class QuestManager {
 			int goalNow = effectiveGoal(quest, qp);
 
 			if (quest.type() == QuestDef.QuestType.CAPTURE_ANY) {
+				if (qp.progress < goalNow) {
+					qp.progress += 1;
+					changed = true;
+					if (before < goalNow && qp.progress >= goalNow) {
+						announceQuestCompleted(player, quest, qp);
+					}
+				}
+				continue;
+			}
+			if (quest.type() == QuestDef.QuestType.CAPTURE_SHINY_ANY) {
+				if (!isShiny) continue;
 				if (qp.progress < goalNow) {
 					qp.progress += 1;
 					changed = true;
@@ -383,10 +436,16 @@ public final class QuestManager {
 		QuestProfile profile = profile(player);
 		boolean changed = false;
 
+		int harvestQuestCount = 0;
+		boolean anyMatched = false;
+		int changedQuestCount = 0;
+
 		for (QuestDef quest : QUESTS.values()) {
 			if (quest.type() != QuestDef.QuestType.HARVEST_ITEM) continue;
+			harvestQuestCount += 1;
 			String target = normalizeItemTarget(quest.target());
 			if (!targetMatchesItem(target, harvested)) continue;
+			anyMatched = true;
 
 			QuestProgress qp = profile.quests.computeIfAbsent(quest.id(), k -> new QuestProgress());
 			if (qp.claimed) continue;
@@ -394,11 +453,28 @@ public final class QuestManager {
 			int goalNow = effectiveGoal(quest, qp);
 
 			if (qp.progress < goalNow) {
-				qp.progress = Math.min(goalNow, qp.progress + amount);
+				int next = Math.min(goalNow, qp.progress + amount);
+				qp.progress = next;
 				changed = true;
+				changedQuestCount += 1;
 				if (before < goalNow && qp.progress >= goalNow) {
 					announceQuestCompleted(player, quest, qp);
 				}
+			}
+		}
+
+		long now = System.currentTimeMillis();
+		Long last = LAST_HARVEST_DEBUG_MS.get(player.getUuid());
+		if (last == null || now - last > HARVEST_DEBUG_MS) {
+			LAST_HARVEST_DEBUG_MS.put(player.getUuid(), now);
+			if (harvestQuestCount == 0) {
+				LOGGER.warn("[CobbleEconomy] Harvest event received but no HARVEST_ITEM quests are loaded (check quests.json)");
+			} else if (!anyMatched) {
+				LOGGER.warn("[CobbleEconomy] Harvested item {} but no HARVEST_ITEM quest matched (loadedHarvestQuests={})", harvested, harvestQuestCount);
+			} else if (changedQuestCount == 0) {
+				LOGGER.warn("[CobbleEconomy] Harvested item {} matched a harvest quest but progress did not change (maybe already completed/claimed?)", harvested);
+			} else {
+				LOGGER.warn("[CobbleEconomy] Harvested item {} progressed {} harvest quest(s)", harvested, changedQuestCount);
 			}
 		}
 
@@ -542,6 +618,9 @@ public final class QuestManager {
 		if (cfg == null) {
 			cfg = defaultConfig();
 		}
+		if (ensureApricornHarvestQuest(cfg)) {
+			LOGGER.warn("[CobbleEconomy] Added missing default apricorn harvest quest to in-memory config");
+		}
 
 		// Categories from config
 		if (cfg.categories != null) {
@@ -617,6 +696,92 @@ public final class QuestManager {
 				addQuest(new QuestDef(q.id, category, type, target, goal, reward, title, description, tiers));
 			}
 		}
+	}
+
+	private static boolean ensureApricornHarvestQuest(QuestConfig cfg) {
+		if (cfg == null) return false;
+		boolean changed = false;
+		if (cfg.categories == null) {
+			cfg.categories = new ArrayList<>();
+			changed = true;
+		}
+		if (cfg.quests == null) {
+			cfg.quests = new ArrayList<>();
+			changed = true;
+		}
+
+		// If the user already defined a harvest quest for apricorns/noigrumes, don't add another.
+		if (cfg.quests != null) {
+			for (QuestConfig.QuestDefConfig q : cfg.quests) {
+				if (q == null) continue;
+				QuestDef.QuestType type = QuestDef.QuestType.parse(q.type);
+				if (type != QuestDef.QuestType.HARVEST_ITEM) continue;
+				String target = normalizeItemTarget(q.target);
+				if (targetMatchesItem(target, "cobblemon:yellow_apricorn")) {
+					return changed;
+				}
+			}
+		}
+
+		final String harvestCategoryName = "FARM";
+		boolean hasHarvestCategory = false;
+		for (QuestConfig.QuestCategoryConfig cat : cfg.categories) {
+			if (cat == null || cat.name == null) continue;
+			if (normalizeCategory(cat.name).equals(harvestCategoryName)) {
+				hasHarvestCategory = true;
+				break;
+			}
+		}
+		if (!hasHarvestCategory) {
+			QuestConfig.QuestCategoryConfig harvest = new QuestConfig.QuestCategoryConfig();
+			harvest.name = harvestCategoryName;
+			harvest.displayName = "Farm";
+			harvest.iconItemId = "minecraft:diamond_hoe";
+			cfg.categories.add(harvest);
+			changed = true;
+		}
+
+		final String questId = "harvest_apricorns";
+		boolean hasQuest = false;
+		for (QuestConfig.QuestDefConfig q : cfg.quests) {
+			if (q == null || q.id == null) continue;
+			if (q.id.equalsIgnoreCase(questId)) {
+				hasQuest = true;
+				break;
+			}
+		}
+		if (!hasQuest) {
+			QuestConfig.QuestDefConfig harvestQuest = new QuestConfig.QuestDefConfig();
+			harvestQuest.id = questId;
+			harvestQuest.category = harvestCategoryName;
+			harvestQuest.type = "HARVEST_ITEM";
+			harvestQuest.target = "noigrume";
+			harvestQuest.title = "Récolter des noigrumes";
+			harvestQuest.description = "Récolte n'importe quelle noigrume.";
+			harvestQuest.tiers = new ArrayList<>();
+			QuestConfig.QuestTierConfig ht1 = new QuestConfig.QuestTierConfig();
+			ht1.goal = 32;
+			ht1.reward = 150.0;
+			ht1.title = "Récolter des noigrumes";
+			ht1.description = "Récolte 32 noigrumes.";
+			harvestQuest.tiers.add(ht1);
+			QuestConfig.QuestTierConfig ht2 = new QuestConfig.QuestTierConfig();
+			ht2.goal = 128;
+			ht2.reward = 600.0;
+			ht2.title = "Récolter des noigrumes";
+			ht2.description = "Récolte 128 noigrumes.";
+			harvestQuest.tiers.add(ht2);
+			QuestConfig.QuestTierConfig ht3 = new QuestConfig.QuestTierConfig();
+			ht3.goal = 512;
+			ht3.reward = 2500.0;
+			ht3.title = "Récolter des noigrumes";
+			ht3.description = "Récolte 512 noigrumes.";
+			harvestQuest.tiers.add(ht3);
+			cfg.quests.add(harvestQuest);
+			changed = true;
+		}
+
+		return changed;
 	}
 
 	private static void loadLegendaryItems() {
@@ -695,19 +860,36 @@ public final class QuestManager {
 	private static QuestConfig defaultConfig() {
 		QuestConfig cfg = new QuestConfig();
 
-		QuestConfig.QuestCategoryConfig general = new QuestConfig.QuestCategoryConfig();
-		general.name = "GENERAL";
-		general.displayName = "Quêtes";
-		general.iconItemId = "minecraft:book";
-
 		cfg.categories = new ArrayList<>();
-		cfg.categories.add(general);
+		QuestConfig.QuestCategoryConfig pokemon = new QuestConfig.QuestCategoryConfig();
+		pokemon.name = "POKEMON";
+		pokemon.displayName = "Pokemon";
+		pokemon.iconItemId = "cobblemon:poke_ball";
+		cfg.categories.add(pokemon);
+
+		QuestConfig.QuestCategoryConfig farm = new QuestConfig.QuestCategoryConfig();
+		farm.name = "FARM";
+		farm.displayName = "Farm";
+		farm.iconItemId = "minecraft:diamond_hoe";
+		cfg.categories.add(farm);
+
+		QuestConfig.QuestCategoryConfig shop = new QuestConfig.QuestCategoryConfig();
+		shop.name = "SHOP";
+		shop.displayName = "Shop";
+		shop.iconItemId = "cobblemon:relic_coin_pouch";
+		cfg.categories.add(shop);
+
+		QuestConfig.QuestCategoryConfig legs = new QuestConfig.QuestCategoryConfig();
+		legs.name = "LEGENDARIES";
+		legs.displayName = "Légendaires";
+		legs.iconItemId = "cobblemon:master_ball";
+		cfg.categories.add(legs);
 
 		QuestConfig.LegendaryCategoryConfig leg = new QuestConfig.LegendaryCategoryConfig();
 		leg.enabled = true;
 		leg.category = "LEGENDARIES";
 		leg.displayName = "Légendaires";
-		leg.iconItemId = "minecraft:nether_star";
+		leg.iconItemId = "cobblemon:master_ball";
 		leg.usePoolFallback = false;
 		leg.reward = 2500.0;
 		leg.species = List.of(
@@ -726,7 +908,7 @@ public final class QuestManager {
 		cfg.quests = new ArrayList<>();
 		QuestConfig.QuestDefConfig q1 = new QuestConfig.QuestDefConfig();
 		q1.id = "capture_10";
-		q1.category = "GENERAL";
+		q1.category = "POKEMON";
 		q1.type = "CAPTURE_ANY";
 		q1.goal = 10;
 		q1.reward = 500.0;
@@ -734,9 +916,36 @@ public final class QuestManager {
 		q1.description = "Capture 10 Pokémon.";
 		cfg.quests.add(q1);
 
+		QuestConfig.QuestDefConfig shiny = new QuestConfig.QuestDefConfig();
+		shiny.id = "capture_shiny";
+		shiny.category = "POKEMON";
+		shiny.type = "CAPTURE_SHINY_ANY";
+		shiny.title = "Shasseur";
+		shiny.description = "Capture des Pokémon shiny.";
+		shiny.tiers = new ArrayList<>();
+		QuestConfig.QuestTierConfig st1 = new QuestConfig.QuestTierConfig();
+		st1.goal = 1;
+		st1.reward = 1000.0;
+		st1.title = "Shasseur";
+		st1.description = "Capture 1 Pokémon shiny.";
+		shiny.tiers.add(st1);
+		QuestConfig.QuestTierConfig st2 = new QuestConfig.QuestTierConfig();
+		st2.goal = 5;
+		st2.reward = 4000.0;
+		st2.title = "Shasseur";
+		st2.description = "Capture 5 Pokémon shiny.";
+		shiny.tiers.add(st2);
+		QuestConfig.QuestTierConfig st3 = new QuestConfig.QuestTierConfig();
+		st3.goal = 25;
+		st3.reward = 15000.0;
+		st3.title = "Shasseur";
+		st3.description = "Capture 25 Pokémon shiny.";
+		shiny.tiers.add(st3);
+		cfg.quests.add(shiny);
+
 		QuestConfig.QuestDefConfig q2 = new QuestConfig.QuestDefConfig();
 		q2.id = "capture_pikachu";
-		q2.category = "GENERAL";
+		q2.category = "POKEMON";
 		q2.type = "CAPTURE_SPECIES";
 		q2.target = "pikachu";
 		q2.goal = 1;
@@ -747,7 +956,7 @@ public final class QuestManager {
 
 		QuestConfig.QuestDefConfig b = new QuestConfig.QuestDefConfig();
 		b.id = "battle_win";
-		b.category = "GENERAL";
+		b.category = "POKEMON";
 		b.type = "BATTLE_WIN_ANY";
 		b.title = "Combattant";
 		b.description = "Remporte des combats Pokémon.";
@@ -774,7 +983,7 @@ public final class QuestManager {
 
 		QuestConfig.QuestDefConfig t = new QuestConfig.QuestDefConfig();
 		t.id = "trade";
-		t.category = "GENERAL";
+		t.category = "POKEMON";
 		t.type = "TRADE_ANY";
 		t.title = "Échangeur";
 		t.description = "Effectue des échanges de Pokémon.";
@@ -798,6 +1007,34 @@ public final class QuestManager {
 		tt3.description = "Effectue 100 échanges de Pokémon.";
 		t.tiers.add(tt3);
 		cfg.quests.add(t);
+
+		QuestConfig.QuestDefConfig h = new QuestConfig.QuestDefConfig();
+		h.id = "harvest_apricorns";
+		h.category = "FARM";
+		h.type = "HARVEST_ITEM";
+		h.target = "noigrume";
+		h.title = "Récolter des noigrumes";
+		h.description = "Récolte n'importe quelle noigrume.";
+		h.tiers = new ArrayList<>();
+		QuestConfig.QuestTierConfig ht1 = new QuestConfig.QuestTierConfig();
+		ht1.goal = 32;
+		ht1.reward = 150.0;
+		ht1.title = "Récolter des noigrumes";
+		ht1.description = "Récolte 32 noigrumes.";
+		h.tiers.add(ht1);
+		QuestConfig.QuestTierConfig ht2 = new QuestConfig.QuestTierConfig();
+		ht2.goal = 128;
+		ht2.reward = 600.0;
+		ht2.title = "Récolter des noigrumes";
+		ht2.description = "Récolte 128 noigrumes.";
+		h.tiers.add(ht2);
+		QuestConfig.QuestTierConfig ht3 = new QuestConfig.QuestTierConfig();
+		ht3.goal = 512;
+		ht3.reward = 2500.0;
+		ht3.title = "Récolter des noigrumes";
+		ht3.description = "Récolte 512 noigrumes.";
+		h.tiers.add(ht3);
+		cfg.quests.add(h);
 
 		return cfg;
 	}
@@ -860,7 +1097,7 @@ public final class QuestManager {
 
 		// wildcard support
 		if (target.contains("*")) {
-			String regex = "^" + java.util.regex.Pattern.quote(target).replace("\\*", ".*") + "$";
+			String regex = wildcardToRegex(target);
 			java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
 			if (target.contains(":")) {
 				return p.matcher(full).matches();
@@ -872,6 +1109,26 @@ public final class QuestManager {
 			return full.equalsIgnoreCase(target);
 		}
 		return path.equalsIgnoreCase(target);
+	}
+
+	private static String wildcardToRegex(String wildcard) {
+		if (wildcard == null) return "^$";
+		StringBuilder out = new StringBuilder(wildcard.length() + 8);
+		out.append('^');
+		int last = 0;
+		for (int i = 0; i < wildcard.length(); i++) {
+			if (wildcard.charAt(i) != '*') continue;
+			if (last < i) {
+				out.append(java.util.regex.Pattern.quote(wildcard.substring(last, i)));
+			}
+			out.append(".*");
+			last = i + 1;
+		}
+		if (last < wildcard.length()) {
+			out.append(java.util.regex.Pattern.quote(wildcard.substring(last)));
+		}
+		out.append('$');
+		return out.toString();
 	}
 
 	private static String prettySpeciesName(String raw) {
@@ -926,6 +1183,28 @@ public final class QuestManager {
 		if (display != null) return display.toString();
 
 		return "";
+	}
+
+	private static boolean isPokemonShiny(Object pokemon) {
+		if (pokemon == null) return false;
+		Object v = firstNonNull(
+			callNoArg(pokemon, "isShiny"),
+			callNoArg(pokemon, "getShiny"),
+			callNoArg(pokemon, "getIsShiny"),
+			callNoArg(pokemon, "shiny")
+		);
+		if (v instanceof Boolean b) return b;
+		if (v != null) {
+			String s = v.toString().trim().toLowerCase(Locale.ROOT);
+			if (s.equals("true")) return true;
+		}
+		return false;
+	}
+
+	private static Object firstNonNull(Object... values) {
+		if (values == null) return null;
+		for (Object v : values) if (v != null) return v;
+		return null;
 	}
 
 	private static Object callNoArg(Object target, String methodName) {

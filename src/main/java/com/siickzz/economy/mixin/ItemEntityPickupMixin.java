@@ -86,7 +86,8 @@ public abstract class ItemEntityPickupMixin {
 			COBBLE_ECONOMY_LOGGER.info("[CobbleEconomy] Apricorn pickup detected: player={} item={} amount={}", serverPlayer.getName().getString(), itemId, delta);
 		}
 
-		HarvestListener.onApricornPickedUp(serverPlayer, itemId, delta);
+		// Quest progression is credited via the harvest window started on right-click.
+		// We keep this mixin only for occasional logging/diagnostics.
 	}
 
 	@Unique

@@ -2,9 +2,7 @@
   "required": true,
   "package": "com.siickzz.economy.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "ItemEntityPickupMixin"
-  ],
+  "mixins": [],
   "injectors": {
     "defaultRequire": 1
   }

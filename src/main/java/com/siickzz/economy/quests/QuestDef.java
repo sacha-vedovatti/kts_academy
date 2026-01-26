@@ -24,6 +24,7 @@ public record QuestDef(
 	public enum QuestType {
 		CAPTURE_ANY,
 		CAPTURE_SPECIES,
+		CAPTURE_SHINY_ANY,
 		BATTLE_WIN_ANY,
 		TRADE_ANY,
 		FISH_POKEMON_ANY,
@@ -39,6 +40,7 @@ public record QuestDef(
 			return switch (s) {
 				case "CAPTURE_SPECIES" -> CAPTURE_SPECIES;
 				case "CAPTURE_ANY" -> CAPTURE_ANY;
+				case "CAPTURE_SHINY_ANY", "CAPTURE_SHINY", "SHINY_CAPTURE_ANY", "SHINY_ANY" -> CAPTURE_SHINY_ANY;
 				case "BATTLE_WIN_ANY" -> BATTLE_WIN_ANY;
 				case "TRADE_ANY" -> TRADE_ANY;
 				case "FISH_POKEMON_ANY", "POKEMON_FISHED_ANY", "POKEFISH_ANY" -> FISH_POKEMON_ANY;
