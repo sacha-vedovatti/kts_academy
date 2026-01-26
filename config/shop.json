@@ -24,6 +24,14 @@
           "amount": 1
         },
         {
+          "key": "roseate_ball",
+          "itemId": "cobblemon:roseate_ball",
+          "displayName": "Roseate Ball",
+          "buyPrice": 400.0,
+          "sellPrice": 50.0,
+          "amount": 1
+        },
+        {
           "key": "verdant_ball",
           "itemId": "cobblemon:verdant_ball",
           "displayName": "Verdant Ball",
@@ -68,15 +76,15 @@
           "itemId": "cobblemon:premier_ball",
           "displayName": "Premier Ball",
           "buyPrice": 600.0,
-          "sellPrice": 50.0,
+          "sellPrice": 60.0,
           "amount": 1
         },
         {
           "key": "luxuryball",
           "itemId": "cobblemon:luxury_ball",
           "displayName": "Luxury Ball",
-          "buyPrice": 4000.0,
-          "sellPrice": 400.0,
+          "buyPrice": 2000.0,
+          "sellPrice": 200.0,
           "amount": 1
         },
         {
@@ -115,88 +123,88 @@
           "key": "repeatball",
           "itemId": "cobblemon:repeat_ball",
           "displayName": "Repeat Ball",
-          "buyPrice": 2250.0,
-          "sellPrice": 225.0,
+          "buyPrice": 1750.0,
+          "sellPrice": 175.0,
           "amount": 1
         },
         {
           "key": "netball",
           "itemId": "cobblemon:net_ball",
           "displayName": "Net Ball",
-          "buyPrice": 2250.0,
-          "sellPrice": 225.0,
+          "buyPrice": 1750.0,
+          "sellPrice": 175.0,
           "amount": 1
         },
         {
           "key": "diveball",
           "itemId": "cobblemon:dive_ball",
           "displayName": "Dive Ball",
-          "buyPrice": 2250.0,
-          "sellPrice": 225.0,
+          "buyPrice": 1750.0,
+          "sellPrice": 175.0,
           "amount": 1
         },
         {
           "key": "nestball",
           "itemId": "cobblemon:nest_ball",
           "displayName": "Nest Ball",
-          "buyPrice": 2250.0,
-          "sellPrice": 225.0,
+          "buyPrice": 1750.0,
+          "sellPrice": 175.0,
           "amount": 1
         },
         {
           "key": "levelball",
           "itemId": "cobblemon:level_ball",
           "displayName": "Level Ball",
-          "buyPrice": 3000.0,
-          "sellPrice": 300.0,
+          "buyPrice": 1750.0,
+          "sellPrice": 175.0,
           "amount": 1
         },
         {
           "key": "lureball",
           "itemId": "cobblemon:lure_ball",
           "displayName": "Lure Ball",
-          "buyPrice": 3000.0,
-          "sellPrice": 300.0,
+          "buyPrice": 1750.0,
+          "sellPrice": 175.0,
           "amount": 1
         },
         {
           "key": "moonball",
           "itemId": "cobblemon:moon_ball",
           "displayName": "Moon Ball",
-          "buyPrice": 3000.0,
-          "sellPrice": 300.0,
+          "buyPrice": 2000.0,
+          "sellPrice": 200.0,
           "amount": 1
         },
         {
           "key": "friendball",
           "itemId": "cobblemon:friend_ball",
           "displayName": "Friend Ball",
-          "buyPrice": 3000.0,
-          "sellPrice": 300.0,
+          "buyPrice": 2000.0,
+          "sellPrice": 200.0,
           "amount": 1
         },
         {
           "key": "loveball",
           "itemId": "cobblemon:love_ball",
           "displayName": "Love Ball",
-          "buyPrice": 6000.0,
-          "sellPrice": 600.0,
+          "buyPrice": 3000.0,
+          "sellPrice": 250.0,
           "amount": 1
         },
         {
           "key": "fastball",
           "itemId": "cobblemon:fast_ball",
           "displayName": "Fast Ball",
-          "buyPrice": 6000.0,
-          "sellPrice": 600.0,
+          "buyPrice": 3000.0,
+          "sellPrice": 250.0,
           "amount": 1
         },
         {
           "key": "heavyball",
           "itemId": "cobblemon:heavy_ball",
           "displayName": "Heavy Ball",
-          "buyPrice": 6000.0,
-          "sellPrice": 600.0,
+          "buyPrice": 3000.0,
+          "sellPrice": 250.0,
           "amount": 1
         }
       ]
