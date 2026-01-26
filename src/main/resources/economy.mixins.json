@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.siickzz.economy.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ItemEntityPickupMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "economy",
+	"version": "${version}",
+	"name": "CobbleEconomy",
+	"description": "Économie pour Cobblemon: argent à la capture + shop.",
+	"authors": [
+		"siickzz"
+	],
+	"contact": {
+		"homepage": ""
+	},
+	"license": "CC0-1.0",
+	"environment": "server",
+	"mixins": [
+		"economy.mixins.json"
+	],
+	"entrypoints": {
+		"main": [
+			"com.siickzz.economy.Economy"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.17.2",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*",
+		"cobblemon": ">=1.6.0"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
