@@ -90,7 +90,8 @@ cp -a "$jar_path" "$dest/mods/"
 # Copy config directory into DEST/config/
 if [[ -d "$CONFIG_DIR" ]]; then
   mkdir -p "$dest/config"
-  cp -a "$CONFIG_DIR/." "$dest/config/"
+  mkdir -p "$dest/config/economy"
+  cp -a "$CONFIG_DIR/." "$dest/config/economy"
 else
   echo "Warning: config directory not found at $CONFIG_DIR; skipping config copy." >&2
 fi
