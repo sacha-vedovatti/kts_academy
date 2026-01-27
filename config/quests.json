@@ -222,49 +222,55 @@
       "goal": 10,
       "reward": 200.0,
       "title": "Collectionneur",
-      "description": "Capture des Pokémon.",
+      "description": "Capturer des Pokémons.",
       "tiers": [
         {
           "goal": 10,
           "reward": 200.0,
           "title": "Collectionneur",
-          "description": "Capture 10 Pokémon."
+          "description": "Capturer 10 Pokémons."
         },
         {
           "goal": 50,
           "reward": 250.0,
           "title": "Collectionneur",
-          "description": "Capture 50 Pokémon."
+          "description": "Capturer 50 Pokémons."
+        },
+        {
+          "goal": 75,
+          "reward": 250.0,
+          "title": "Collectionneur",
+          "description": "Capturer 75 Pokémons."
         },
         {
           "goal": 100,
           "reward": 500.0,
           "title": "Collectionneur",
-          "description": "Capture 100 Pokémon."
+          "description": "Capturer 100 Pokémons."
         },
         {
           "goal": 250,
           "reward": 750.0,
           "title": "Collectionneur",
-          "description": "Capture 250 Pokémon."
+          "description": "Capturer 250 Pokémons."
         },
         {
           "goal": 500,
           "reward": 500.0,
           "title": "Collectionneur",
-          "description": "Capture 500 Pokémon."
+          "description": "Capturer 500 Pokémons."
+        },
+        {
+          "goal": 750,
+          "reward": 1000.0,
+          "title": "Collectionneur",
+          "description": "Capturer 750 Pokémons."
         },
         {
           "goal": 1000,
           "reward": 5000.0,
           "title": "Collectionneur",
-          "description": "Capture 1000 Pokémon."
-        },
-        {
-          "goal": 5000,
-          "reward": 10000.0,
-          "title": "Collectionneur",
-          "description": "Capture 5000 Pokémon."
+          "description": "Capturer 1000 Pokémons."
         }
       ]
     },
@@ -272,29 +278,41 @@
       "id": "capture_shiny",
       "category": "POKEMON",
       "type": "CAPTURE_SHINY_ANY",
-      "iconItemId": "cobblemon:master_ball",
+      "iconItemId": "moresparkles:shiny_charm",
       "goal": 1,
       "reward": 1000.0,
       "title": "Shiny Hunter",
-      "description": "Capture des Pokémon shiny.",
+      "description": "Capturer des Pokémons shiny.",
       "tiers": [
         {
           "goal": 1,
-          "reward": 1000.0,
+          "reward": 500.0,
           "title": "Shiny Hunter",
-          "description": "Capture 1 Pokémon shiny."
+          "description": "Capturer 1 Pokémons shiny."
         },
         {
           "goal": 5,
-          "reward": 4000.0,
+          "reward": 500.0,
           "title": "Shiny Hunter",
-          "description": "Capture 5 Pokémon shiny."
+          "description": "Capturer 5 Pokémons shiny."
         },
         {
           "goal": 25,
-          "reward": 15000.0,
+          "reward": 1000.0,
           "title": "Shiny Hunter",
-          "description": "Capture 25 Pokémon shiny."
+          "description": "Capturer 25 Pokémons shiny."
+        },
+        {
+          "goal": 50,
+          "reward": 1500.0,
+          "title": "Shiny Hunter",
+          "description": "Capturer 50 Pokémons shiny."
+        },
+        {
+          "goal": 100,
+          "reward": 2000.0,
+          "title": "Shiny Hunter",
+          "description": "Capturer 100 Pokémons shiny."
         }
       ]
     },
@@ -454,59 +472,34 @@
       "description": "Récolte des noixgrumes (apricorns) de Cobblemon.",
       "tiers": [
         {
-          "goal": 50,
+          "goal": 64,
           "reward": 200.0,
           "title": "Récolteur",
-          "description": "Récolte 50 noixgrumes."
-        },
-        {
-          "goal": 100,
-          "reward": 500.0,
-          "title": "Récolteur",
-          "description": "Récolte 100 noixgrumes."
-        },
-        {
-          "goal": 500,
-          "reward": 2500.0,
-          "title": "Récolteur",
-          "description": "Récolte 500 noixgrumes."
-        },
-        {
-          "goal": 1000,
-          "reward": 5000.0,
-          "title": "Récolteur",
-          "description": "Récolte 1000 noixgrumes."
-        }
-      ]
-    },
-    {
-      "id": "harvest_berries",
-      "category": "FARM",
-      "type": "HARVEST_ITEM",
-      "iconItemId": "cobblemon:mythical_pecha_berry",
-      "target": "*berry*",
-      "goal": 32,
-      "reward": 200.0,
-      "title": "Récolter des baies",
-      "description": "Récolte n'importe quelle baie (ex: baie Oran).",
-      "tiers": [
-        {
-          "goal": 32,
-          "reward": 200.0,
-          "title": "Récolter des baies",
-          "description": "Récolte 32 baies."
+          "description": "Récolte 64 noixgrumes."
         },
         {
           "goal": 128,
-          "reward": 600.0,
-          "title": "Récolter des baies",
-          "description": "Récolte 128 baies."
+          "reward": 500.0,
+          "title": "Récolteur",
+          "description": "Récolte 128 noixgrumes."
         },
         {
-          "goal": 512,
+          "goal": 320,
+          "reward": 500.0,
+          "title": "Récolteur",
+          "description": "Récolte 256 noixgrumes."
+        },
+        {
+          "goal": 640,
           "reward": 2500.0,
-          "title": "Récolter des baies",
-          "description": "Récolte 512 baies."
+          "title": "Récolteur",
+          "description": "Récolte 640 noixgrumes."
+        },
+        {
+          "goal": 1280,
+          "reward": 5000.0,
+          "title": "Récolteur",
+          "description": "Récolte 1280 noixgrumes."
         }
       ]
     },
@@ -584,31 +577,49 @@
       "goal": 50,
       "reward": 200.0,
       "title": "Acheteur",
-      "description": "Achète des objets dans le shop.",
+      "description": "Acheter des objets dans le shop.",
       "tiers": [
         {
           "goal": 50,
           "reward": 200.0,
           "title": "Acheteur",
-          "description": "Achète 50 objets dans le shop."
+          "description": "Acheter 50 objets dans le shop."
         },
         {
           "goal": 100,
           "reward": 500.0,
           "title": "Acheteur",
-          "description": "Achète 100 objets dans le shop."
+          "description": "Acheter 100 objets dans le shop."
         },
         {
           "goal": 500,
-          "reward": 2500.0,
+          "reward": 1500.0,
           "title": "Acheteur",
-          "description": "Achète 500 objets dans le shop."
-        },
+          "description": "Acheter 500 objets dans le shop."
+        },  
         {
           "goal": 1000,
           "reward": 5000.0,
           "title": "Acheteur",
-          "description": "Achète 1000 objets dans le shop."
+          "description": "Acheter 1000 objets dans le shop."
+        },
+        {
+          "goal": 2500,
+          "reward": 5000.0,
+          "title": "Acheteur",
+          "description": "Acheter 2500 objets dans le shop."
+        },
+        {
+          "goal": 5000,
+          "reward": 5000.0,
+          "title": "Acheteur",
+          "description": "Acheter 5000 objets dans le shop."
+        },
+         {
+          "goal": 10000,
+          "reward": 10000.0,
+          "title": "Acheteur",
+          "description": "Acheter 10k objets dans le shop."
         }
       ]
     },
@@ -616,42 +627,42 @@
       "id": "mine_diamond_ore",
       "category": "FARM",
       "type": "MINE_ORE",
-      "iconItemId": "minecraft:diamond_ore",
+      "iconItemId": "minecraft:diamond",
       "target": "diamond",
       "goal": 64,
       "reward": 500.0,
-      "title": "Farmer (Diamant)",
-      "description": "Mine des minerais de diamant.",
+      "title": "Diamond Farmer",
+      "description": "Miner des minerais de diamant.",
       "tiers": [
         {
           "goal": 64,
           "reward": 500.0,
-          "title": "Farmer (Diamant)",
-          "description": "Mine 64 minerais de diamant."
+          "title": "Diamond Farmer",
+          "description": "Miner 64 minerais de diamant."
         },
         {
           "goal": 128,
           "reward": 1500.0,
-          "title": "Farmer (Diamant)",
-          "description": "Mine 128 minerais de diamant."
+          "title": "Diamond Farmer",
+          "description": "Miner 128 minerais de diamant."
         },
         {
           "goal": 256,
-          "reward": 4000.0,
-          "title": "Farmer (Diamant)",
-          "description": "Mine 256 minerais de diamant."
+          "reward": 2000.0,
+          "title": "Diamond Farmer",
+          "description": "Miner 256 minerais de diamant."
         },
         {
           "goal": 512,
-          "reward": 4000.0,
-          "title": "Farmer (Diamant)",
-          "description": "Mine 512 minerais de diamant."
+          "reward": 2500.0,
+          "title": "Diamond Farmer",
+          "description": "Miner 512 minerais de diamant."
         },
         {
           "goal": 1024,
-          "reward": 4000.0,
-          "title": "Farmer (Diamant)",
-          "description": "Mine 1024 minerais de diamant."
+          "reward": 5000.0,
+          "title": "Diamond Farmer",
+          "description": "Miner 1024 minerais de diamant."
         }
       ]
     },
@@ -659,47 +670,47 @@
       "id": "mine_iron_ore",
       "category": "FARM",
       "type": "MINE_ORE",
-      "iconItemId": "minecraft:iron_ore",
+      "iconItemId": "minecraft:iron_ingot",
       "target": "iron",
       "goal": 64,
       "reward": 250.0,
-      "title": "Farmer (Fer)",
+      "title": "Iron Farmer",
       "description": "Mine des minerais de fer.",
       "tiers": [
         {
           "goal": 64,
           "reward": 250.0,
-          "title": "Farmer (Fer)",
+          "title": "Iron Farmer",
           "description": "Mine 64 minerais de fer."
         },
         {
           "goal": 128,
           "reward": 700.0,
-          "title": "Farmer (Fer)",
+          "title": "Iron Farmer",
           "description": "Mine 128 minerais de fer."
         },
         {
           "goal": 256,
           "reward": 1500.0,
-          "title": "Farmer (Fer)",
+          "title": "Iron Farmer",
           "description": "Mine 256 minerais de fer."
         },
         {
           "goal": 512,
           "reward": 1500.0,
-          "title": "Farmer (Fer)",
+          "title": "Iron Farmer",
           "description": "Mine 512 minerais de fer."
         },
         {
           "goal": 1024,
           "reward": 2000.0,
-          "title": "Farmer (Fer)",
+          "title": "Iron Farmer",
           "description": "Mine 1024 minerais de fer."
         },
         {
           "goal": 2048,
           "reward": 5000.0,
-          "title": "Farmer (Fer)",
+          "title": "Iron Farmer",
           "description": "Mine 2048 minerais de fer."
         }
       ]
@@ -708,41 +719,41 @@
       "id": "mine_gold_ore",
       "category": "FARM",
       "type": "MINE_ORE",
-      "iconItemId": "minecraft:gold_ore",
+      "iconItemId": "minecraft:gold_ingot",
       "target": "gold",
       "goal": 64,
       "reward": 300.0,
-      "title": "Farmer (Or)",
+      "title": "Gold Farmer",
       "description": "Mine des minerais d'or.",
       "tiers": [
         {
           "goal": 64,
           "reward": 300.0,
-          "title": "Farmer (Or)",
+          "title": "Gold Farmer",
           "description": "Mine 64 minerais d'or."
         },
         {
           "goal": 128,
           "reward": 800.0,
-          "title": "Farmer (Or)",
+          "title": "Gold Farmer",
           "description": "Mine 128 minerais d'or."
         },
         {
           "goal": 256,
           "reward": 1500.0,
-          "title": "Farmer (Or)",
+          "title": "Gold Farmer",
           "description": "Mine 256 minerais d'or."
         },
         {
           "goal": 512,
           "reward": 1500.0,
-          "title": "Farmer (Or)",
+          "title": "Gold Farmer",
           "description": "Mine 512 minerais d'or."
         },
         {
           "goal": 1024,
           "reward": 3000.0,
-          "title": "Farmer (Or)",
+          "title": "Gold Farmer",
           "description": "Mine 1024 minerais d'or."
         }
       ]
