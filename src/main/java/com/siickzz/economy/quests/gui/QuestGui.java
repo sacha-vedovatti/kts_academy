@@ -208,6 +208,12 @@ public final class QuestGui {
 	private static Item questIcon(String category, QuestDef quest, QuestProgress progress) {
 		boolean complete = progress.progress >= QuestManager.effectiveGoal(quest, progress);
 		boolean claimed = progress.claimed;
+		String configuredIconId = quest.iconItemId();
+		boolean hasConfiguredIcon = configuredIconId != null && !configuredIconId.isBlank();
+		if (hasConfiguredIcon) {
+			Item configured = iconOrFallback(configuredIconId.trim(), Items.AIR);
+			if (configured != Items.AIR) return configured;
+		}
 		if (claimed) return Items.GRAY_DYE;
 		if (complete) return Items.LIME_DYE;
 		if (category != null && category.toUpperCase(Locale.ROOT).contains("LEGEND")) {
@@ -222,6 +228,7 @@ public final class QuestGui {
 		if (quest.type() == QuestDef.QuestType.FISH_POKEMON_ANY) return Items.FISHING_ROD;
 		if (quest.type() == QuestDef.QuestType.SHOP_BUY_ANY) return Items.CHEST;
 		if (quest.type() == QuestDef.QuestType.SHOP_SELL_ANY) return Items.HOPPER;
+		if (quest.type() == QuestDef.QuestType.CAPTURE_SHINY_ANY) return Items.AMETHYST_SHARD;
 		if (quest.type() == QuestDef.QuestType.HARVEST_ITEM) {
 			String t = quest.target() == null ? "" : quest.target().trim();
 			if (!t.isBlank() && t.contains(":")) {

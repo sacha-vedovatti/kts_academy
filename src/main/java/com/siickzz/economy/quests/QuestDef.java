@@ -8,12 +8,13 @@ public record QuestDef(
 		String category,
 		QuestType type,
 		String target,
+		String iconItemId,
 		int goal,
 		double reward,
 		String title,
 		String description,
 		List<QuestTier> tiers
-) {
+	) {	
 	public record QuestTier(int goal, double reward, String title, String description) {
 	}
 

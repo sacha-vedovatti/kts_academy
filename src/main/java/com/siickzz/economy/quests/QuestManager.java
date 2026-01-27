@@ -658,7 +658,7 @@ public final class QuestManager {
 				String id = "legendary_capture_" + key;
 				String title = "Capturer " + prettySpeciesName(s);
 				String desc = "Capture " + prettySpeciesName(s) + " (1/1).";
-				addQuest(new QuestDef(id, catName, QuestDef.QuestType.CAPTURE_SPECIES, key, 1, cfg.legendaryCategory.reward, title, desc, null));
+				addQuest(new QuestDef(id, catName, QuestDef.QuestType.CAPTURE_SPECIES, key, null, 1, cfg.legendaryCategory.reward, title, desc, null));
 			}
 		}
 		if (cfg.legendaryCategory == null || !cfg.legendaryCategory.enabled) {
@@ -693,7 +693,7 @@ public final class QuestManager {
 					if (tiers.isEmpty()) tiers = null;
 				}
 
-				addQuest(new QuestDef(q.id, category, type, target, goal, reward, title, description, tiers));
+				addQuest(new QuestDef(q.id, category, type, target, q.iconItemId, goal, reward, title, description, tiers));
 			}
 		}
 	}
@@ -755,6 +755,7 @@ public final class QuestManager {
 			harvestQuest.id = questId;
 			harvestQuest.category = harvestCategoryName;
 			harvestQuest.type = "HARVEST_ITEM";
+			harvestQuest.iconItemId = "cobblemon:yellow_apricorn";
 			harvestQuest.target = "noigrume";
 			harvestQuest.title = "Récolter des noigrumes";
 			harvestQuest.description = "Récolte n'importe quelle noigrume.";
@@ -910,6 +911,7 @@ public final class QuestManager {
 		q1.id = "capture_10";
 		q1.category = "POKEMON";
 		q1.type = "CAPTURE_ANY";
+		q1.iconItemId = "cobblemon:poke_ball";
 		q1.goal = 10;
 		q1.reward = 500.0;
 		q1.title = "Collectionneur";
@@ -920,6 +922,7 @@ public final class QuestManager {
 		shiny.id = "capture_shiny";
 		shiny.category = "POKEMON";
 		shiny.type = "CAPTURE_SHINY_ANY";
+		shiny.iconItemId = "cobblemon:master_ball";
 		shiny.title = "Shasseur";
 		shiny.description = "Capture des Pokémon shiny.";
 		shiny.tiers = new ArrayList<>();
@@ -947,6 +950,7 @@ public final class QuestManager {
 		q2.id = "capture_pikachu";
 		q2.category = "POKEMON";
 		q2.type = "CAPTURE_SPECIES";
+		q2.iconItemId = "cobblemon:poke_ball";
 		q2.target = "pikachu";
 		q2.goal = 1;
 		q2.reward = 200.0;
@@ -958,6 +962,7 @@ public final class QuestManager {
 		b.id = "battle_win";
 		b.category = "POKEMON";
 		b.type = "BATTLE_WIN_ANY";
+		b.iconItemId = "minecraft:iron_sword";
 		b.title = "Combattant";
 		b.description = "Remporte des combats Pokémon.";
 		b.tiers = new ArrayList<>();
@@ -985,6 +990,7 @@ public final class QuestManager {
 		t.id = "trade";
 		t.category = "POKEMON";
 		t.type = "TRADE_ANY";
+		t.iconItemId = "minecraft:emerald";
 		t.title = "Échangeur";
 		t.description = "Effectue des échanges de Pokémon.";
 		t.tiers = new ArrayList<>();
@@ -1012,6 +1018,7 @@ public final class QuestManager {
 		h.id = "harvest_apricorns";
 		h.category = "FARM";
 		h.type = "HARVEST_ITEM";
+		h.iconItemId = "cobblemon:yellow_apricorn";
 		h.target = "noigrume";
 		h.title = "Récolter des noigrumes";
 		h.description = "Récolte n'importe quelle noigrume.";
@@ -1035,6 +1042,35 @@ public final class QuestManager {
 		ht3.description = "Récolte 512 noigrumes.";
 		h.tiers.add(ht3);
 		cfg.quests.add(h);
+
+		QuestConfig.QuestDefConfig hb = new QuestConfig.QuestDefConfig();
+		hb.id = "harvest_berries";
+		hb.category = "FARM";
+		hb.type = "HARVEST_ITEM";
+		hb.iconItemId = "cobblemon:mythical_pecha_berry";
+		hb.target = "*berry*";
+		hb.title = "Récolter des baies";
+		hb.description = "Récolte n'importe quelle baie (ex: baie Oran).";
+		hb.tiers = new ArrayList<>();
+		QuestConfig.QuestTierConfig b1 = new QuestConfig.QuestTierConfig();
+		b1.goal = 32;
+		b1.reward = 200.0;
+		b1.title = "Récolter des baies";
+		b1.description = "Récolte 32 baies.";
+		hb.tiers.add(b1);
+		QuestConfig.QuestTierConfig b2 = new QuestConfig.QuestTierConfig();
+		b2.goal = 128;
+		b2.reward = 600.0;
+		b2.title = "Récolter des baies";
+		b2.description = "Récolte 128 baies.";
+		hb.tiers.add(b2);
+		QuestConfig.QuestTierConfig b3 = new QuestConfig.QuestTierConfig();
+		b3.goal = 512;
+		b3.reward = 2500.0;
+		b3.title = "Récolter des baies";
+		b3.description = "Récolte 512 baies.";
+		hb.tiers.add(b3);
+		cfg.quests.add(hb);
 
 		return cfg;
 	}

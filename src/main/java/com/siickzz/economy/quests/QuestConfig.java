@@ -33,6 +33,7 @@ public final class QuestConfig {
 		public String category;
 		public String type; // CAPTURE_ANY, CAPTURE_SPECIES, BATTLE_WIN_ANY, TRADE_ANY, FISH_POKEMON_ANY, SHOP_BUY_ANY, SHOP_SELL_ANY, HARVEST_ITEM, MINE_ORE, POKEDEX_CAUGHT
 		public String target; // species name/id for CAPTURE_SPECIES, ore key for MINE_ORE (e.g. diamond/iron/gold), item id/pattern for HARVEST_ITEM (e.g. cobblemon:black_apricorn or *apricorn*)
+		public String iconItemId;
 		public Integer goal;
 		public Double reward;
 		public String title;
