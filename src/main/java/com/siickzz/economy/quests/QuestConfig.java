@@ -7,6 +7,22 @@ public final class QuestConfig {
 	public List<QuestCategoryConfig> categories;
 	public LegendaryCategoryConfig legendaryCategory;
 	public List<QuestDefConfig> quests;
+	public TierDropsConfig tierDrops;
+
+	public static final class TierDropsConfig {
+		public boolean enabled = false;
+		public Integer rollsPerTier = 1;
+		public boolean dropOnGroundIfFull = true;
+		public boolean notifyPlayer = true;
+		public List<TierDropEntryConfig> drops;
+	}
+
+	public static final class TierDropEntryConfig {
+		public String itemId;
+		public Double chance; // 0..1 or 0..100 (treated as percent if > 1)
+		public Integer min = 1;
+		public Integer max = 1;
+	}
 
 	public static final class QuestCategoryConfig {
 		public String name;

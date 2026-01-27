@@ -5,6 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.siickzz.economy.economy.EconomyManager;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -40,6 +43,10 @@ public final class QuestManager {
 	private static final List<String> LEGENDARY_ICON_POOL = new ArrayList<>();
 	private static volatile boolean LEGENDARY_USE_POOL_FALLBACK = false;
 
+	private static volatile QuestConfig.TierDropsConfig TIER_DROPS = null;
+	private static final Set<String> LOGGED_BAD_DROP_IDS = Collections.newSetFromMap(new ConcurrentHashMap<>());
+	private static final java.util.random.RandomGenerator DROP_RNG = java.util.random.RandomGenerator.getDefault();
+
 	private static final class LegendaryItemsConfig {
 		public List<LegendaryItemMapping> custom;
 		public List<String> occurrences;
@@ -62,14 +69,19 @@ public final class QuestManager {
 		synchronized (QuestManager.class) {
 			if (INITIALIZED) return;
 
-			Path configDir = FabricLoader.getInstance().getConfigDir().resolve("economy");
+			Path rootConfigDir = FabricLoader.getInstance().getConfigDir();
+			Path legacyQuestsFile = rootConfigDir.resolve("quests.json");
+			Path configDir = rootConfigDir.resolve("economy");
 			questsFile = configDir.resolve("quests.json");
 			progressFile = configDir.resolve("quests_progress.json");
-			legendaryItemsFile = FabricLoader.getInstance().getConfigDir().resolve("academy").resolve("legendary_items.json");
+			legendaryItemsFile = rootConfigDir.resolve("academy").resolve("legendary_items.json");
 			try {
 				Files.createDirectories(configDir);
 			} catch (IOException ignored) {
 			}
+
+			maybeMigrateLegacyQuestsConfig(legacyQuestsFile, questsFile);
+			warnIfLegacyQuestsConfigIgnored(legacyQuestsFile, questsFile);
 
 			if (!Files.exists(questsFile)) {
 				writeDefaultConfig(questsFile);
@@ -85,6 +97,50 @@ public final class QuestManager {
 		synchronized (QuestManager.class) {
 			loadLegendaryItems();
 			loadConfig();
+		}
+	}
+
+	private static void warnIfLegacyQuestsConfigIgnored(Path legacyQuestsFile, Path activeQuestsFile) {
+		try {
+			if (legacyQuestsFile == null || activeQuestsFile == null) return;
+			if (!Files.exists(legacyQuestsFile)) return;
+			if (!Files.exists(activeQuestsFile)) return;
+			if (legacyQuestsFile.normalize().equals(activeQuestsFile.normalize())) return;
+			LOGGER.warn("[CobbleEconomy] Found legacy quests config at {} but active config is {} (move your edits to the active file)", legacyQuestsFile, activeQuestsFile);
+		} catch (Throwable ignored) {
+		}
+	}
+
+	private static void maybeMigrateLegacyQuestsConfig(Path legacyQuestsFile, Path activeQuestsFile) {
+		try {
+			if (legacyQuestsFile == null || activeQuestsFile == null) return;
+			if (!Files.exists(legacyQuestsFile)) return;
+			if (legacyQuestsFile.normalize().equals(activeQuestsFile.normalize())) return;
+
+			// If the active file doesn't exist yet, adopt legacy as the active config.
+			if (!Files.exists(activeQuestsFile)) {
+				Files.createDirectories(activeQuestsFile.getParent());
+				Files.copy(legacyQuestsFile, activeQuestsFile);
+				LOGGER.warn("[CobbleEconomy] Migrated legacy quests config from {} to {}", legacyQuestsFile, activeQuestsFile);
+				return;
+			}
+
+			// If both exist but active is missing tierDrops while legacy has it, prefer legacy (common 'edited wrong file' case).
+			String activeText = Files.readString(activeQuestsFile, StandardCharsets.UTF_8);
+			String legacyText = Files.readString(legacyQuestsFile, StandardCharsets.UTF_8);
+			boolean activeHasTierDrops = activeText != null && activeText.contains("\"tierDrops\"");
+			boolean legacyHasTierDrops = legacyText != null && legacyText.contains("\"tierDrops\"");
+			if (!activeHasTierDrops && legacyHasTierDrops) {
+				Path backup = activeQuestsFile.resolveSibling(activeQuestsFile.getFileName() + ".bak");
+				try {
+					Files.copy(activeQuestsFile, backup);
+				} catch (IOException ignored) {
+				}
+				Files.copy(legacyQuestsFile, activeQuestsFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+				LOGGER.warn("[CobbleEconomy] Active quests config was missing tierDrops. Replaced {} with legacy {} (backup at {})", activeQuestsFile, legacyQuestsFile, backup);
+			}
+		} catch (Throwable t) {
+			LOGGER.warn("[CobbleEconomy] Could not migrate legacy quests config", t);
 		}
 	}
 
@@ -217,6 +273,7 @@ public final class QuestManager {
 					qp.progress += 1;
 					changed = true;
 					if (before < goalNow && qp.progress >= goalNow) {
+						tryRollTierDrops(player, quest, qp.tier);
 						announceQuestCompleted(player, quest, qp);
 					}
 				}
@@ -228,6 +285,7 @@ public final class QuestManager {
 					qp.progress += 1;
 					changed = true;
 					if (before < goalNow && qp.progress >= goalNow) {
+						tryRollTierDrops(player, quest, qp.tier);
 						announceQuestCompleted(player, quest, qp);
 					}
 				}
@@ -240,6 +298,7 @@ public final class QuestManager {
 				if (qp.progress < goalNow) {
 					qp.progress = goalNow;
 					changed = true;
+					tryRollTierDrops(player, quest, qp.tier);
 					announceQuestCompleted(player, quest, qp);
 				}
 			}
@@ -268,6 +327,7 @@ public final class QuestManager {
 				qp.progress += 1;
 				changed = true;
 				if (before < goalNow && qp.progress >= goalNow) {
+					tryRollTierDrops(player, quest, qp.tier);
 					announceQuestCompleted(player, quest, qp);
 				}
 			}
@@ -296,6 +356,7 @@ public final class QuestManager {
 				qp.progress += 1;
 				changed = true;
 				if (before < goalNow && qp.progress >= goalNow) {
+					tryRollTierDrops(player, quest, qp.tier);
 					announceQuestCompleted(player, quest, qp);
 				}
 			}
@@ -324,6 +385,7 @@ public final class QuestManager {
 				qp.progress += 1;
 				changed = true;
 				if (before < goalNow && qp.progress >= goalNow) {
+					tryRollTierDrops(player, quest, qp.tier);
 					announceQuestCompleted(player, quest, qp);
 				}
 			}
@@ -353,6 +415,7 @@ public final class QuestManager {
 				qp.progress = Math.min(goalNow, qp.progress + itemCount);
 				changed = true;
 				if (before < goalNow && qp.progress >= goalNow) {
+					tryRollTierDrops(player, quest, qp.tier);
 					announceQuestCompleted(player, quest, qp);
 				}
 			}
@@ -382,6 +445,7 @@ public final class QuestManager {
 				qp.progress = Math.min(goalNow, qp.progress + itemCount);
 				changed = true;
 				if (before < goalNow && qp.progress >= goalNow) {
+					tryRollTierDrops(player, quest, qp.tier);
 					announceQuestCompleted(player, quest, qp);
 				}
 			}
@@ -416,6 +480,7 @@ public final class QuestManager {
 				qp.progress = Math.min(goalNow, qp.progress + 1);
 				changed = true;
 				if (before < goalNow && qp.progress >= goalNow) {
+					tryRollTierDrops(player, quest, qp.tier);
 					announceQuestCompleted(player, quest, qp);
 				}
 			}
@@ -458,6 +523,7 @@ public final class QuestManager {
 				changed = true;
 				changedQuestCount += 1;
 				if (before < goalNow && qp.progress >= goalNow) {
+					tryRollTierDrops(player, quest, qp.tier);
 					announceQuestCompleted(player, quest, qp);
 				}
 			}
@@ -505,6 +571,7 @@ public final class QuestManager {
 				changed = true;
 			}
 			if (before < goalNow && qp.progress >= goalNow) {
+				tryRollTierDrops(player, quest, qp.tier);
 				announceQuestCompleted(player, quest, qp);
 				changed = true;
 			}
@@ -559,6 +626,74 @@ public final class QuestManager {
 		return true;
 	}
 
+	private static void tryRollTierDrops(ServerPlayerEntity player, QuestDef quest, int completedTierIndex) {
+		QuestConfig.TierDropsConfig cfg = TIER_DROPS;
+		if (cfg == null || !cfg.enabled) return;
+		if (cfg.drops == null || cfg.drops.isEmpty()) return;
+		int rolls = cfg.rollsPerTier == null ? 1 : Math.max(0, cfg.rollsPerTier);
+		if (rolls <= 0) return;
+		if (player == null) return;
+
+		for (int r = 0; r < rolls; r++) {
+			for (QuestConfig.TierDropEntryConfig entry : cfg.drops) {
+				if (entry == null) continue;
+				String id = entry.itemId;
+				if (id == null || id.isBlank()) continue;
+				double chance = normalizeChance(entry.chance);
+				if (chance <= 0.0) continue;
+				if (chance < 1.0 && DROP_RNG.nextDouble() >= chance) continue;
+
+				Item item = resolveItem(id.trim());
+				if (item == null) {
+					if (LOGGED_BAD_DROP_IDS.add(id.trim().toLowerCase(Locale.ROOT))) {
+						LOGGER.warn("[CobbleEconomy] tierDrops: unknown itemId '{}' (check config/economy/quests.json)", id);
+					}
+					continue;
+				}
+
+				int min = entry.min == null ? 1 : Math.max(1, entry.min);
+				int max = entry.max == null ? min : Math.max(min, entry.max);
+				int count = min == max ? min : (min + DROP_RNG.nextInt(max - min + 1));
+				ItemStack stack = new ItemStack(item, count);
+				String displayName = stack.getName().getString();
+				giveItem(player, stack, cfg.dropOnGroundIfFull);
+				if (cfg.notifyPlayer) {
+					String tierLabel = (quest != null && quest.isTiered() && quest.tiers() != null)
+						? ("Palier " + (completedTierIndex + 1) + "/" + quest.tiers().size())
+						: "Quête";
+					player.sendMessage(Text.literal("§d[Quêtes] §7Bonus (" + tierLabel + "): §f" + displayName + " §7x§f" + count), false);
+				}
+			}
+		}
+	}
+
+	private static double normalizeChance(Double raw) {
+		if (raw == null) return 0.0;
+		double v = raw;
+		if (v <= 0.0) return 0.0;
+		// allow 5 => 5% for convenience
+		if (v > 1.0) v = v / 100.0;
+		return Math.min(1.0, v);
+	}
+
+	private static Item resolveItem(String itemId) {
+		Identifier id = Identifier.tryParse(itemId);
+		if (id == null) return null;
+		Item item = Registries.ITEM.get(id);
+		// In 1.21, unknown IDs typically map to AIR
+		if (item == null) return null;
+		if (item == net.minecraft.item.Items.AIR) return null;
+		return item;
+	}
+
+	private static void giveItem(ServerPlayerEntity player, ItemStack stack, boolean dropOnGroundIfFull) {
+		if (stack == null || stack.isEmpty()) return;
+		boolean inserted = player.getInventory().insertStack(stack);
+		if (!inserted && !stack.isEmpty() && dropOnGroundIfFull) {
+			player.dropItem(stack, false);
+		}
+	}
+
 	public static int effectiveGoal(QuestDef quest, QuestProgress progress) {
 		if (quest == null) return 1;
 		if (quest.isTiered() && quest.tiers() != null && progress != null) {
@@ -611,13 +746,17 @@ public final class QuestManager {
 		QuestConfig cfg = null;
 		try (BufferedReader reader = Files.newBufferedReader(questsFile, StandardCharsets.UTF_8)) {
 			cfg = GSON.fromJson(reader, QuestConfig.class);
-		} catch (IOException e) {
-			LOGGER.warn("[CobbleEconomy] Could not read quests config at {}", questsFile);
+		} catch (Exception e) {
+			LOGGER.warn("[CobbleEconomy] Could not read quests config at {}", questsFile, e);
 		}
 
 		if (cfg == null) {
 			cfg = defaultConfig();
 		}
+		TIER_DROPS = cfg.tierDrops;
+		LOGGED_BAD_DROP_IDS.clear();
+		logTierDropsSummary();
+		validateTierDropsItemIds();
 		if (ensureApricornHarvestQuest(cfg)) {
 			LOGGER.warn("[CobbleEconomy] Added missing default apricorn harvest quest to in-memory config");
 		}
@@ -694,6 +833,34 @@ public final class QuestManager {
 				}
 
 				addQuest(new QuestDef(q.id, category, type, target, q.iconItemId, goal, reward, title, description, tiers));
+			}
+		}
+
+		LOGGER.warn("[CobbleEconomy] Loaded quests config from {} (quests={}, categories={}, tierDropsEnabled={})", questsFile, QUESTS.size(), CATEGORIES.size(), (TIER_DROPS != null && TIER_DROPS.enabled));
+	}
+
+	private static void logTierDropsSummary() {
+		QuestConfig.TierDropsConfig cfg = TIER_DROPS;
+		if (cfg == null) {
+			LOGGER.warn("[CobbleEconomy] tierDrops: not configured (missing 'tierDrops' section)");
+			return;
+		}
+		int drops = (cfg.drops == null) ? 0 : cfg.drops.size();
+		int rolls = cfg.rollsPerTier == null ? 1 : cfg.rollsPerTier;
+		LOGGER.warn("[CobbleEconomy] tierDrops: enabled={} rollsPerTier={} entries={} notifyPlayer={} dropOnGroundIfFull={}", cfg.enabled, rolls, drops, cfg.notifyPlayer, cfg.dropOnGroundIfFull);
+	}
+
+	private static void validateTierDropsItemIds() {
+		QuestConfig.TierDropsConfig cfg = TIER_DROPS;
+		if (cfg == null || !cfg.enabled) return;
+		if (cfg.drops == null || cfg.drops.isEmpty()) return;
+		for (QuestConfig.TierDropEntryConfig entry : cfg.drops) {
+			if (entry == null) continue;
+			String id = entry.itemId;
+			if (id == null || id.isBlank()) continue;
+			Item item = resolveItem(id.trim());
+			if (item == null) {
+				LOGGER.warn("[CobbleEconomy] tierDrops: unknown itemId '{}' (check {})", id, questsFile);
 			}
 		}
 	}
@@ -1071,6 +1238,26 @@ public final class QuestManager {
 		b3.description = "Récolte 512 baies.";
 		hb.tiers.add(b3);
 		cfg.quests.add(hb);
+
+		QuestConfig.TierDropsConfig drops = new QuestConfig.TierDropsConfig();
+		drops.enabled = false;
+		drops.rollsPerTier = 1;
+		drops.dropOnGroundIfFull = true;
+		drops.notifyPlayer = true;
+		drops.drops = new ArrayList<>();
+		QuestConfig.TierDropEntryConfig d1 = new QuestConfig.TierDropEntryConfig();
+		d1.itemId = "minecraft:experience_bottle";
+		d1.chance = 10.0; // 10%
+		d1.min = 4;
+		d1.max = 12;
+		drops.drops.add(d1);
+		QuestConfig.TierDropEntryConfig d2 = new QuestConfig.TierDropEntryConfig();
+		d2.itemId = "minecraft:emerald";
+		d2.chance = 2.0; // 2%
+		d2.min = 1;
+		d2.max = 2;
+		drops.drops.add(d2);
+		cfg.tierDrops = drops;
 
 		return cfg;
 	}
