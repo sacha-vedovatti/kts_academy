@@ -6,6 +6,7 @@ import com.siickzz.economy.commands.PokeBoardCommand;
 import com.siickzz.economy.commands.PokedexCommand;
 import com.siickzz.economy.commands.QuestCommand;
 import com.siickzz.economy.commands.ShopCommand;
+import com.siickzz.economy.commands.TrashCommand;
 import com.siickzz.economy.economy.EconomyManager;
 import com.siickzz.economy.events.PokemonBattleWinListener;
 import com.siickzz.economy.events.PokemonCaptureListener;
@@ -40,6 +41,7 @@ public class Economy implements ModInitializer {
         PokeBoardCommand.register();
         PokedexCommand.register();
 		QuestCommand.register();
+        TrashCommand.register();
 
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> EconomyManager.save());
 		ServerLifecycleEvents.SERVER_STOPPING.register(server -> QuestManager.save());
