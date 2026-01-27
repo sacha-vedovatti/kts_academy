@@ -83,7 +83,7 @@
           "key": "luxuryball",
           "itemId": "cobblemon:luxury_ball",
           "displayName": "Luxury Ball",
-          "buyPrice": 2000.0,
+          "buyPrice": 2250.0,
           "sellPrice": 200.0,
           "amount": 1
         },
@@ -187,23 +187,31 @@
           "key": "loveball",
           "itemId": "cobblemon:love_ball",
           "displayName": "Love Ball",
-          "buyPrice": 3000.0,
-          "sellPrice": 250.0,
+          "buyPrice": 1750.0,
+          "sellPrice": 175.0,
           "amount": 1
         },
         {
           "key": "fastball",
           "itemId": "cobblemon:fast_ball",
           "displayName": "Fast Ball",
-          "buyPrice": 3000.0,
-          "sellPrice": 250.0,
+          "buyPrice": 2000.0,
+          "sellPrice": 175.0,
           "amount": 1
         },
         {
           "key": "heavyball",
           "itemId": "cobblemon:heavy_ball",
           "displayName": "Heavy Ball",
-          "buyPrice": 3000.0,
+          "buyPrice": 2000.0,
+          "sellPrice": 175.0,
+          "amount": 1
+        },
+        {
+          "key": "dreamball",
+          "itemId": "cobblemon:dream_ball",
+          "displayName": "Dream Ball",
+          "buyPrice": 2500.0,
           "sellPrice": 250.0,
           "amount": 1
         }
