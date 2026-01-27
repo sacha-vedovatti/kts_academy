@@ -1,16 +1,31 @@
 {
   "categories": [
     {
-      "name": "GENERAL",
-      "displayName": "Quêtes",
-      "iconItemId": "minecraft:book"
+      "name": "POKEMON",
+      "displayName": "Pokemon",
+      "iconItemId": "cobblemon:poke_ball"
+    },
+    {
+      "name": "FARM",
+      "displayName": "Farm",
+      "iconItemId": "minecraft:diamond_hoe"
+    },
+    {
+      "name": "SHOP",
+      "displayName": "Shop",
+      "iconItemId": "cobblemon:relic_coin_pouch"
+    },
+    {
+      "name": "LEGENDARIES",
+      "displayName": "Légendaires",
+      "iconItemId": "cobblemon:master_ball"
     }
   ],
   "legendaryCategory": {
     "enabled": true,
     "category": "LEGENDARIES",
     "displayName": "Légendaires",
-    "iconItemId": "minecraft:nether_star",
+    "iconItemId": "cobblemon:master_ball",
     "usePoolFallback": false,
     "reward": 2500.0,
     "speciesIcons": {
@@ -201,8 +216,9 @@
   "quests": [
     {
       "id": "capture_10",
-      "category": "GENERAL",
+      "category": "POKEMON",
       "type": "CAPTURE_ANY",
+      "iconItemId": "cobblemon:poke_ball",
       "goal": 10,
       "reward": 200.0,
       "title": "Collectionneur",
@@ -253,9 +269,40 @@
       ]
     },
     {
+      "id": "capture_shiny",
+      "category": "POKEMON",
+      "type": "CAPTURE_SHINY_ANY",
+      "iconItemId": "cobblemon:master_ball",
+      "goal": 1,
+      "reward": 1000.0,
+      "title": "Shiny Hunter",
+      "description": "Capture des Pokémon shiny.",
+      "tiers": [
+        {
+          "goal": 1,
+          "reward": 1000.0,
+          "title": "Shiny Hunter",
+          "description": "Capture 1 Pokémon shiny."
+        },
+        {
+          "goal": 5,
+          "reward": 4000.0,
+          "title": "Shiny Hunter",
+          "description": "Capture 5 Pokémon shiny."
+        },
+        {
+          "goal": 25,
+          "reward": 15000.0,
+          "title": "Shiny Hunter",
+          "description": "Capture 25 Pokémon shiny."
+        }
+      ]
+    },
+    {
       "id": "battle_win_10",
-      "category": "GENERAL",
+      "category": "POKEMON",
       "type": "BATTLE_WIN_ANY",
+      "iconItemId": "minecraft:iron_sword",
       "goal": 10,
       "reward": 200.0,
       "title": "Combattant",
@@ -307,8 +354,9 @@
     },
     {
       "id": "fish_pokemon",
-      "category": "GENERAL",
+      "category": "POKEMON",
       "type": "FISH_POKEMON_ANY",
+      "iconItemId": "minecraft:fishing_rod",
       "goal": 10,
       "reward": 200.0,
       "title": "Pêcheur",
@@ -396,8 +444,9 @@
     },
     {
       "id": "harvest_noigrumes",
-      "category": "GENERAL",
+      "category": "FARM",
       "type": "HARVEST_ITEM",
+      "iconItemId": "cobblemon:yellow_apricorn",
       "target": "noigrume",
       "goal": 50,
       "reward": 200.0,
@@ -431,9 +480,41 @@
       ]
     },
     {
+      "id": "harvest_berries",
+      "category": "FARM",
+      "type": "HARVEST_ITEM",
+      "iconItemId": "cobblemon:mythical_pecha_berry",
+      "target": "*berry*",
+      "goal": 32,
+      "reward": 200.0,
+      "title": "Récolter des baies",
+      "description": "Récolte n'importe quelle baie (ex: baie Oran).",
+      "tiers": [
+        {
+          "goal": 32,
+          "reward": 200.0,
+          "title": "Récolter des baies",
+          "description": "Récolte 32 baies."
+        },
+        {
+          "goal": 128,
+          "reward": 600.0,
+          "title": "Récolter des baies",
+          "description": "Récolte 128 baies."
+        },
+        {
+          "goal": 512,
+          "reward": 2500.0,
+          "title": "Récolter des baies",
+          "description": "Récolte 512 baies."
+        }
+      ]
+    },
+    {
       "id": "shop_sell_items",
-      "category": "GENERAL",
+      "category": "SHOP",
       "type": "SHOP_SELL_ANY",
+      "iconItemId": "cobblemon:relic_coin_pouch",
       "goal": 50,
       "reward": 200.0,
       "title": "Vendeur",
@@ -497,8 +578,9 @@
     },
     {
       "id": "shop_buy_items",
-      "category": "GENERAL",
+      "category": "SHOP",
       "type": "SHOP_BUY_ANY",
+      "iconItemId": "cobblemon:relic_coin_pouch",
       "goal": 50,
       "reward": 200.0,
       "title": "Acheteur",
@@ -532,8 +614,9 @@
     },
     {
       "id": "mine_diamond_ore",
-      "category": "GENERAL",
+      "category": "FARM",
       "type": "MINE_ORE",
+      "iconItemId": "minecraft:diamond_ore",
       "target": "diamond",
       "goal": 64,
       "reward": 500.0,
@@ -562,20 +645,21 @@
           "goal": 512,
           "reward": 4000.0,
           "title": "Farmer (Diamant)",
-          "description": "Mine 512 minerais de diamant." 
+          "description": "Mine 512 minerais de diamant."
         },
         {
           "goal": 1024,
           "reward": 4000.0,
           "title": "Farmer (Diamant)",
-          "description": "Mine 1024 minerais de diamant." 
+          "description": "Mine 1024 minerais de diamant."
         }
       ]
     },
     {
       "id": "mine_iron_ore",
-      "category": "GENERAL",
+      "category": "FARM",
       "type": "MINE_ORE",
+      "iconItemId": "minecraft:iron_ore",
       "target": "iron",
       "goal": 64,
       "reward": 250.0,
@@ -606,7 +690,7 @@
           "title": "Farmer (Fer)",
           "description": "Mine 512 minerais de fer."
         },
-         {
+        {
           "goal": 1024,
           "reward": 2000.0,
           "title": "Farmer (Fer)",
@@ -622,8 +706,9 @@
     },
     {
       "id": "mine_gold_ore",
-      "category": "GENERAL",
+      "category": "FARM",
       "type": "MINE_ORE",
+      "iconItemId": "minecraft:gold_ore",
       "target": "gold",
       "goal": 64,
       "reward": 300.0,
@@ -664,8 +749,9 @@
     },
     {
       "id": "pokedex_caught",
-      "category": "GENERAL",
+      "category": "POKEMON",
       "type": "POKEDEX_CAUGHT",
+      "iconItemId": "minecraft:knowledge_book",
       "goal": 50,
       "reward": 500.0,
       "title": "Pokédex",
