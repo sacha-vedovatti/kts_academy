@@ -107,16 +107,16 @@
           "key": "duskball",
           "itemId": "cobblemon:dusk_ball",
           "displayName": "Dusk Ball",
-          "buyPrice": 2250.0,
-          "sellPrice": 225.0,
+          "buyPrice": 2000.0,
+          "sellPrice": 200.0,
           "amount": 1
         },
         {
           "key": "timerball",
           "itemId": "cobblemon:timer_ball",
           "displayName": "Timer Ball",
-          "buyPrice": 2250.0,
-          "sellPrice": 225.0,
+          "buyPrice": 2000.0,
+          "sellPrice": 200.0,
           "amount": 1
         },
         {
@@ -318,7 +318,7 @@
           "itemId": "cobblemon:fire_stone",
           "displayName": "Fire Stone",
           "buyPrice": 3000.0,
-          "sellPrice": 300.0,
+          "sellPrice": 200.0,
           "amount": 1
         },
         {
@@ -326,7 +326,7 @@
           "itemId": "cobblemon:water_stone",
           "displayName": "Water Stone",
           "buyPrice": 3000.0,
-          "sellPrice": 300.0,
+          "sellPrice": 200.0,
           "amount": 1
         },
         {
@@ -334,7 +334,7 @@
           "itemId": "cobblemon:thunder_stone",
           "displayName": "Thunder Stone",
           "buyPrice": 3000.0,
-          "sellPrice": 300.0,
+          "sellPrice": 200.0,
           "amount": 1
         },
         {
@@ -342,7 +342,7 @@
           "itemId": "cobblemon:leaf_stone",
           "displayName": "Leaf Stone",
           "buyPrice": 3000.0,
-          "sellPrice": 300.0,
+          "sellPrice": 200.0,
           "amount": 1
         },
         {
@@ -350,7 +350,7 @@
           "itemId": "cobblemon:moon_stone",
           "displayName": "Moon Stone",
           "buyPrice": 3500.0,
-          "sellPrice": 350.0,
+          "sellPrice": 250.0,
           "amount": 1
         },
         {
@@ -358,7 +358,7 @@
           "itemId": "cobblemon:sun_stone",
           "displayName": "Sun Stone",
           "buyPrice": 3500.0,
-          "sellPrice": 350.0,
+          "sellPrice": 250.0,
           "amount": 1
         },
         {
@@ -366,7 +366,7 @@
           "itemId": "cobblemon:dawn_stone",
           "displayName": "Dawn Stone",
           "buyPrice": 4000.0,
-          "sellPrice": 400.0,
+          "sellPrice": 300.0,
           "amount": 1
         },
         {
@@ -374,7 +374,7 @@
           "itemId": "cobblemon:dusk_stone",
           "displayName": "Dusk Stone",
           "buyPrice": 4000.0,
-          "sellPrice": 400.0,
+          "sellPrice": 300.0,
           "amount": 1
         },
         {
@@ -382,7 +382,7 @@
           "itemId": "cobblemon:ice_stone",
           "displayName": "Ice Stone",
           "buyPrice": 4000.0,
-          "sellPrice": 400.0,
+          "sellPrice": 300.0,
           "amount": 1
         },
         {
@@ -390,7 +390,365 @@
           "itemId": "cobblemon:shiny_stone",
           "displayName": "Shiny Stone",
           "buyPrice": 4000.0,
-          "sellPrice": 400.0,
+          "sellPrice": 300.0,
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "name": "Mega Stones",
+      "displayName": "Mega Stones",
+      "items": [
+        {
+          "key": "abomasite",
+          "itemId": "cobblemon:abomasite",
+          "displayName": "Blizzarite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "absolite",
+          "itemId": "cobblemon:absolite",
+          "displayName": "Absolite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "aerodactylite",
+          "itemId": "cobblemon:aerodactylite",
+          "displayName": "Ptéraïte",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "aggronite",
+          "itemId": "cobblemon:aggronite",
+          "displayName": "Galekingite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "alakazite",
+          "itemId": "cobblemon:alakazite",
+          "displayName": "Alakazamite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "altarianite",
+          "itemId": "cobblemon:altarianite",
+          "displayName": "Altarite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "ampharosite",
+          "itemId": "cobblemon:ampharosite",
+          "displayName": "Pharampite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "audinite",
+          "itemId": "cobblemon:audinite",
+          "displayName": "Nanméouïte",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "banettite",
+          "itemId": "cobblemon:banettite",
+          "displayName": "Branettite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "beedrillite",
+          "itemId": "cobblemon:beedrillite",
+          "displayName": "Dardargnite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "blastoisinite",
+          "itemId": "cobblemon:blastoisinite",
+          "displayName": "Tortankite",
+          "buyPrice": 10000.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "blazikenite",
+          "itemId": "cobblemon:blazikenite",
+          "displayName": "Braségalite",
+          "buyPrice": 10000.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "charizardite_x",
+          "itemId": "cobblemon:charizarditex",
+          "displayName": "Dracaufite X",
+          "buyPrice": 10000.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "charizardite_y",
+          "itemId": "cobblemon:charizarditey",
+          "displayName": "Dracaufite Y",
+          "buyPrice": 10000.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "diancite",
+          "itemId": "cobblemon:diancite",
+          "displayName": "Diancite",
+          "buyPrice": 15000.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "garchompite",
+          "itemId": "cobblemon:garchompite",
+          "displayName": "Carchacrokite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "gardevoirite",
+          "itemId": "cobblemon:gardevoirite",
+          "displayName": "Gardevoirite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "gengarite",
+          "itemId": "cobblemon:gengarite",
+          "displayName": "Ectoplasmite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "gyaradosite",
+          "itemId": "cobblemon:gyaradosite",
+          "displayName": "Léviatorite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "heracronite",
+          "itemId": "cobblemon:heracronite",
+          "displayName": "Scarhinoïte",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "houndoominite",
+          "itemId": "cobblemon:houndoominite",
+          "displayName": "Démolossite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "kangaskhanite",
+          "itemId": "cobblemon:kangaskhanite",
+          "displayName": "Kangourexite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "latiasite",
+          "itemId": "cobblemon:latiasite",
+          "displayName": "Latiasite",
+          "buyPrice": 15000.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "latiosite",
+          "itemId": "cobblemon:latiosite",
+          "displayName": "Latiosite",
+          "buyPrice": 15000.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "lopunnite",
+          "itemId": "cobblemon:lopunnite",
+          "displayName": "Lockpinite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "lucarionite",
+          "itemId": "cobblemon:lucarionite",
+          "displayName": "Lucarite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "manectite",
+          "itemId": "cobblemon:manectite",
+          "displayName": "Élecsprintite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "mawilite",
+          "itemId": "cobblemon:mawilite",
+          "displayName": "Mysdibulite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "medichamite",
+          "itemId": "cobblemon:medichamite",
+          "displayName": "Charminite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "metagrossite",
+          "itemId": "cobblemon:metagrossite",
+          "displayName": "Métalossite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "mewtwonite_x",
+          "itemId": "cobblemon:mewtwonitex",
+          "displayName": "Mewtwoïte X",
+          "buyPrice": 15000.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "mewtwonite_y",
+          "itemId": "cobblemon:mewtwonitey",
+          "displayName": "Mewtwoïte Y",
+          "buyPrice": 15000.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "pidgeotite",
+          "itemId": "cobblemon:pidgeotite",
+          "displayName": "Roucarnagite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "pinsirite",
+          "itemId": "cobblemon:pinsirite",
+          "displayName": "Scarabruite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "sablenite",
+          "itemId": "cobblemon:sablenite",
+          "displayName": "Ténéfixite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "salamencite",
+          "itemId": "cobblemon:salamencite",
+          "displayName": "Drattakite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "sceptilite",
+          "itemId": "cobblemon:sceptilite",
+          "displayName": "Jungkite",
+          "buyPrice": 10000.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "scizorite",
+          "itemId": "cobblemon:scizorite",
+          "displayName": "Cizayoxite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "sharpedonite",
+          "itemId": "cobblemon:sharpedonite",
+          "displayName": "Sharpedite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "slowbronite",
+          "itemId": "cobblemon:slowbronite",
+          "displayName": "Flagadossite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "steelixite",
+          "itemId": "cobblemon:steelixite",
+          "displayName": "Steelixite",
+          "buyPrice": 5000.0,
+          "sellPrice": 500,
+          "amount": 1
+        },
+        {
+          "key": "swampertite",
+          "itemId": "cobblemon:swampertite",
+          "displayName": "Laggronite",
+          "buyPrice": 10000.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "tyranitarite",
+          "itemId": "cobblemon:tyranitarite",
+          "displayName": "Tyranocivite",
+          "buyPrice": 7500.0,
+          "sellPrice": 750,
+          "amount": 1
+        },
+        {
+          "key": "venusaurite",
+          "itemId": "cobblemon:venusaurite",
+          "displayName": "Florizarrite",
+          "buyPrice": 10000.0,
+          "sellPrice": 750,
           "amount": 1
         }
       ]
