@@ -3,6 +3,7 @@ package com.siickzz.economy;
 import com.siickzz.economy.commands.EconomyAdminCommand;
 import com.siickzz.economy.commands.MoneyTopCommand;
 import com.siickzz.economy.commands.PokeBoardCommand;
+import com.siickzz.economy.commands.PokedexCommand;
 import com.siickzz.economy.commands.QuestCommand;
 import com.siickzz.economy.commands.ShopCommand;
 import com.siickzz.economy.economy.EconomyManager;
@@ -37,6 +38,7 @@ public class Economy implements ModInitializer {
         EconomyAdminCommand.register();
 		MoneyTopCommand.register();
         PokeBoardCommand.register();
+        PokedexCommand.register();
 		QuestCommand.register();
 
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> EconomyManager.save());
