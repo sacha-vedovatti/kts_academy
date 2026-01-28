@@ -1,13 +1,13 @@
-# Update 1.0.1 [PREVIEW]
+# Update 1.0.1
 
-## Nouveautés :
+## News :
 
-### Quêtes
+### Quests
 - **Farmer** (Farm) : Récoltez `64/128/320/640/1280` noigrumes.
 
 - **Shiny Hunter** (Pokemon) : Capturez `1/5/10/25/50/100` pokémons shiny.
 
-- De nouvelles récompenses ont été ajoutés aux quêtes.
+- New quests rewards : other rewards may appear after this patch (see issue #3).
 
 ### Shop
 - **Mega Stones** : All mega stones.
@@ -18,15 +18,15 @@
   - Buy price: `2500`₱
   - Sell price: `250`₱
 
-### Autre
+### Other
 
 1. `Wither` mob is now enable in overworld. (already live)
-2. Chunks optimisations. (already live, can be fix)
-3. Commande `/pokedex` : permet de visualiser son pokedex.
-4. Commande `/trash` : permet de jeter des objets à la poubelle.
+2. Chunks optimisations. (already live, some fix will be released during patch 1.0.2)
+3. New command `/pokedex` : access your own Pokédex without any items.
+4. New command `/trash` (or `/poubelle`) : throw your useless items in the trash !
 5. Maximum Pokemons levels : `50` ➜ `75`
 
-## Ajustements :
+## Reworks :
 
 ### Quêtes :
 - **Pokemon Collector** (Pokemon) : Capturer `10/50/100/250/500/1000/5000` Pokémons
