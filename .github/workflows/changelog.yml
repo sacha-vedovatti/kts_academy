@@ -1,0 +1,28 @@
+name: Discord Changelogs
+
+on:
+  push:
+    paths:
+      - "CHANGELOG.md"
+    branches:
+      - main
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Read CHANGELOG
+        id: changelog
+        run: |
+          echo "::set-output name=content::$(cat CHANGELOG.md)"
+
+      - name: Send Changelog to Discord
+        uses: Ilshidur/action-discord@v2
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          content: |
+            ```markdown
+            ${{ steps.changelog.outputs.content }}
+            ```
