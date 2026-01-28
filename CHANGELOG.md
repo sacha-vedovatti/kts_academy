@@ -24,7 +24,7 @@
 2. Chunks optimisations. (already live, some fix will be released during patch 1.0.2)
 3. New command `/pokedex` : access your own Pokédex without any items.
 4. New command `/trash` (or `/poubelle`) : throw your useless items in the trash !
-5. Maximum Pokemons levels : `50` ➜ `75`
+5. Maximum Pokemons levels : `50` ➜ `75`. 
 
 ## Reworks :
 
