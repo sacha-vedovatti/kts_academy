@@ -27,6 +27,4 @@ jobs:
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
           content: |
-            ```markdown
             ${{ env.CHANGELOG_CONTENT }}
-            ```
