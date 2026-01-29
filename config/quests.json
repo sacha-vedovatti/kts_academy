@@ -221,21 +221,27 @@
     "drops": [
       {
         "itemId": "cobblemon:booster_pack",
-        "chance": 2.0,
+        "chance": 25.0,
+        "min": 1,
+        "max": 2
+      },
+      {
+        "itemId": "cobblemon:rare_candy",
+        "chance": 100.0,
+        "min": 1,
+        "max": 5
+      },
+      {
+        "itemId": "cobblemon:mega_bracelet",
+        "chance": 5.0,
         "min": 1,
         "max": 1
       },
       {
-        "itemId": "cobblemon:rare_candy",
-        "chance": 100.0,
+        "itemId": "cobblemon:tera_orb",
+        "chance": 5.0,
         "min": 1,
-        "max": 2
-      },
-      {
-        "itemId": "cobblemon:rare_candy",
-        "chance": 100.0,
-        "min": 1,
-        "max": 2
+        "max": 1
       }
     ]
   },
@@ -349,49 +355,49 @@
       "iconItemId": "minecraft:iron_sword",
       "goal": 10,
       "reward": 200.0,
-      "title": "Combattant",
+      "title": "Pokemon Trainer",
       "description": "Remporte des combats Pokémon.",
       "tiers": [
         {
           "goal": 10,
           "reward": 200.0,
-          "title": "Combattant",
+          "title": "Trainer I",
           "description": "Remporte 10 combats Pokémon."
         },
         {
           "goal": 10,
           "reward": 500.0,
-          "title": "Combattant",
+          "title": "Trainer II",
           "description": "Remporte 50 combats Pokémon."
         },
         {
           "goal": 100,
           "reward": 1000.0,
-          "title": "Combattant",
+          "title": "Trainer III",
           "description": "Remporte 100 combats Pokémon."
         },
         {
           "goal": 250,
           "reward": 2500.0,
-          "title": "Combattant",
+          "title": "Trainer IV",
           "description": "Remporte 250 combats Pokémon."
         },
         {
           "goal": 500,
           "reward": 5000.0,
-          "title": "Combattant",
+          "title": "Trainer V",
           "description": "Remporte 500 combats Pokémon."
         },
         {
           "goal": 1000,
           "reward": 5000.0,
-          "title": "Combattant",
+          "title": "Trainer VI",
           "description": "Remporte 1000 combats Pokémon."
         },
         {
           "goal": 5000,
           "reward": 10000.0,
-          "title": "Combattant",
+          "title": "Trainer VII",
           "description": "Remporte 5000 combats Pokémon."
         }
       ]
@@ -403,85 +409,85 @@
       "iconItemId": "minecraft:fishing_rod",
       "goal": 10,
       "reward": 200.0,
-      "title": "Pêcheur",
+      "title": "Fisher",
       "description": "Pêche des Pokémon avec la canne Cobblemon.",
       "tiers": [
         {
           "goal": 10,
           "reward": 100.0,
-          "title": "Pêcheur",
+          "title": "Fisher I",
           "description": "Pêche 10 Pokémon."
         },
         {
           "goal": 25,
           "reward": 250.0,
-          "title": "Pêcheur",
+          "title": "Fisher II",
           "description": "Pêche 25 Pokémon."
         },
         {
           "goal": 50,
           "reward": 500.0,
-          "title": "Pêcheur",
+          "title": "Fisher III",
           "description": "Pêche 50 Pokémon."
         },
         {
           "goal": 75,
           "reward": 750.0,
-          "title": "Pêcheur",
+          "title": "Fisher IV",
           "description": "Pêche 50 Pokémon."
         },
         {
           "goal": 100,
           "reward": 1000.0,
-          "title": "Pêcheur",
+          "title": "Fisher V",
           "description": "Pêche 100 Pokémon."
         },
         {
           "goal": 150,
           "reward": 750.0,
-          "title": "Pêcheur",
+          "title": "Fisher VI",
           "description": "Pêche 150 Pokémon."
         },
         {
           "goal": 200,
           "reward": 2000.0,
-          "title": "Pêcheur",
+          "title": "Fisher VII",
           "description": "Pêche 200 Pokémon."
         },
         {
           "goal": 250,
           "reward": 2500.0,
-          "title": "Pêcheur",
+          "title": "Fisher VIII",
           "description": "Pêche 250 Pokémon."
         },
         {
           "goal": 300,
           "reward": 3000.0,
-          "title": "Pêcheur",
+          "title": "Fisher IX",
           "description": "Pêche 300 Pokémon."
         },
         {
           "goal": 350,
           "reward": 3500.0,
-          "title": "Pêcheur",
+          "title": "Fisher X",
           "description": "Pêche 350 Pokémon."
         },
         {
           "goal": 400,
           "reward": 4000.0,
-          "title": "Pêcheur",
+          "title": "Fisher XI",
           "description": "Pêche 400 Pokémon."
         },
         {
           "goal": 450,
           "reward": 4500.0,
-          "title": "Pêcheur",
+          "title": "Fisher XII",
           "description": "Pêche 450 Pokémon."
         },
         {
           "goal": 500,
           "reward": 5000.0,
-          "title": "Pêcheur",
+          "title": "Fisher XIII",
           "description": "Pêche 500 Pokémon."
         }
       ]
@@ -494,38 +500,68 @@
       "target": "noigrume",
       "goal": 50,
       "reward": 200.0,
-      "title": "Récolteur",
+      "title": "Apricorn Farmer",
       "description": "Récolte des noixgrumes (apricorns) de Cobblemon.",
       "tiers": [
         {
           "goal": 64,
           "reward": 200.0,
-          "title": "Récolteur",
+          "title": "Apricorn I",
           "description": "Récolte 64 noixgrumes."
         },
         {
           "goal": 128,
           "reward": 500.0,
-          "title": "Récolteur",
+          "title": "Apricorn II",
           "description": "Récolte 128 noixgrumes."
         },
         {
           "goal": 320,
           "reward": 500.0,
-          "title": "Récolteur",
+          "title": "Apricorn III",
           "description": "Récolte 256 noixgrumes."
         },
         {
           "goal": 640,
           "reward": 2500.0,
-          "title": "Récolteur",
+          "title": "Apricorn IV",
           "description": "Récolte 640 noixgrumes."
         },
         {
           "goal": 1280,
           "reward": 5000.0,
-          "title": "Récolteur",
+          "title": "Apricorn V",
           "description": "Récolte 1280 noixgrumes."
+        },
+        {
+          "goal": 1920,
+          "reward": 2000.0,
+          "title": "Apricorn VI",
+          "description": "Récolte 1920 noixgrumes."
+        },
+        {
+          "goal": 2560,
+          "reward": 5000.0,
+          "title": "Apricorn VII",
+          "description": "Récolte 2560 noixgrumes."
+        },
+        {
+          "goal": 3840,
+          "reward": 2000.0,
+          "title": "Apricorn VIII",
+          "description": "Récolte 3840 noixgrumes."
+        },
+        {
+          "goal": 5120,
+          "reward": 5000.0,
+          "title": "Apricorn IX",
+          "description": "Récolte 5120 noixgrumes."
+        },
+        {
+          "goal":  10240,
+          "reward": 10000.0,
+          "title": "Apricorn X",
+          "description": "Récolte 10.24k noixgrumes."
         }
       ]
     },
@@ -542,56 +578,80 @@
         {
           "goal": 50,
           "reward": 200.0,
-          "title": "Dealer",
+          "title": "Dealer I",
           "description": "Vends 50 objets dans le shop."
         },
         {
           "goal": 100,
           "reward": 500.0,
-          "title": "Dealer",
+          "title": "Dealer II",
           "description": "Vends 100 objets dans le shop."
         },
         {
           "goal": 250,
           "reward": 1000.0,
-          "title": "Dealer",
+          "title": "Dealer III",
           "description": "Vends 250 objets dans le shop."
         },
         {
           "goal": 500,
           "reward": 2500.0,
-          "title": "Dealer",
+          "title": "Dealer IV",
           "description": "Vends 500 objets dans le shop."
         },
         {
           "goal": 750,
           "reward": 1000.0,
-          "title": "Dealer",
+          "title": "Dealer V",
           "description": "Vends 750 objets dans le shop."
         },
         {
           "goal": 1000,
           "reward": 5000.0,
-          "title": "Dealer",
+          "title": "Dealer VI",
           "description": "Vends 1000 objets dans le shop."
         },
         {
           "goal": 2500,
           "reward": 5000.0,
-          "title": "Dealer",
+          "title": "Dealer VII",
           "description": "Vends 2500 objets dans le shop."
         },
         {
           "goal": 5000,
           "reward": 5000.0,
-          "title": "Dealer",
+          "title": "Dealer VIII",
           "description": "Vends 5000 objets dans le shop."
         },
         {
           "goal": 10000,
           "reward": 10000.0,
-          "title": "Dealer",
+          "title": "Dealer IX",
           "description": "Vends 10k objets dans le shop."
+        },
+        {
+          "goal": 15000,
+          "reward": 5000.0,
+          "title": "Dealer X",
+          "description": "Vends 15k objets dans le shop."
+        },
+        {
+          "goal": 20000,
+          "reward": 10000.0,
+          "title": "Dealer XI",
+          "description": "Vends 20k objets dans le shop."
+        },
+        {
+          "goal": 30000,
+          "reward": 5000.0,
+          "title": "Dealer XII",
+          "description": "Vends 30k objets dans le shop."
+        },
+        {
+          "goal": 50000,
+          "reward": 10000.0,
+          "title": "Dealer XIII",
+          "description": "Vends 50k objets dans le shop."
         }
       ]
     },
