@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "economy",
+	"id": "ktsacademy",
 	"version": "${version}",
-	"name": "CobbleEconomy",
-	"description": "Économie pour Cobblemon: argent à la capture + shop.",
+	"name": "KTS Academy",
+	"description": "KTS Academy mod for Cobblemon.",
 	"authors": [
 		"siickzz"
 	],
@@ -13,11 +13,11 @@
 	"license": "CC0-1.0",
 	"environment": "server",
 	"mixins": [
-		"economy.mixins.json"
+		"ktsacademy.mixins.json"
 	],
 	"entrypoints": {
 		"main": [
-			"com.siickzz.economy.Economy"
+          "com.siickzz.economy.KTSAcademy"
 		]
 	},
 	"depends": {
