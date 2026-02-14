@@ -17,7 +17,7 @@
 	],
 	"entrypoints": {
 		"main": [
-          "com.siickzz.economy.KTSAcademy"
+          "com.siickzz.ktsacademy.KTSAcademy"
 		]
 	},
 	"depends": {
