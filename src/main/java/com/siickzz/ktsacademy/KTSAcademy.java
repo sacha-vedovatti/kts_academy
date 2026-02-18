@@ -25,25 +25,22 @@ public class KTSAcademy implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        EconomyManager.init();
-        ShopRegistry.init();
-		QuestManager.init();
-        PokemonBattleWinListener.register();
-        PokemonCaptureListener.register();
-		PokemonFishingListener.register();
-		PokemonTradeListener.register();
-        HarvestListener.register();
-        PokedexMilestoneListener.register();
-		OreMineListener.register();
-        ShopCommand.register();
-        EconomyAdminCommand.register();
-		MoneyTopCommand.register();
+//        PokemonBattleWinListener.register();
+//        PokemonCaptureListener.register();
+//		PokemonFishingListener.register();
+//		PokemonTradeListener.register();
+//        HarvestListener.register();
+//        PokedexMilestoneListener.register();
+//		OreMineListener.register();
+//        ShopCommand.register();
+//        EconomyAdminCommand.register();
+//		MoneyTopCommand.register();
         PokeBoardCommand.register();
         PokedexCommand.register();
-		QuestCommand.register();
+//		QuestCommand.register();
         TrashCommand.register();
 
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> EconomyManager.save());
-		ServerLifecycleEvents.SERVER_STOPPING.register(server -> QuestManager.save());
+//        ServerLifecycleEvents.SERVER_STOPPING.register(server -> EconomyManager.save());
+//		ServerLifecycleEvents.SERVER_STOPPING.register(server -> QuestManager.save());
     }
 }
