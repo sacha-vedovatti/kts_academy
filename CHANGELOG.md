@@ -26,7 +26,9 @@
 - [UPDATE] **World Structures**: _some new structures have been added to the world_.
 - [UPDATE] **Shop**: _the shop has been reworked and now offers more items and fix prices._
 - [UPDATE] **Quests**: _some quests have been reworked and now offer better rewards._
-- [UPDATE] **Waystones Cost**: _the cost of using waystones is now free._
+- [UPDATE] **Waystones Cost**:
+  - _The cost of using waystones is now free._
+  - _A general "spawn" waystone has been added to the spawn._
 - [UPDATE] **Chests Loot**: _add all fossils in chest loots._
 
 ### Dépréciations
