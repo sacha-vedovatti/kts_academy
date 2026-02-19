@@ -2,7 +2,9 @@
   "required": true,
   "package": "com.siickzz.ktsacademy.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "mixins": [
+    "ServerMetadataMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

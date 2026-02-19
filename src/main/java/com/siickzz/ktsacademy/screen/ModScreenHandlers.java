@@ -8,23 +8,21 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 
 public final class ModScreenHandlers {
-	public static ScreenHandlerType<ShopScreenHandler> SHOP;
+	public static ScreenHandlerType<ShopScreenHandler>    SHOP;
 	public static ScreenHandlerType<ConfirmScreenHandler> CONFIRM;
 
-	private ModScreenHandlers() {
-	}
+	private ModScreenHandlers() {}
 
-	public static void register() {
-		if (SHOP != null) {
+	public static void register()
+	{
+		if (SHOP != null)
 			return;
-		}
 
 		SHOP = Registry.register(
 			Registries.SCREEN_HANDLER,
 			Identifier.of(KTSAcademy.MOD_ID, "shop"),
 			new ScreenHandlerType<>(ShopScreenHandler::new, FeatureFlags.VANILLA_FEATURES)
 		);
-
 		CONFIRM = Registry.register(
 			Registries.SCREEN_HANDLER,
 			Identifier.of(KTSAcademy.MOD_ID, "shop_confirm"),

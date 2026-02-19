@@ -26,443 +26,345 @@ import java.util.List;
 import java.util.Locale;
 
 public final class QuestGui {
-	private static final int MENU_ROWS = 3;
-	private static final int MENU_SIZE = MENU_ROWS * 9;
-	private static final int LIST_ROWS = 6;
-	private static final int LIST_SIZE = LIST_ROWS * 9;
-	private static final int LIST_PAGE_SIZE = 45; // reserve bottom row (9 slots) for controls
-	private static final int BACK_SLOT = 49;
-	private static final int PREV_SLOT = 18;
-	private static final int NEXT_SLOT = 26;
-	private static final int LIST_PREV_SLOT = 48;
-	private static final int LIST_NEXT_SLOT = 50;
-	private static final ItemStack FILLER_MENU = pane(Items.BLACK_STAINED_GLASS_PANE);
-	private static final ItemStack FILLER_LIST = pane(Items.GRAY_STAINED_GLASS_PANE);
 
-	private QuestGui() {
-	}
+    // Tout le GUI est en 9×6 (54 slots)
+    private static final int ROWS      = 6;
+    private static final int SIZE      = ROWS * 9; // 54
+    private static final int PAGE_SIZE = 45;        // 5 lignes de quêtes, dernière ligne = contrôles
 
-	public static void open(ServerPlayerEntity player) {
-		openCategoryMenu(player, 0);
-	}
+    // Slots de contrôle (dernière ligne)
+    private static final int SLOT_BACK = 49;
+    private static final int SLOT_PREV = 45;
+    private static final int SLOT_NEXT = 53;
 
-	private static void openCategoryMenu(ServerPlayerEntity player, int page) {
-		Inventory inv = new SimpleInventory(MENU_SIZE);
-		String[] slotCategory = new String[MENU_SIZE];
-		fill(inv, FILLER_MENU);
+    private static final ItemStack FILLER_DARK  = filler(Items.BLACK_STAINED_GLASS_PANE);
+    private static final ItemStack FILLER_LIGHT = filler(Items.GRAY_STAINED_GLASS_PANE);
 
-		List<QuestManager.QuestCategory> cats = QuestManager.categories();
-		int pageSize = MENU_SIZE - 2;
-		int start = Math.max(0, page) * pageSize;
-		int end = Math.min(cats.size(), start + pageSize);
+    private QuestGui() {}
 
-		if (page > 0) {
-			inv.setStack(PREV_SLOT, named(Items.ARROW, "§ePrécédent"));
-			slotCategory[PREV_SLOT] = "__prev__";
-		}
-		if (end < cats.size()) {
-			inv.setStack(NEXT_SLOT, named(Items.ARROW, "§eSuivant"));
-			slotCategory[NEXT_SLOT] = "__next__";
-		}
+    // =========================================================================
+    // Entrée publique
+    // =========================================================================
 
-		int slot = 0;
-		for (int i = start; i < end; i++) {
-			while (slot == PREV_SLOT || slot == NEXT_SLOT) {
-				slot++;
-				if (slot >= MENU_SIZE) break;
-			}
-			if (slot >= MENU_SIZE) break;
+    public static void open(ServerPlayerEntity player)
+    {
+        openCategories(player, 0);
+    }
 
-			QuestManager.QuestCategory cat = cats.get(i);
-			Item icon = iconOrFallback(cat.iconItemId(), Items.BOOK);
+    // =========================================================================
+    // Menu catégories (9×6, texture 0.png)
+    // =========================================================================
 
-			int total = QuestManager.questsByCategory(cat.name()).size();
-			int done = countDone(player, cat.name());
+    private static void openCategories(ServerPlayerEntity player, int page)
+    {
+        Inventory inv = new SimpleInventory(SIZE);
+        String[] slotCat = new String[SIZE];
+        fill(inv, FILLER_DARK);
 
-			ItemStack stack = new ItemStack(icon);
-			stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§b" + cat.displayName()));
-			List<Text> lore = new ArrayList<>();
-			lore.add(Text.literal("§7Quêtes: §f" + total));
-			lore.add(Text.literal("§7Terminées: §a" + done + "§7/§f" + total));
-			lore.add(Text.literal("§8Clique pour ouvrir"));
-			stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+        List<QuestManager.QuestCategory> cats = QuestManager.categories();
+        int start = page * PAGE_SIZE;
+        int end   = Math.min(cats.size(), start + PAGE_SIZE);
 
-			inv.setStack(slot, stack);
-			slotCategory[slot] = cat.name();
-			slot++;
-		}
+        // Contrôles
+        inv.setStack(SLOT_BACK, named(Items.BARRIER, "§cFermer"));
+        slotCat[SLOT_BACK] = "__close__";
+        if (page > 0) {
+            inv.setStack(SLOT_PREV, named(Items.ARROW, "§ePrécédent"));
+            slotCat[SLOT_PREV] = "__prev__";
+        }
+        if (end < cats.size()) {
+            inv.setStack(SLOT_NEXT, named(Items.ARROW, "§eSuivant"));
+            slotCat[SLOT_NEXT] = "__next__";
+        }
 
-		player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-			(syncId, playerInv, p) -> new CategoryMenuHandler(syncId, playerInv, inv, slotCategory, page),
-			Text.literal("Quêtes - Catégories")
-		));
-	}
+        int slot = 0;
+        for (int i = start; i < end; i++) {
+            if (slot >= PAGE_SIZE)
+                break;
+            QuestManager.QuestCategory cat = cats.get(i);
+            List<QuestDef> quests = QuestManager.questsByCategory(cat.name());
+            int total = quests.size();
+            int done  = countAllClaimed(player, quests);
+            Item icon = resolveItem(cat.iconItemId(), Items.BOOK);
 
-	private static int countDone(ServerPlayerEntity player, String category) {
-		int done = 0;
-		for (QuestDef q : QuestManager.questsByCategory(category)) {
-			QuestProgress qp = QuestManager.progress(player, q.id());
-			int goal;
-			if (q.isTiered() && q.tiers() != null && !q.tiers().isEmpty()) {
-				goal = q.tiers().get(q.tiers().size() - 1).goal();
-			} else {
-				goal = q.goal();
-			}
-			if (qp.progress >= goal) {
-				done++;
-			}
-		}
-		return done;
-	}
+            ItemStack stack = new ItemStack(icon);
+            stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§b§l" + cat.displayName()));
 
-	private static void openCategory(ServerPlayerEntity player, String category) {
-		openCategory(player, category, 0);
-	}
+            List<Text> lore = new ArrayList<>();
+            lore.add(Text.literal("§7Quêtes : §f" + total));
+            lore.add(Text.literal("§7Terminées : §a" + done + "§7/§f" + total));
+            lore.add(Text.literal("§8Cliquer pour ouvrir"));
+            stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+            inv.setStack(slot, stack);
+            slotCat[slot] = cat.name();
+            slot++;
+        }
+        player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
+            (id, pInv, p) -> new QuestHandler(id, pInv, inv, slotCat, null, page, true),
+            Text.literal("§0Quêtes")
+        ));
+    }
 
-	private static void openCategory(ServerPlayerEntity player, String category, int page) {
-		Inventory inv = new SimpleInventory(LIST_SIZE);
-		String[] slotQuestId = new String[LIST_SIZE];
-		fill(inv, FILLER_LIST);
+    // =========================================================================
+    // Liste des quêtes (9×6, texture 1/2/3.png selon page)
+    // =========================================================================
 
-		List<QuestDef> quests = new ArrayList<>(QuestManager.questsByCategory(category));
-		quests.sort((a, b) -> {
-			QuestProgress pa = QuestManager.progress(player, a.id());
-			QuestProgress pb = QuestManager.progress(player, b.id());
-			int sa = statusRank(pa, QuestManager.effectiveGoal(a, pa));
-			int sb = statusRank(pb, QuestManager.effectiveGoal(b, pb));
-			if (sa != sb) return Integer.compare(sa, sb);
-			return String.CASE_INSENSITIVE_ORDER.compare(QuestManager.effectiveTitle(a, pa), QuestManager.effectiveTitle(b, pb));
-		});
+    private static void openCategory(ServerPlayerEntity player, String category, int page)
+    {
+        Inventory inv = new SimpleInventory(SIZE);
+        String[] slotQuest = new String[SIZE];
+        fill(inv, FILLER_LIGHT);
 
-		int safePage = Math.max(0, page);
-		int start = safePage * LIST_PAGE_SIZE;
-		int end = Math.min(quests.size(), start + LIST_PAGE_SIZE);
+        List<QuestDef> quests = new ArrayList<>(QuestManager.questsByCategory(category));
+        quests.sort((a, b) -> {
+            int ra = statusRank(QuestManager.progress(player, a.id()), QuestManager.effectiveGoal(a, QuestManager.progress(player, a.id())));
+            int rb = statusRank(QuestManager.progress(player, b.id()), QuestManager.effectiveGoal(b, QuestManager.progress(player, b.id())));
+            return ra != rb ? Integer.compare(ra, rb) : String.CASE_INSENSITIVE_ORDER.compare(a.title(), b.title());
+        });
 
-		if (safePage > 0) {
-			inv.setStack(LIST_PREV_SLOT, named(Items.ARROW, "§ePrécédent"));
-			slotQuestId[LIST_PREV_SLOT] = "__prev__";
-		}
-		if (end < quests.size()) {
-			inv.setStack(LIST_NEXT_SLOT, named(Items.ARROW, "§eSuivant"));
-			slotQuestId[LIST_NEXT_SLOT] = "__next__";
-		}
+        int start = page * PAGE_SIZE;
+        int end   = Math.min(quests.size(), start + PAGE_SIZE);
 
-		int slot = 0;
-		for (int idx = start; idx < end; idx++) {
-			QuestDef q = quests.get(idx);
-			if (slot >= LIST_SIZE) break;
-			if (slot == BACK_SLOT || slot == LIST_PREV_SLOT || slot == LIST_NEXT_SLOT) {
-				slot++;
-				if (slot >= LIST_SIZE) break;
-			}
+        // Contrôles
+        inv.setStack(SLOT_BACK, named(Items.ARROW, "§eRetour"));
+        slotQuest[SLOT_BACK] = "__back__";
+        if (page > 0) {
+            inv.setStack(SLOT_PREV, named(Items.ARROW, "§ePrécédent"));
+            slotQuest[SLOT_PREV] = "__prev__";
+        }
+        if (end < quests.size()) {
+            inv.setStack(SLOT_NEXT, named(Items.ARROW, "§eSuivant"));
+            slotQuest[SLOT_NEXT] = "__next__";
+        }
 
-			QuestProgress qp = QuestManager.progress(player, q.id());
-			int goalNow = QuestManager.effectiveGoal(q, qp);
-			double rewardNow = QuestManager.effectiveReward(q, qp);
-			String titleNow = QuestManager.effectiveTitle(q, qp);
-			String descNow = QuestManager.effectiveDescription(q, qp);
-			boolean complete = qp.progress >= goalNow;
-			boolean claimed = qp.claimed;
+        int slot = 0;
+        for (int i = start; i < end; i++) {
+            if (slot >= PAGE_SIZE)
+                break;
 
-			Item icon = questIcon(category, q, qp);
-			ItemStack stack = new ItemStack(icon);
-			String status = claimed ? "§8Réclamée" : (complete ? "§aRéclamer" : "§eEn cours");
-			stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§b" + titleNow));
+            QuestDef quest = quests.get(i);
+            QuestProgress qp = QuestManager.progress(player, quest.id());
+            int    goal    = QuestManager.effectiveGoal(quest, qp);
+            double reward  = QuestManager.effectiveReward(quest, qp);
+            String title   = QuestManager.effectiveTitle(quest, qp);
+            String desc    = QuestManager.effectiveDescription(quest, qp);
+            boolean done   = qp.progress >= goal;
+            boolean claimed = qp.claimed;
+            Item icon = questIcon(category, quest, qp);
 
-			List<Text> lore = new ArrayList<>();
-			lore.add(Text.literal("§7Statut: " + status));
-			if (descNow != null && !descNow.isBlank()) {
-				lore.add(Text.literal("§7" + descNow));
-			}
-			int shown = Math.min(goalNow, Math.max(0, qp.progress));
-			lore.add(Text.literal("§7Progression: §f" + shown + "§7/§f" + goalNow + " " + progressBar(shown, goalNow)));
-			lore.add(Text.literal("§7Récompense: §e" + formatMoney(rewardNow) + " ₽"));
-			if (complete && !claimed) {
-				lore.add(Text.literal("§aClique pour réclamer la récompense"));
-			} else if (claimed) {
-				lore.add(Text.literal("§8Récompense déjà récupérée"));
-			} else {
-				lore.add(Text.literal("§8Continue à progresser"));
-			}
-			stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+            ItemStack stack = new ItemStack(icon);
+            stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§b" + title));
 
-			inv.setStack(slot, stack);
-			slotQuestId[slot] = q.id();
-			slot++;
-		}
+            List<Text> lore = new ArrayList<>();
+            if (desc != null && !desc.isBlank())
+                lore.add(Text.literal("§7" + desc));
 
-		inv.setStack(BACK_SLOT, named(Items.ARROW, "§eRetour"));
+            int shown = Math.min(goal, Math.max(0, qp.progress));
+            lore.add(Text.literal("§7Progression : §f" + shown + "§7/§f" + goal + " " + progressBar(shown, goal)));
+            lore.add(Text.literal("§7Récompense : §e" + QuestManager.formatMoney(reward) + " $"));
+            if (done && !claimed)
+                lore.add(Text.literal("§a▶ Cliquer pour réclamer !"));
+            else if (claimed)
+                lore.add(Text.literal("§8✔ Récompense réclamée"));
+            else
+                lore.add(Text.literal("§8Continue ta progression…"));
+            stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+            inv.setStack(slot, stack);
+            slotQuest[slot] = quest.id();
+            slot++;
+        }
 
-		String title = category;
-		QuestManager.QuestCategory def = QuestManager.category(category);
-		if (def != null && def.displayName() != null && !def.displayName().isBlank()) {
-			title = def.displayName();
-		}
+        QuestManager.QuestCategory catDef = QuestManager.category(category);
+        String catTitle = catDef != null ? catDef.displayName() : category;
+        player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
+            (id, pInv, p) -> new QuestHandler(id, pInv, inv, slotQuest, category, page, false),
+            Text.literal("§0Quêtes — " + catTitle)
+        ));
+    }
 
-		player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-			(syncId, playerInv, p) -> new QuestListHandler(syncId, playerInv, inv, slotQuestId, category, safePage),
-			Text.literal("Quêtes - " + title)
-		));
-	}
+    // =========================================================================
+    // Handler unique (catégories ET liste)
+    // =========================================================================
 
-	private static Item questIcon(String category, QuestDef quest, QuestProgress progress) {
-		boolean complete = progress.progress >= QuestManager.effectiveGoal(quest, progress);
-		boolean claimed = progress.claimed;
-		String configuredIconId = quest.iconItemId();
-		boolean hasConfiguredIcon = configuredIconId != null && !configuredIconId.isBlank();
-		if (hasConfiguredIcon) {
-			Item configured = iconOrFallback(configuredIconId.trim(), Items.AIR);
-			if (configured != Items.AIR) return configured;
-		}
-		if (claimed) return Items.GRAY_DYE;
-		if (complete) return Items.LIME_DYE;
-		if (category != null && category.toUpperCase(Locale.ROOT).contains("LEGEND")) {
-			if (quest.type() == QuestDef.QuestType.CAPTURE_SPECIES && quest.target() != null && !quest.target().isBlank()) {
-				Item icon = resolveLegendaryIcon(quest.target());
-				if (icon != Items.AIR) return icon;
-			}
-			return Items.NETHER_STAR;
-		}
-		if (quest.type() == QuestDef.QuestType.BATTLE_WIN_ANY) return Items.IRON_SWORD;
-		if (quest.type() == QuestDef.QuestType.TRADE_ANY) return Items.EMERALD;
-		if (quest.type() == QuestDef.QuestType.FISH_POKEMON_ANY) return Items.FISHING_ROD;
-		if (quest.type() == QuestDef.QuestType.SHOP_BUY_ANY) return Items.CHEST;
-		if (quest.type() == QuestDef.QuestType.SHOP_SELL_ANY) return Items.HOPPER;
-		if (quest.type() == QuestDef.QuestType.CAPTURE_SHINY_ANY) return Items.AMETHYST_SHARD;
-		if (quest.type() == QuestDef.QuestType.HARVEST_ITEM) {
-			String t = quest.target() == null ? "" : quest.target().trim();
-			if (!t.isBlank() && t.contains(":")) {
-				Item icon = iconOrFallback(t, Items.SWEET_BERRIES);
-				if (icon != Items.AIR) return icon;
-			}
-			return Items.SWEET_BERRIES;
-		}
-		if (quest.type() == QuestDef.QuestType.POKEDEX_CAUGHT) return Items.KNOWLEDGE_BOOK;
-		if (quest.type() == QuestDef.QuestType.MINE_ORE) {
-			String t = quest.target() == null ? "" : quest.target().trim().toLowerCase(Locale.ROOT);
-			t = t.replace('-', '_').replace(' ', '_');
-			return switch (t) {
-				case "diamond" -> Items.DIAMOND_ORE;
-				case "iron" -> Items.IRON_ORE;
-				case "gold" -> Items.GOLD_ORE;
-				default -> Items.IRON_PICKAXE;
-			};
-		}
-		if (quest.type() == QuestDef.QuestType.CAPTURE_SPECIES) return Items.NAME_TAG;
-		return Items.PAPER;
-	}
+    private static final class QuestHandler extends GenericContainerScreenHandler
+    {
+        private final String[] slots;
+        private final String   category; // null = mode catégories
+        private final int      page;
+        private final boolean  isCategoryMenu;
 
-	private static Item resolveLegendaryIcon(String speciesKey) {
-		if (speciesKey == null || speciesKey.isBlank()) return Items.AIR;
+        QuestHandler(int syncId, PlayerInventory pInv, Inventory inv,
+                     String[] slots, String category, int page, boolean isCategoryMenu)
+        {
+            super(ScreenHandlerType.GENERIC_9X6, syncId, pInv, inv, ROWS);
+            this.slots          = slots;
+            this.category       = category;
+            this.page           = page;
+            this.isCategoryMenu = isCategoryMenu;
+        }
 
-		// Preferred: academy legendary_items.json mapping/pool (deterministic per species)
-		String configured = QuestManager.legendaryIconItemIdForSpecies(speciesKey);
-		if (configured != null && !configured.isBlank()) {
-			Item item = iconOrFallback(configured, Items.AIR);
-			if (item != Items.AIR) return item;
-		}
+        @Override
+        public void onSlotClick(int slotIndex, int button, SlotActionType action, PlayerEntity player)
+        {
+            if (player.getWorld().isClient || !(player instanceof ServerPlayerEntity sp)) {
+                super.onSlotClick(slotIndex, button, action, player);
+                return;
+            }
+            // Bloquer tout transfert d'items
+            if (slotIndex < 0 || slotIndex >= SIZE)
+                return;
+            if (action != SlotActionType.PICKUP)
+                return;
 
-		// Fallback: try common Cobblemon patterns
-		String key = speciesKey.trim().toLowerCase(Locale.ROOT);
-		String underscored = key.replace('-', '_').replace(' ', '_');
-		String compact = underscored.replace("_", "");
-		String[] candidates = {
-			"cobblemon:" + underscored,
-			"cobblemon:" + underscored + "_icon",
-			"cobblemon:" + underscored + "_sprite",
-			"cobblemon:" + underscored + "_spawn_egg",
-			"cobblemon:" + underscored + "_egg",
-			"cobblemon:" + compact,
-			"cobblemon:" + compact + "_icon",
-			"cobblemon:" + compact + "_sprite",
-			"cobblemon:" + compact + "_spawn_egg",
-			"cobblemon:" + compact + "_egg"
-		};
-		for (String id : candidates) {
-			Item item = iconOrFallback(id, Items.AIR);
-			if (item != Items.AIR) return item;
-		}
-		return Items.AIR;
-	}
+            String id = slots[slotIndex];
+            if (id == null)
+                return;
+            if (isCategoryMenu) {
+                switch (id) {
+                    case "__close__" -> sp.closeHandledScreen();
+                    case "__prev__"  -> openCategories(sp, Math.max(0, page - 1));
+                    case "__next__"  -> openCategories(sp, page + 1);
+                    default          -> openCategory(sp, id, 0);
+                }
+            } else {
+                switch (id) {
+                    case "__back__" -> openCategories(sp, 0);
+                    case "__prev__" -> openCategory(sp, category, Math.max(0, page - 1));
+                    case "__next__" -> openCategory(sp, category, page + 1);
+                    default -> {
+                        QuestDef quest = QuestManager.quest(id);
+                        if (quest == null)
+                            return;
 
-	private static int statusRank(QuestProgress p, int goal) {
-		boolean complete = p.progress >= goal;
-		if (complete && !p.claimed) return 0; // claimable first
-		if (!complete) return 1; // in progress
-		return 2; // claimed
-	}
+                        QuestProgress qp = QuestManager.progress(sp, id);
+                        int goal = QuestManager.effectiveGoal(quest, qp);
+                        if (qp.progress >= goal && !qp.claimed) {
+                            if (QuestManager.tryClaim(sp, id))
+                                openCategory(sp, category, page);
+                        } else {
+                            sp.sendMessage(Text.literal(
+                                "§7Progression : §f" + Math.min(goal, qp.progress) + "§7/§f" + goal
+                            ), false);
+                        }
+                    }
+                }
+            }
+        }
 
-	private static String progressBar(int progress, int goal) {
-		int g = Math.max(1, goal);
-		int p = Math.max(0, Math.min(progress, g));
-		int width = 10;
-		int filled = (int) Math.round((p / (double) g) * width);
-		filled = Math.max(0, Math.min(width, filled));
-		StringBuilder sb = new StringBuilder("§7[");
-		for (int i = 0; i < width; i++) {
-			sb.append(i < filled ? "§a■" : "§8■");
-		}
-		sb.append("§7]");
-		return sb.toString();
-	}
+        @Override public boolean canUse(PlayerEntity player)
+        {
+            return true;
+        }
+    }
 
-	private static void fill(Inventory inv, ItemStack stack) {
-		for (int i = 0; i < inv.size(); i++) {
-			inv.setStack(i, stack.copy());
-		}
-	}
+    // =========================================================================
+    // Helpers
+    // =========================================================================
 
-	private static ItemStack pane(Item item) {
-		ItemStack stack = new ItemStack(item);
-		stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(" "));
-		return stack;
-	}
+    private static Item questIcon(String category, QuestDef quest, QuestProgress progress)
+    {
+        boolean claimed = progress.claimed;
+        boolean done    = progress.progress >= QuestManager.effectiveGoal(quest, progress);
 
-	private static ItemStack named(Item item, String name) {
-		ItemStack stack = new ItemStack(item);
-		stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name));
-		return stack;
-	}
+        if (quest.iconItemId() != null && !quest.iconItemId().isBlank()) {
+            Item i = resolveItem(quest.iconItemId(), Items.AIR);
+            if (i != Items.AIR)
+                return i;
+        }
+        if (claimed)
+            return Items.GRAY_DYE;
+        if (done)
+            return Items.LIME_DYE;
+        if (category != null && category.toUpperCase(Locale.ROOT).contains("LEGEND")) {
+            if (quest.type() == QuestDef.QuestType.CAPTURE_SPECIES && quest.target() != null) {
+                String iconId = QuestManager.legendaryIconItemIdForSpecies(quest.target());
 
-	private static Item iconOrFallback(String itemId, Item fallback) {
-		if (itemId == null || itemId.isBlank()) return fallback;
-		try {
-			Identifier id = Identifier.of(itemId);
-			Item item = Registries.ITEM.get(id);
-			return item == Items.AIR ? fallback : item;
-		} catch (Throwable ignored) {
-			return fallback;
-		}
-	}
+                if (iconId != null) {
+                    Item i = resolveItem(iconId, Items.AIR);
+                    if (i != Items.AIR)
+                        return i;
+                }
+            }
+            return Items.NETHER_STAR;
+        }
+        return switch (quest.type()) {
+            case BATTLE_WIN_ANY    -> Items.IRON_SWORD;
+            case TRADE_ANY         -> Items.EMERALD;
+            case FISH_POKEMON_ANY  -> Items.FISHING_ROD;
+            case SHOP_BUY_ANY      -> Items.CHEST;
+            case SHOP_SELL_ANY     -> Items.HOPPER;
+            case CAPTURE_SHINY_ANY -> Items.AMETHYST_SHARD;
+            case HARVEST_ITEM      -> Items.SWEET_BERRIES;
+            case POKEDEX_CAUGHT    -> Items.KNOWLEDGE_BOOK;
+            case MINE_ORE          -> Items.IRON_PICKAXE;
+            case CAPTURE_SPECIES   -> Items.NAME_TAG;
+            default                -> Items.PAPER;
+        };
+    }
 
-	private static String formatMoney(double value) {
-		if (value == (long) value) return Long.toString((long) value);
-		return String.format(Locale.ROOT, "%.2f", value);
-	}
+    private static String progressBar(int progress, int goal) {
+        int width  = 10;
+        int filled = (int) Math.round((Math.max(0, Math.min(progress, goal)) / (double) Math.max(1, goal)) * width);
+        StringBuilder sb = new StringBuilder("§7[");
 
-	private static final class CategoryMenuHandler extends GenericContainerScreenHandler {
-		private final String[] slotCategory;
-		private final int page;
+        for (int i = 0; i < width; i++)
+            sb.append(i < filled ? "§a■" : "§8■");
+        return sb.append("§7]").toString();
+    }
 
-		private CategoryMenuHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, String[] slotCategory, int page) {
-			super(ScreenHandlerType.GENERIC_9X3, syncId, playerInventory, inventory, MENU_ROWS);
-			this.slotCategory = slotCategory;
-			this.page = page;
-		}
+    private static int statusRank(QuestProgress p, int goal)
+    {
+        if (p.progress >= goal && !p.claimed)
+            return 0;
+        if (p.progress < goal)
+            return 1;
+        return 2;
+    }
 
-		@Override
-		public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
-			if (player.getWorld().isClient) {
-				super.onSlotClick(slotIndex, button, actionType, player);
-				return;
-			}
-			if (!(player instanceof ServerPlayerEntity serverPlayer)) {
-				super.onSlotClick(slotIndex, button, actionType, player);
-				return;
-			}
+    private static int countAllClaimed(ServerPlayerEntity player, List<QuestDef> quests) {
+        int count = 0;
 
-			// Never allow taking/inserting items in the GUI inventory.
-			if (slotIndex >= 0 && slotIndex < MENU_SIZE) {
-				if (actionType == SlotActionType.PICKUP) {
-					String cat = slotCategory[slotIndex];
-					if (cat == null) return;
-					if ("__prev__".equals(cat)) {
-						openCategoryMenu(serverPlayer, Math.max(0, page - 1));
-						return;
-					}
-					if ("__next__".equals(cat)) {
-						openCategoryMenu(serverPlayer, page + 1);
-						return;
-					}
-					openCategory(serverPlayer, cat);
-				}
-				return;
-			}
+        for (QuestDef q : quests) {
+            QuestProgress qp = QuestManager.progress(player, q.id());
+            int goal = q.isTiered() && q.tiers() != null ? q.tiers().get(q.tiers().size() - 1).goal() : q.goal();
 
-			super.onSlotClick(slotIndex, button, actionType, player);
-		}
+            if (qp.progress >= goal)
+                count++;
+        }
+        return count;
+    }
 
-		@Override
-		public boolean canUse(PlayerEntity player) {
-			return true;
-		}
-	}
+    private static void fill(Inventory inv, ItemStack stack)
+    {
+        for (int i = 0; i < inv.size(); i++)
+            inv.setStack(i, stack.copy());
+    }
 
-	private static final class QuestListHandler extends GenericContainerScreenHandler {
-		private final String[] slotQuestId;
-		private final String category;
-		private final int page;
+    private static ItemStack filler(Item item)
+    {
+        ItemStack s = new ItemStack(item);
 
-		private QuestListHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, String[] slotQuestId, String category, int page) {
-			super(ScreenHandlerType.GENERIC_9X6, syncId, playerInventory, inventory, LIST_ROWS);
-			this.slotQuestId = slotQuestId;
-			this.category = category;
-			this.page = page;
-		}
+        s.set(DataComponentTypes.CUSTOM_NAME, Text.literal(" "));
+        return s;
+    }
 
-		@Override
-		public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
-			if (player.getWorld().isClient) {
-				super.onSlotClick(slotIndex, button, actionType, player);
-				return;
-			}
-			if (!(player instanceof ServerPlayerEntity serverPlayer)) {
-				super.onSlotClick(slotIndex, button, actionType, player);
-				return;
-			}
+    private static ItemStack named(Item item, String name)
+    {
+        ItemStack s = new ItemStack(item);
 
-			// Never allow taking/inserting items in the GUI inventory.
-			if (slotIndex >= 0 && slotIndex < LIST_SIZE) {
-				if (slotIndex == BACK_SLOT && actionType == SlotActionType.PICKUP) {
-					openCategoryMenu(serverPlayer, 0);
-					return;
-				}
-				if (slotIndex == LIST_PREV_SLOT && actionType == SlotActionType.PICKUP) {
-					openCategory(serverPlayer, category, Math.max(0, page - 1));
-					return;
-				}
-				if (slotIndex == LIST_NEXT_SLOT && actionType == SlotActionType.PICKUP) {
-					openCategory(serverPlayer, category, page + 1);
-					return;
-				}
+        s.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name));
+        return s;
+    }
 
-				if (actionType == SlotActionType.PICKUP) {
-					String questId = slotQuestId[slotIndex];
-					if (questId == null) return;
-					if ("__prev__".equals(questId)) {
-						openCategory(serverPlayer, category, Math.max(0, page - 1));
-						return;
-					}
-					if ("__next__".equals(questId)) {
-						openCategory(serverPlayer, category, page + 1);
-						return;
-					}
-
-					QuestDef quest = QuestManager.quest(questId);
-					if (quest == null) return;
-					QuestProgress qp = QuestManager.progress(serverPlayer, questId);
-					boolean complete = qp.progress >= QuestManager.effectiveGoal(quest, qp);
-					if (complete && !qp.claimed) {
-						boolean ok = QuestManager.tryClaim(serverPlayer, questId);
-						if (ok) {
-							openCategory(serverPlayer, category, page);
-						}
-						return;
-					}
-					int goalNow = QuestManager.effectiveGoal(quest, qp);
-					serverPlayer.sendMessage(Text.literal("§7Progression: §f" + Math.min(goalNow, qp.progress) + "§7/§f" + goalNow), false);
-					return;
-				}
-
-				return;
-			}
-
-			super.onSlotClick(slotIndex, button, actionType, player);
-		}
-
-		@Override
-		public boolean canUse(PlayerEntity player) {
-			return true;
-		}
-	}
+    private static Item resolveItem(String itemId, Item fallback)
+    {
+        if (itemId == null || itemId.isBlank())
+            return fallback;
+        try {
+            Item i = Registries.ITEM.get(Identifier.of(itemId));
+            return i == Items.AIR ? fallback : i;
+        } catch (Throwable ignored) {
+            return fallback;
+        }
+    }
 }

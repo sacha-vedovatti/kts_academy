@@ -14,9 +14,10 @@ public record QuestDef(
 		String title,
 		String description,
 		List<QuestTier> tiers
-	) {	
-	public record QuestTier(int goal, double reward, String title, String description) {
-	}
+	) {
+
+	/** Palier simplifié : seulement objectif + récompense. Le titre est déduit du titre de la quête. */
+	public record QuestTier(int goal, double reward) {}
 
 	public boolean isTiered() {
 		return tiers != null && !tiers.isEmpty();
@@ -48,8 +49,8 @@ public record QuestDef(
 				case "SHOP_BUY_ANY" -> SHOP_BUY_ANY;
 				case "SHOP_SELL_ANY" -> SHOP_SELL_ANY;
 				case "HARVEST_ITEM", "HARVEST", "RECOLTE", "RECOLTE_ITEM" -> HARVEST_ITEM;
-				case "MINE_ORE" -> MINE_ORE;
-				case "POKEDEX_CAUGHT" -> POKEDEX_CAUGHT;
+				case "MINE_ORE", "MINE", "MINER" -> MINE_ORE;
+				case "POKEDEX_CAUGHT", "POKEDEX" -> POKEDEX_CAUGHT;
 				default -> CAPTURE_ANY;
 			};
 		}
