@@ -37,3 +37,6 @@
 
 - [REMOVE] **Legendaries Wild Spawn**: _Legendaries Pokémons will no longer spawn in the wild, only **Mythicals Legendaries** can spawn in wild (see the wiki [here](https://github.com/sacha-vedovatti/kts_academy/wiki))._
 - [REMOVE] **Random TP Command**: _the random teleport command has been removed due to server performance issues (chunks generations)._
+
+---
+If you encounter some issues, or if you have any suggestions, please contact me by mail at: sacha.vedovatti@epitech.eu
