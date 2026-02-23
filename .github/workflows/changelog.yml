@@ -22,9 +22,15 @@ jobs:
           cat CHANGELOG.md >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Send Discord webhook
-        uses: tsickert/discord-webhook@v7.0.0
-        with:
-          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-          content: |
-            ${{ env.CHANGELOG_CONTENT }}
+      - name: Send CHANGELOG.md to Discord
+        run: |
+          curl -H "Content-Type: multipart/form-data" \
+               -F 'payload_json={
+                 "embeds": [{
+                   "title": "Update pushed",
+                   "description": "Full changelog available in the attached file.",
+                   "color": 3447003
+                 }]
+               }' \
+               -F "file=@CHANGELOG.md" \
+               ${{ secrets.DISCORD_WEBHOOK }}
