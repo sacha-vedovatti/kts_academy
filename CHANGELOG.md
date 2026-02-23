@@ -1,6 +1,6 @@
-# Update [2.0.0] - 2026-02-XX
+# Update [2.0.0] - 2026-02-23
 
-### Ajouts
+### Additions
 
 - [NEW] **Server Spawn**: _a new spawn area has been created for the server. New NPCs have been added to the spawn._
 - [NEW] **Server Textures**: _new textures have been added to the server_.
@@ -13,7 +13,7 @@
 - [NEW] **Daycare**: _a new feature that allows players to breed their Pokémons._
 - [NEW] **Catch Indicator**: _a new feature that allows players to see if they already captured the Pokémon when they encounter it in the wild._
 
-### Corrections
+### Fixes
 
 - [FIX] **Academy Fossils**: _Academy fossils now work with the Fossil Machine._
 - [FIX] **Cobblemon Trials**: _Cobblemon Trials now work properly._
@@ -21,7 +21,7 @@
 - [FIX] **User Roles**: _some user roles and permissions have been fixed._
 - [FIX] **Crawl Mod**: _the crawl mod has been fixed and now works properly._
 
-### Améliorations
+### Updates
 
 - [UPDATE] **World Structures**: _some new structures have been added to the world_.
 - [UPDATE] **Shop**: _the shop has been reworked and now offers more items and fix prices._
@@ -33,7 +33,7 @@
   - _A general "spawn" waystone has been added to the spawn._
 - [UPDATE] **Chests Loot**: _add all fossils in chest loots._
 
-### Dépréciations
+### Removals
 
 - [REMOVE] **Legendaries Wild Spawn**: _Legendaries Pokémons will no longer spawn in the wild, only **Mythicals Legendaries** can spawn in wild (see the wiki [here](https://github.com/sacha-vedovatti/kts_academy/wiki))._
 - [REMOVE] **Random TP Command**: _the random teleport command has been removed due to server performance issues (chunks generations)._
