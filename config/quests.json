@@ -1,216 +1,126 @@
 {
   "categories": [
-    {
-      "name": "POKEMON",
-      "displayName": "Pokemon",
-      "iconItemId": "cobblemon:poke_ball"
-    },
-    {
-      "name": "FARM",
-      "displayName": "Farm",
-      "iconItemId": "minecraft:diamond_hoe"
-    },
-    {
-      "name": "SHOP",
-      "displayName": "Shop",
-      "iconItemId": "cobblemon:relic_coin_pouch"
-    },
-    {
-      "name": "LEGENDARIES",
-      "displayName": "Légendaires",
-      "iconItemId": "cobblemon:master_ball"
-    }
+    { "name": "POKEMON",    "displayName": "Pokemon",     "iconItemId": "cobblemon:poke_ball" },
+    { "name": "FARM",       "displayName": "Farm",        "iconItemId": "minecraft:diamond_hoe" },
+    { "name": "LEGENDARIES","displayName": "Légendaires", "iconItemId": "cobblemon:master_ball" }
   ],
   "legendaryCategory": {
     "enabled": true,
     "category": "LEGENDARIES",
     "displayName": "Légendaires",
     "iconItemId": "cobblemon:master_ball",
-    "usePoolFallback": false,
     "reward": 2500.0,
     "speciesIcons": {
-      "mewtwo": "cobblemon:cloning_cable",
-      "mew": "cobblemon:rare_dna",
-      "lugia": "cobblemon:silver_wing",
-      "ho_oh": "cobblemon:rainbow_wing",
-      "celebi": "cobblemon:time_core",
-      "jirachi": "cobblemon:wishing_star",
-      "deoxys": "cobblemon:meteorite",
-      "manaphy": "cobblemon:rare_sea_egg",
-      "darkrai": "cobblemon:nightmare_core",
-      "shaymin": "cobblemon:gracidea",
-      "arceus": "cobblemon:jewel_of_life",
-      "victini": "cobblemon:victory_star",
-      "keldeo": "cobblemon:resolute_star",
-      "meloetta": "cobblemon:relic_disc",
-      "genesect": "cobblemon:disc_drive",
-      "diancie": "cobblemon:pink_diamond",
-      "hoopa": "cobblemon:ring",
-      "volcanion": "cobblemon:steam_engine",
-      "magearna": "cobblemon:soul_heart",
-      "marshadow": "cobblemon:z_soul",
-      "meltan": "cobblemon:meltan_nut",
-      "zarude": "cobblemon:dada_scarf",
-      "pecharunt": "cobblemon:mythical_pecha_berry",
-      "articuno": "cobblemon:glacial_orb",
-      "zapdos": "cobblemon:static_orb",
-      "moltres": "cobblemon:flare_orb",
-      "raikou": "cobblemon:sacred_lightning",
-      "entei": "cobblemon:sacred_flame",
-      "suicune": "cobblemon:sacred_droplet",
-      "registeel": "cobblemon:steel_alloy",
-      "regice": "cobblemon:never_melt_icicle",
-      "regirock": "cobblemon:ancient_ingot",
-      "regieleki": "cobblemon:infinite_source",
-      "regidrago": "cobblemon:dragon_skull",
-      "regigigas": "cobblemon:titan_totem",
-      "latios": "cobblemon:blue_eon_ticket",
-      "latias": "cobblemon:red_eon_ticket",
-      "kyogre": "cobblemon:blue_orb",
-      "groudon": "cobblemon:red_orb",
-      "rayquaza": "cobblemon:jade_orb",
-      "azelf": "cobblemon:ruby_of_willpower",
-      "mesprit": "cobblemon:ruby_of_emotion",
-      "uxie": "cobblemon:ruby_of_knowledge",
-      "dialga": "cobblemon:adamant_orb",
-      "palkia": "cobblemon:lustrous_orb",
-      "giratina": "cobblemon:griseous_orb",
-      "heatran": "cobblemon:magma_chunk",
-      "cresselia": "cobblemon:lunar_feather",
-      "cobalion": "cobblemon:cobalion_sword",
-      "virizion": "cobblemon:virizion_sword",
-      "terrakion": "cobblemon:terrakion_sword",
-      "thundurus": "cobblemon:thundurus_bottle",
-      "tornadus": "cobblemon:tornadus_bottle",
-      "landorus": "cobblemon:landorus_bottle",
-      "enamorus": "cobblemon:enamorus_bottle",
-      "reshiram": "cobblemon:light_stone",
-      "zekrom": "cobblemon:dark_stone",
-      "kyurem": "cobblemon:gray_stone",
-      "xerneas": "cobblemon:tree_of_life",
-      "yveltal": "cobblemon:cocoon_of_destruction",
-      "zygarde": "cobblemon:zygarde_cube",
-      "silvally": "cobblemon:broken_memory",
-      "tapu_koko": "cobblemon:electric_totem",
-      "tapu_lele": "cobblemon:psychic_totem",
-      "tapu_bulu": "cobblemon:grass_totem",
-      "tapu_fini": "cobblemon:water_totem",
-      "solgaleo": "cobblemon:solar_core",
-      "lunala": "cobblemon:lunar_core",
-      "necrozma": "cobblemon:eclipse_core",
-      "zacian": "cobblemon:rusted_sword",
-      "zamazenta": "cobblemon:rusted_shield",
-      "eternatus": "cobblemon:dynamax_core",
-      "calyrex": "cobblemon:mystical_branch",
-      "glastrier": "cobblemon:frozen_hoof",
-      "spectrier": "cobblemon:ghostly_hoof",
-      "koraidon": "cobblemon:koraidon_key",
-      "miraidon": "cobblemon:miraidon_key",
-      "okidogi": "cobblemon:toxic_scarf",
-      "munkidori": "cobblemon:toxic_headband",
-      "fezandipiti": "cobblemon:toxic_ribbon",
-      "ogerpon": "cobblemon:teal_mask",
-      "terapagos": "cobblemon:stellar_tera_core",
+      "mewtwo":            "cobblemon:cloning_cable",
+      "mew":               "cobblemon:rare_dna",
+      "lugia":             "cobblemon:silver_wing",
+      "ho_oh":             "cobblemon:rainbow_wing",
+      "celebi":            "cobblemon:time_core",
+      "jirachi":           "cobblemon:wishing_star",
+      "deoxys":            "cobblemon:meteorite",
+      "manaphy":           "cobblemon:rare_sea_egg",
+      "darkrai":           "cobblemon:nightmare_core",
+      "shaymin":           "cobblemon:gracidea",
+      "arceus":            "cobblemon:jewel_of_life",
+      "victini":           "cobblemon:victory_star",
+      "keldeo":            "cobblemon:resolute_star",
+      "meloetta":          "cobblemon:relic_disc",
+      "genesect":          "cobblemon:disc_drive",
+      "diancie":           "cobblemon:pink_diamond",
+      "hoopa":             "cobblemon:ring",
+      "volcanion":         "cobblemon:steam_engine",
+      "magearna":          "cobblemon:soul_heart",
+      "marshadow":         "cobblemon:z_soul",
+      "meltan":            "cobblemon:meltan_nut",
+      "zarude":            "cobblemon:dada_scarf",
+      "pecharunt":         "cobblemon:mythical_pecha_berry",
+      "articuno":          "cobblemon:glacial_orb",
+      "zapdos":            "cobblemon:static_orb",
+      "moltres":           "cobblemon:flare_orb",
+      "raikou":            "cobblemon:sacred_lightning",
+      "entei":             "cobblemon:sacred_flame",
+      "suicune":           "cobblemon:sacred_droplet",
+      "registeel":         "cobblemon:steel_alloy",
+      "regice":            "cobblemon:never_melt_icicle",
+      "regirock":          "cobblemon:ancient_ingot",
+      "regieleki":         "cobblemon:infinite_source",
+      "regidrago":         "cobblemon:dragon_skull",
+      "regigigas":         "cobblemon:titan_totem",
+      "latios":            "cobblemon:blue_eon_ticket",
+      "latias":            "cobblemon:red_eon_ticket",
+      "kyogre":            "cobblemon:blue_orb",
+      "groudon":           "cobblemon:red_orb",
+      "rayquaza":          "cobblemon:jade_orb",
+      "azelf":             "cobblemon:ruby_of_willpower",
+      "mesprit":           "cobblemon:ruby_of_emotion",
+      "uxie":              "cobblemon:ruby_of_knowledge",
+      "dialga":            "cobblemon:adamant_orb",
+      "palkia":            "cobblemon:lustrous_orb",
+      "giratina":          "cobblemon:griseous_orb",
+      "heatran":           "cobblemon:magma_chunk",
+      "cresselia":         "cobblemon:lunar_feather",
+      "cobalion":          "cobblemon:cobalion_sword",
+      "virizion":          "cobblemon:virizion_sword",
+      "terrakion":         "cobblemon:terrakion_sword",
+      "thundurus":         "cobblemon:thundurus_bottle",
+      "tornadus":          "cobblemon:tornadus_bottle",
+      "landorus":          "cobblemon:landorus_bottle",
+      "enamorus":          "cobblemon:enamorus_bottle",
+      "reshiram":          "cobblemon:light_stone",
+      "zekrom":            "cobblemon:dark_stone",
+      "kyurem":            "cobblemon:gray_stone",
+      "xerneas":           "cobblemon:tree_of_life",
+      "yveltal":           "cobblemon:cocoon_of_destruction",
+      "zygarde":           "cobblemon:zygarde_cube",
+      "silvally":          "cobblemon:broken_memory",
+      "tapu_koko":         "cobblemon:electric_totem",
+      "tapu_lele":         "cobblemon:psychic_totem",
+      "tapu_bulu":         "cobblemon:grass_totem",
+      "tapu_fini":         "cobblemon:water_totem",
+      "solgaleo":          "cobblemon:solar_core",
+      "lunala":            "cobblemon:lunar_core",
+      "necrozma":          "cobblemon:eclipse_core",
+      "zacian":            "cobblemon:rusted_sword",
+      "zamazenta":         "cobblemon:rusted_shield",
+      "eternatus":         "cobblemon:dynamax_core",
+      "calyrex":           "cobblemon:mystical_branch",
+      "glastrier":         "cobblemon:frozen_hoof",
+      "spectrier":         "cobblemon:ghostly_hoof",
+      "koraidon":          "cobblemon:koraidon_key",
+      "miraidon":          "cobblemon:miraidon_key",
+      "okidogi":           "cobblemon:toxic_scarf",
+      "munkidori":         "cobblemon:toxic_headband",
+      "fezandipiti":       "cobblemon:toxic_ribbon",
+      "ogerpon":           "cobblemon:teal_mask",
+      "terapagos":         "cobblemon:stellar_tera_core",
       "galarian_articuno": "cobblemon:psychic_orb",
-      "galarian_zapdos": "cobblemon:combat_orb",
-      "galarian_moltres": "cobblemon:dark_orb",
-      "chien_pao": "cobblemon:ruinous_sword",
-      "chi_yu": "cobblemon:ruinous_beads",
-      "wo_chien": "cobblemon:ruinous_tablet",
-      "tinglu": "cobblemon:ruinous_vessel",
-      "zeraora": "cobblemon:zeraora_tuft"
+      "galarian_zapdos":   "cobblemon:combat_orb",
+      "galarian_moltres":  "cobblemon:dark_orb",
+      "chien_pao":         "cobblemon:ruinous_sword",
+      "chi_yu":            "cobblemon:ruinous_beads",
+      "wo_chien":          "cobblemon:ruinous_tablet",
+      "tinglu":            "cobblemon:ruinous_vessel",
+      "zeraora":           "cobblemon:zeraora_tuft"
     },
     "species": [
-      "meltan",
-      "mewtwo",
-      "mew",
-      "lugia",
-      "ho_oh",
-      "celebi",
-      "jirachi",
-      "deoxys",
-      "manaphy",
-      "darkrai",
-      "shaymin",
-      "arceus",
-      "victini",
-      "keldeo",
-      "meloetta",
-      "genesect",
-      "diancie",
-      "hoopa",
-      "volcanion",
-      "magearna",
-      "marshadow",
-      "zarude",
-      "pecharunt",
-      "articuno",
-      "zapdos",
-      "moltres",
-      "raikou",
-      "entei",
-      "suicune",
-      "registeel",
-      "regice",
-      "regirock",
-      "regieleki",
-      "regidrago",
-      "regigigas",
-      "latios",
-      "latias",
-      "kyogre",
-      "groudon",
-      "rayquaza",
-      "azelf",
-      "mesprit",
-      "uxie",
-      "dialga",
-      "palkia",
-      "giratina",
-      "heatran",
-      "cresselia",
-      "cobalion",
-      "virizion",
-      "terrakion",
-      "thundurus",
-      "tornadus",
-      "landorus",
-      "enamorus",
-      "reshiram",
-      "zekrom",
-      "kyurem",
-      "xerneas",
-      "yveltal",
-      "zygarde",
-      "silvally",
-      "tapu_koko",
-      "tapu_lele",
-      "tapu_bulu",
-      "tapu_fini",
-      "solgaleo",
-      "lunala",
-      "necrozma",
-      "zacian",
-      "zamazenta",
-      "eternatus",
-      "calyrex",
-      "glastrier",
-      "spectrier",
-      "koraidon",
-      "miraidon",
-      "okidogi",
-      "munkidori",
-      "fezandipiti",
-      "ogerpon",
-      "terapagos",
-      "galarian_articuno",
-      "galarian_zapdos",
-      "galarian_moltres",
-      "chien_pao",
-      "chi_yu",
-      "wo_chien",
-      "tinglu",
-      "zeraora"
+      "meltan","mewtwo","mew","lugia","ho_oh","celebi","jirachi","deoxys","manaphy",
+      "darkrai","shaymin","arceus","victini","keldeo","meloetta","genesect","diancie",
+      "hoopa","volcanion","magearna","marshadow","zarude","pecharunt",
+      "articuno","zapdos","moltres",
+      "raikou","entei","suicune",
+      "registeel","regice","regirock","regieleki","regidrago","regigigas",
+      "latios","latias","kyogre","groudon","rayquaza",
+      "azelf","mesprit","uxie","dialga","palkia","giratina","heatran","cresselia",
+      "cobalion","virizion","terrakion","thundurus","tornadus","landorus","enamorus",
+      "reshiram","zekrom","kyurem",
+      "xerneas","yveltal","zygarde","silvally",
+      "tapu_koko","tapu_lele","tapu_bulu","tapu_fini",
+      "solgaleo","lunala","necrozma",
+      "zacian","zamazenta","eternatus","calyrex","glastrier","spectrier",
+      "koraidon","miraidon",
+      "okidogi","munkidori","fezandipiti","ogerpon","terapagos",
+      "galarian_articuno","galarian_zapdos","galarian_moltres",
+      "chien_pao","chi_yu","wo_chien","tinglu","zeraora"
     ]
   },
   "tierDrops": {
@@ -219,127 +129,27 @@
     "dropOnGroundIfFull": true,
     "notifyPlayer": true,
     "drops": [
-      {
-        "itemId": "cobblemon:booster_pack",
-        "chance": 2.0,
-        "min": 1,
-        "max": 1
-      },
-      {
-        "itemId": "cobblemon:rare_candy",
-        "chance": 100.0,
-        "min": 1,
-        "max": 2
-      },
-      {
-        "itemId": "cobblemon:rare_candy",
-        "chance": 100.0,
-        "min": 1,
-        "max": 2
-      }
+      { "itemId": "cobblemon:rare_candy",   "chance": 100.0, "min": 1, "max": 5 },
+      { "itemId": "cobblemon:booster_pack", "chance": 25.0,  "min": 1, "max": 1 },
+      { "itemId": "cobblemon:poke_ball",     "chance": 50.0,  "min": 1, "max": 5 },
+      { "itemId": "cobblemon:ultra_ball",   "chance": 10.0,  "min": 1, "max": 3 },
+      { "itemId": "cobblemon:master_ball",  "chance": 0.5,   "min": 1, "max": 1 }
     ]
   },
   "quests": [
-    {
-      "id": "capture_10",
-      "category": "POKEMON",
-      "type": "CAPTURE_ANY",
-      "iconItemId": "cobblemon:poke_ball",
-      "goal": 10,
-      "reward": 200.0,
-      "title": "Pokemon Collector",
-      "description": "Capturer des Pokémons.",
-      "tiers": [
-        {
-          "goal": 10,
-          "reward": 200.0,
-          "title": "Pokemon Collector",
-          "description": "Capturer 10 Pokémons."
-        },
-        {
-          "goal": 50,
-          "reward": 250.0,
-          "title": "Pokemon Collector",
-          "description": "Capturer 50 Pokémons."
-        },
-        {
-          "goal": 75,
-          "reward": 250.0,
-          "title": "Pokemon Collector",
-          "description": "Capturer 75 Pokémons."
-        },
-        {
-          "goal": 100,
-          "reward": 500.0,
-          "title": "Pokemon Collector",
-          "description": "Capturer 100 Pokémons."
-        },
-        {
-          "goal": 250,
-          "reward": 750.0,
-          "title": "Pokemon Collector",
-          "description": "Capturer 250 Pokémons."
-        },
-        {
-          "goal": 500,
-          "reward": 500.0,
-          "title": "Pokemon Collector",
-          "description": "Capturer 500 Pokémons."
-        },
-        {
-          "goal": 750,
-          "reward": 1000.0,
-          "title": "Pokemon Collector",
-          "description": "Capturer 750 Pokémons."
-        },
-        {
-          "goal": 1000,
-          "reward": 5000.0,
-          "title": "Pokemon Collector",
-          "description": "Capturer 1000 Pokémons."
-        }
-      ]
-    },
     {
       "id": "capture_shiny",
       "category": "POKEMON",
       "type": "CAPTURE_SHINY_ANY",
       "iconItemId": "moresparkles:shiny_charm",
-      "goal": 1,
-      "reward": 1000.0,
       "title": "Shiny Hunter",
-      "description": "Capturer des Pokémons shiny.",
+      "description": "Capture des Pokémon shiny.",
       "tiers": [
-        {
-          "goal": 1,
-          "reward": 500.0,
-          "title": "Shiny Hunter",
-          "description": "Capturer 1 Pokémons shiny."
-        },
-        {
-          "goal": 5,
-          "reward": 500.0,
-          "title": "Shiny Hunter",
-          "description": "Capturer 5 Pokémons shiny."
-        },
-        {
-          "goal": 25,
-          "reward": 1000.0,
-          "title": "Shiny Hunter",
-          "description": "Capturer 25 Pokémons shiny."
-        },
-        {
-          "goal": 50,
-          "reward": 1500.0,
-          "title": "Shiny Hunter",
-          "description": "Capturer 50 Pokémons shiny."
-        },
-        {
-          "goal": 100,
-          "reward": 2000.0,
-          "title": "Shiny Hunter",
-          "description": "Capturer 100 Pokémons shiny."
-        }
+        { "goal": 1,   "reward": 500.0  },
+        { "goal": 5,   "reward": 500.0  },
+        { "goal": 25,  "reward": 1000.0 },
+        { "goal": 50,  "reward": 1500.0 },
+        { "goal": 100, "reward": 2000.0 }
       ]
     },
     {
@@ -347,53 +157,16 @@
       "category": "POKEMON",
       "type": "BATTLE_WIN_ANY",
       "iconItemId": "minecraft:iron_sword",
-      "goal": 10,
-      "reward": 200.0,
-      "title": "Combattant",
+      "title": "Pokemon Trainer",
       "description": "Remporte des combats Pokémon.",
       "tiers": [
-        {
-          "goal": 10,
-          "reward": 200.0,
-          "title": "Combattant",
-          "description": "Remporte 10 combats Pokémon."
-        },
-        {
-          "goal": 10,
-          "reward": 500.0,
-          "title": "Combattant",
-          "description": "Remporte 50 combats Pokémon."
-        },
-        {
-          "goal": 100,
-          "reward": 1000.0,
-          "title": "Combattant",
-          "description": "Remporte 100 combats Pokémon."
-        },
-        {
-          "goal": 250,
-          "reward": 2500.0,
-          "title": "Combattant",
-          "description": "Remporte 250 combats Pokémon."
-        },
-        {
-          "goal": 500,
-          "reward": 5000.0,
-          "title": "Combattant",
-          "description": "Remporte 500 combats Pokémon."
-        },
-        {
-          "goal": 1000,
-          "reward": 5000.0,
-          "title": "Combattant",
-          "description": "Remporte 1000 combats Pokémon."
-        },
-        {
-          "goal": 5000,
-          "reward": 10000.0,
-          "title": "Combattant",
-          "description": "Remporte 5000 combats Pokémon."
-        }
+        { "goal": 10,   "reward": 200.0   },
+        { "goal": 50,   "reward": 500.0   },
+        { "goal": 100,  "reward": 1000.0  },
+        { "goal": 250,  "reward": 2500.0  },
+        { "goal": 500,  "reward": 5000.0  },
+        { "goal": 1000, "reward": 5000.0  },
+        { "goal": 5000, "reward": 10000.0 }
       ]
     },
     {
@@ -401,89 +174,22 @@
       "category": "POKEMON",
       "type": "FISH_POKEMON_ANY",
       "iconItemId": "minecraft:fishing_rod",
-      "goal": 10,
-      "reward": 200.0,
-      "title": "Pêcheur",
+      "title": "Fisher",
       "description": "Pêche des Pokémon avec la canne Cobblemon.",
       "tiers": [
-        {
-          "goal": 10,
-          "reward": 100.0,
-          "title": "Pêcheur",
-          "description": "Pêche 10 Pokémon."
-        },
-        {
-          "goal": 25,
-          "reward": 250.0,
-          "title": "Pêcheur",
-          "description": "Pêche 25 Pokémon."
-        },
-        {
-          "goal": 50,
-          "reward": 500.0,
-          "title": "Pêcheur",
-          "description": "Pêche 50 Pokémon."
-        },
-        {
-          "goal": 75,
-          "reward": 750.0,
-          "title": "Pêcheur",
-          "description": "Pêche 50 Pokémon."
-        },
-        {
-          "goal": 100,
-          "reward": 1000.0,
-          "title": "Pêcheur",
-          "description": "Pêche 100 Pokémon."
-        },
-        {
-          "goal": 150,
-          "reward": 750.0,
-          "title": "Pêcheur",
-          "description": "Pêche 150 Pokémon."
-        },
-        {
-          "goal": 200,
-          "reward": 2000.0,
-          "title": "Pêcheur",
-          "description": "Pêche 200 Pokémon."
-        },
-        {
-          "goal": 250,
-          "reward": 2500.0,
-          "title": "Pêcheur",
-          "description": "Pêche 250 Pokémon."
-        },
-        {
-          "goal": 300,
-          "reward": 3000.0,
-          "title": "Pêcheur",
-          "description": "Pêche 300 Pokémon."
-        },
-        {
-          "goal": 350,
-          "reward": 3500.0,
-          "title": "Pêcheur",
-          "description": "Pêche 350 Pokémon."
-        },
-        {
-          "goal": 400,
-          "reward": 4000.0,
-          "title": "Pêcheur",
-          "description": "Pêche 400 Pokémon."
-        },
-        {
-          "goal": 450,
-          "reward": 4500.0,
-          "title": "Pêcheur",
-          "description": "Pêche 450 Pokémon."
-        },
-        {
-          "goal": 500,
-          "reward": 5000.0,
-          "title": "Pêcheur",
-          "description": "Pêche 500 Pokémon."
-        }
+        { "goal": 10,  "reward": 100.0  },
+        { "goal": 25,  "reward": 250.0  },
+        { "goal": 50,  "reward": 500.0  },
+        { "goal": 75,  "reward": 750.0  },
+        { "goal": 100, "reward": 1000.0 },
+        { "goal": 150, "reward": 750.0  },
+        { "goal": 200, "reward": 2000.0 },
+        { "goal": 250, "reward": 2500.0 },
+        { "goal": 300, "reward": 3000.0 },
+        { "goal": 350, "reward": 3500.0 },
+        { "goal": 400, "reward": 4000.0 },
+        { "goal": 450, "reward": 4500.0 },
+        { "goal": 500, "reward": 5000.0 }
       ]
     },
     {
@@ -492,161 +198,19 @@
       "type": "HARVEST_ITEM",
       "iconItemId": "cobblemon:yellow_apricorn",
       "target": "noigrume",
-      "goal": 50,
-      "reward": 200.0,
-      "title": "Récolteur",
-      "description": "Récolte des noixgrumes (apricorns) de Cobblemon.",
+      "title": "Apricorn Farmer",
+      "description": "Récolte des noigrumes (apricorns) de Cobblemon.",
       "tiers": [
-        {
-          "goal": 64,
-          "reward": 200.0,
-          "title": "Récolteur",
-          "description": "Récolte 64 noixgrumes."
-        },
-        {
-          "goal": 128,
-          "reward": 500.0,
-          "title": "Récolteur",
-          "description": "Récolte 128 noixgrumes."
-        },
-        {
-          "goal": 320,
-          "reward": 500.0,
-          "title": "Récolteur",
-          "description": "Récolte 256 noixgrumes."
-        },
-        {
-          "goal": 640,
-          "reward": 2500.0,
-          "title": "Récolteur",
-          "description": "Récolte 640 noixgrumes."
-        },
-        {
-          "goal": 1280,
-          "reward": 5000.0,
-          "title": "Récolteur",
-          "description": "Récolte 1280 noixgrumes."
-        }
-      ]
-    },
-    {
-      "id": "shop_sell_items",
-      "category": "SHOP",
-      "type": "SHOP_SELL_ANY",
-      "iconItemId": "cobblemon:relic_coin_pouch",
-      "goal": 50,
-      "reward": 200.0,
-      "title": "Dealer",
-      "description": "Vends des objets dans le shop.",
-      "tiers": [
-        {
-          "goal": 50,
-          "reward": 200.0,
-          "title": "Dealer",
-          "description": "Vends 50 objets dans le shop."
-        },
-        {
-          "goal": 100,
-          "reward": 500.0,
-          "title": "Dealer",
-          "description": "Vends 100 objets dans le shop."
-        },
-        {
-          "goal": 250,
-          "reward": 1000.0,
-          "title": "Dealer",
-          "description": "Vends 250 objets dans le shop."
-        },
-        {
-          "goal": 500,
-          "reward": 2500.0,
-          "title": "Dealer",
-          "description": "Vends 500 objets dans le shop."
-        },
-        {
-          "goal": 750,
-          "reward": 1000.0,
-          "title": "Dealer",
-          "description": "Vends 750 objets dans le shop."
-        },
-        {
-          "goal": 1000,
-          "reward": 5000.0,
-          "title": "Dealer",
-          "description": "Vends 1000 objets dans le shop."
-        },
-        {
-          "goal": 2500,
-          "reward": 5000.0,
-          "title": "Dealer",
-          "description": "Vends 2500 objets dans le shop."
-        },
-        {
-          "goal": 5000,
-          "reward": 5000.0,
-          "title": "Dealer",
-          "description": "Vends 5000 objets dans le shop."
-        },
-        {
-          "goal": 10000,
-          "reward": 10000.0,
-          "title": "Dealer",
-          "description": "Vends 10k objets dans le shop."
-        }
-      ]
-    },
-    {
-      "id": "shop_buy_items",
-      "category": "SHOP",
-      "type": "SHOP_BUY_ANY",
-      "iconItemId": "cobblemon:relic_coin_pouch",
-      "goal": 50,
-      "reward": 200.0,
-      "title": "Purchaser",
-      "description": "Acheter des objets dans le shop.",
-      "tiers": [
-        {
-          "goal": 50,
-          "reward": 200.0,
-          "title": "Purchaser",
-          "description": "Acheter 50 objets dans le shop."
-        },
-        {
-          "goal": 100,
-          "reward": 500.0,
-          "title": "Purchaser",
-          "description": "Acheter 100 objets dans le shop."
-        },
-        {
-          "goal": 500,
-          "reward": 1500.0,
-          "title": "Purchaser",
-          "description": "Acheter 500 objets dans le shop."
-        },  
-        {
-          "goal": 1000,
-          "reward": 5000.0,
-          "title": "Purchaser",
-          "description": "Acheter 1000 objets dans le shop."
-        },
-        {
-          "goal": 2500,
-          "reward": 5000.0,
-          "title": "Purchaser",
-          "description": "Acheter 2500 objets dans le shop."
-        },
-        {
-          "goal": 5000,
-          "reward": 5000.0,
-          "title": "Purchaser",
-          "description": "Acheter 5000 objets dans le shop."
-        },
-         {
-          "goal": 10000,
-          "reward": 10000.0,
-          "title": "Purchaser",
-          "description": "Acheter 10k objets dans le shop."
-        }
+        { "goal": 64,    "reward": 200.0   },
+        { "goal": 128,   "reward": 500.0   },
+        { "goal": 320,   "reward": 500.0   },
+        { "goal": 640,   "reward": 2500.0  },
+        { "goal": 1280,  "reward": 5000.0  },
+        { "goal": 1920,  "reward": 2000.0  },
+        { "goal": 2560,  "reward": 5000.0  },
+        { "goal": 3840,  "reward": 2000.0  },
+        { "goal": 5120,  "reward": 5000.0  },
+        { "goal": 10240, "reward": 10000.0 }
       ]
     },
     {
@@ -655,41 +219,14 @@
       "type": "MINE_ORE",
       "iconItemId": "minecraft:diamond",
       "target": "diamond",
-      "goal": 64,
-      "reward": 500.0,
       "title": "Diamond Farmer",
-      "description": "Miner des minerais de diamant.",
+      "description": "Mine des minerais de diamant.",
       "tiers": [
-        {
-          "goal": 64,
-          "reward": 500.0,
-          "title": "Diamond Farmer",
-          "description": "Miner 64 minerais de diamant."
-        },
-        {
-          "goal": 128,
-          "reward": 1500.0,
-          "title": "Diamond Farmer",
-          "description": "Miner 128 minerais de diamant."
-        },
-        {
-          "goal": 256,
-          "reward": 2000.0,
-          "title": "Diamond Farmer",
-          "description": "Miner 256 minerais de diamant."
-        },
-        {
-          "goal": 512,
-          "reward": 2500.0,
-          "title": "Diamond Farmer",
-          "description": "Miner 512 minerais de diamant."
-        },
-        {
-          "goal": 1024,
-          "reward": 5000.0,
-          "title": "Diamond Farmer",
-          "description": "Miner 1024 minerais de diamant."
-        }
+        { "goal": 64,   "reward": 500.0  },
+        { "goal": 128,  "reward": 1500.0 },
+        { "goal": 256,  "reward": 2000.0 },
+        { "goal": 512,  "reward": 2500.0 },
+        { "goal": 1024, "reward": 5000.0 }
       ]
     },
     {
@@ -698,47 +235,15 @@
       "type": "MINE_ORE",
       "iconItemId": "minecraft:iron_ingot",
       "target": "iron",
-      "goal": 64,
-      "reward": 250.0,
       "title": "Iron Farmer",
       "description": "Mine des minerais de fer.",
       "tiers": [
-        {
-          "goal": 64,
-          "reward": 250.0,
-          "title": "Iron Farmer",
-          "description": "Mine 64 minerais de fer."
-        },
-        {
-          "goal": 128,
-          "reward": 700.0,
-          "title": "Iron Farmer",
-          "description": "Mine 128 minerais de fer."
-        },
-        {
-          "goal": 256,
-          "reward": 1500.0,
-          "title": "Iron Farmer",
-          "description": "Mine 256 minerais de fer."
-        },
-        {
-          "goal": 512,
-          "reward": 1500.0,
-          "title": "Iron Farmer",
-          "description": "Mine 512 minerais de fer."
-        },
-        {
-          "goal": 1024,
-          "reward": 2000.0,
-          "title": "Iron Farmer",
-          "description": "Mine 1024 minerais de fer."
-        },
-        {
-          "goal": 2048,
-          "reward": 5000.0,
-          "title": "Iron Farmer",
-          "description": "Mine 2048 minerais de fer."
-        }
+        { "goal": 64,   "reward": 250.0  },
+        { "goal": 128,  "reward": 700.0  },
+        { "goal": 256,  "reward": 1500.0 },
+        { "goal": 512,  "reward": 1500.0 },
+        { "goal": 1024, "reward": 2000.0 },
+        { "goal": 2048, "reward": 5000.0 }
       ]
     },
     {
@@ -747,83 +252,14 @@
       "type": "MINE_ORE",
       "iconItemId": "minecraft:gold_ingot",
       "target": "gold",
-      "goal": 64,
-      "reward": 300.0,
       "title": "Gold Farmer",
       "description": "Mine des minerais d'or.",
       "tiers": [
-        {
-          "goal": 64,
-          "reward": 300.0,
-          "title": "Gold Farmer",
-          "description": "Mine 64 minerais d'or."
-        },
-        {
-          "goal": 128,
-          "reward": 800.0,
-          "title": "Gold Farmer",
-          "description": "Mine 128 minerais d'or."
-        },
-        {
-          "goal": 256,
-          "reward": 1500.0,
-          "title": "Gold Farmer",
-          "description": "Mine 256 minerais d'or."
-        },
-        {
-          "goal": 512,
-          "reward": 1500.0,
-          "title": "Gold Farmer",
-          "description": "Mine 512 minerais d'or."
-        },
-        {
-          "goal": 1024,
-          "reward": 3000.0,
-          "title": "Gold Farmer",
-          "description": "Mine 1024 minerais d'or."
-        }
-      ]
-    },
-    {
-      "id": "pokedex_caught",
-      "category": "POKEMON",
-      "type": "POKEDEX_CAUGHT",
-      "iconItemId": "minecraft:knowledge_book",
-      "goal": 50,
-      "reward": 500.0,
-      "title": "Pokédex",
-      "description": "Progresse dans la complétion du Pokédex (capturés).",
-      "tiers": [
-        {
-          "goal": 50,
-          "reward": 500.0,
-          "title": "Pokédex",
-          "description": "Capture 50 espèces (Pokédex)."
-        },
-        {
-          "goal": 100,
-          "reward": 1200.0,
-          "title": "Pokédex",
-          "description": "Capture 100 espèces (Pokédex)."
-        },
-        {
-          "goal": 250,
-          "reward": 3000.0,
-          "title": "Pokédex",
-          "description": "Capture 250 espèces (Pokédex)."
-        },
-        {
-          "goal": 500,
-          "reward": 7000.0,
-          "title": "Pokédex",
-          "description": "Capture 500 espèces (Pokédex)."
-        },
-        {
-          "goal": 1000,
-          "reward": 15000.0,
-          "title": "Pokédex",
-          "description": "Capture 1000 espèces (Pokédex)."
-        }
+        { "goal": 64,   "reward": 300.0  },
+        { "goal": 128,  "reward": 800.0  },
+        { "goal": 256,  "reward": 1500.0 },
+        { "goal": 512,  "reward": 1500.0 },
+        { "goal": 1024, "reward": 3000.0 }
       ]
     }
   ]

@@ -1,58 +1,42 @@
-# Update 1.0.1 [LIVE]
+# Update [2.0.0] - 2026-02-23
 
-## News :
+### Additions
 
-### Quests
-- **Farmer** (Farm) : Récoltez `64/128/320/640/1280` noigrumes.
+- [NEW] **Server Spawn**: _a new spawn area has been created for the server. New NPCs have been added to the spawn._
+- [NEW] **Server Textures**: _new textures have been added to the server_.
+- [NEW] **Cobblemon Raids**
+- [NEW] **Cobblemon Gyms**
+- [NEW] **Cobblemon Safari**
+- [NEW] **Pokemons Categories**: _added new pokemons categories._
+  - _**Legendaries, Mythicals, Ultra Beasts, Paradox, Radiants**._
+- [NEW] **Capture Streaks**: _a new feature that allows players to get better IVs, shiny rate or hidden abilities rate for capturing Pokémons in a row._
+- [NEW] **Daycare**: _a new feature that allows players to breed their Pokémons._
+- [NEW] **Catch Indicator**: _a new feature that allows players to see if they already captured the Pokémon when they encounter it in the wild._
 
-- **Shiny Hunter** (Pokemon) : Capturez `1/5/10/25/50/100` pokémons shiny.
+### Fixes
 
-- New quests rewards : other rewards may appear after this patch (see issue #3).
+- [FIX] **Academy Fossils**: _Academy fossils now work with the Fossil Machine._
+- [FIX] **Cobblemon Trials**: _Cobblemon Trials now work properly._
+- [FIX] **Chests Loot**: _Chests loot now all Cobblemon & Academy items._
+- [FIX] **User Roles**: _some user roles and permissions have been fixed._
+- [FIX] **Crawl Mod**: _the crawl mod has been fixed and now works properly._
 
-### Shop
-- **Mega Stones** : All mega stones.
+### Updates
 
-- **Terastallization** : All types tera shards.
+- [UPDATE] **World Structures**: _some new structures have been added to the world_.
+- [UPDATE] **Shop**: _the shop has been reworked and now offers more items and fix prices._
+- [UPDATE] **Quests**:
+  - _Some quests have been reworked and now offer differents rewards._
+  - _Added Safari quests._
+- [UPDATE] **Waystones Cost**:
+  - _The cost of using waystones is now free._
+  - _A general "spawn" waystone has been added to the spawn._
+- [UPDATE] **Chests Loot**: _add all fossils in chest loots._
 
-- **Dream Ball** (Pokeball) :
-  - Buy price: `2500`₱
-  - Sell price: `250`₱
+### Removals
 
-### Other
+- [REMOVE] **Legendaries Wild Spawn**: _Legendaries Pokémons will no longer spawn in the wild, only **Mythicals Legendaries** can spawn in wild (see the wiki [here](https://github.com/sacha-vedovatti/kts_academy/wiki))._
+- [REMOVE] **Random TP Command**: _the random teleport command has been removed due to server performance issues (chunks generations)._
 
-1. `Wither` mob is now enable in overworld. (already live)
-2. Chunks optimisations. (already live, some fix will be released during patch 1.0.2)
-3. New command `/pokedex` : access your own Pokédex without any items.
-4. New command `/trash` (or `/poubelle`) : throw your useless items in the trash !
-5. Maximum Pokemons levels : `50` ➜ `75`. 
-
-## Reworks :
-
-### Quêtes :
-- **Pokemon Collector** (Pokemon) : Capturer `10/50/100/250/500/1000/5000` Pokémons
-   ➜ Capturer `10/50/75/100/250/500/750/1000` Pokémons.
-
-- **Purchaser** (Shop) :
-  - Acheter `50/100/500/1000` objets dans le shop ➜ Acheter `50/100/500/1000/2500/5000/10000` objets dans le shop.
-  - Level 3 Reward : `2500`₱ ➜ `1500`₱
-
-- **Diamond Farmer** (Farm) :
-  - Levels `3/4/5` Rewards : `4000/4000/4000`₱ ➜ `2000/2500/5000`₱
-
-### Shop :
-- **Stones** : `-100`₱ on all stones sell price
-
-- **Dusk Ball** & **Timer Ball** :
-  - Buy price: `2250`₱ ➜ `2000`₱
-  - Sell price: `225`₱ ➜ `200`₱
-
-- **Love Ball** :
-  - Buy price: `3000`₱ ➜ `1750`₱
-  - Sell price: `250`₱ ➜ `175`₱
-
-- **Fast Ball** & **Heavy Ball** :
-  - Buy price: `3000`₱ ➜ `2000`₱
-  - Sell price: `250`₱ ➜ `175`₱
-
-If you encounter some issues, or if you have any suggestions, please contact me by mail at:
-sacha.vedovatti@epitech.eu
+---
+If you encounter some issues, or if you have any suggestions, please contact me by mail at: sacha.vedovatti@epitech.eu

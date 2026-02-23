@@ -1,0 +1,17 @@
+{
+  "lines": [
+    {
+      "text": "KTS Academy",
+      "font": "small_caps",
+      "bold": true,
+      "gradient": {
+        "from": "#FFD700",
+        "to": "#FF4500"
+      }
+    },
+    {
+      "text": "§7Serveur Cobblemon §f• §aBienvenue !",
+      "font": "normal"
+    }
+  ]
+}
