@@ -1,42 +1,16 @@
-# Update [2.0.0] - 2026-02-23
+# Update [2.0.1] - 2026-02-26
 
-### Additions
+[NEW] Shiny Alerts: Now you can receive shiny alerts when a shiny Pokémon despawns near a Trainer.
+[NEW] Messages System: new commands /msg and /r to send private messages to other Trainers.
 
-- [NEW] **Server Spawn**: _a new spawn area has been created for the server. New NPCs have been added to the spawn._
-- [NEW] **Server Textures**: _new textures have been added to the server_.
-- [NEW] **Cobblemon Raids**
-- [NEW] **Cobblemon Gyms**
-- [NEW] **Cobblemon Safari**
-- [NEW] **Pokemons Categories**: _added new pokemons categories._
-  - _**Legendaries, Mythicals, Ultra Beasts, Paradox, Radiants**._
-- [NEW] **Capture Streaks**: _a new feature that allows players to get better IVs, shiny rate or hidden abilities rate for capturing Pokémons in a row._
-- [NEW] **Daycare**: _a new feature that allows players to breed their Pokémons._
-- [NEW] **Catch Indicator**: _a new feature that allows players to see if they already captured the Pokémon when they encounter it in the wild._
+[UPDATE] Raids :
+   - Increase raids difficulty.
+   - Update raids rewards.
+   - Nerf tiers 4/5/6/7 boss IVs to 2 max.
+   - Rewards can only be claimed by trainers who survived the raid.
+   - Raid crystals can't be broken by trainers.
+[UPDATE] Shop Items: Added new items to the shop.
+[UPDATE] Pokémon Levels: set the maximum level of Pokémon to 100.
+[UPDATE] Gyms Rewards: Added new rewards for gym battles.
 
-### Fixes
-
-- [FIX] **Academy Fossils**: _Academy fossils now work with the Fossil Machine._
-- [FIX] **Cobblemon Trials**: _Cobblemon Trials now work properly._
-- [FIX] **Chests Loot**: _Chests loot now all Cobblemon & Academy items._
-- [FIX] **User Roles**: _some user roles and permissions have been fixed._
-- [FIX] **Crawl Mod**: _the crawl mod has been fixed and now works properly._
-
-### Updates
-
-- [UPDATE] **World Structures**: _some new structures have been added to the world_.
-- [UPDATE] **Shop**: _the shop has been reworked and now offers more items and fix prices._
-- [UPDATE] **Quests**:
-  - _Some quests have been reworked and now offer differents rewards._
-  - _Added Safari quests._
-- [UPDATE] **Waystones Cost**:
-  - _The cost of using waystones is now free._
-  - _A general "spawn" waystone has been added to the spawn._
-- [UPDATE] **Chests Loot**: _add all fossils in chest loots._
-
-### Removals
-
-- [REMOVE] **Legendaries Wild Spawn**: _Legendaries Pokémons will no longer spawn in the wild, only **Mythicals Legendaries** can spawn in wild (see the wiki [here](https://github.com/sacha-vedovatti/kts_academy/wiki))._
-- [REMOVE] **Random TP Command**: _the random teleport command has been removed due to server performance issues (chunks generations)._
-
----
-If you encounter some issues, or if you have any suggestions, please contact me by mail at: sacha.vedovatti@epitech.eu or open an issue.
+[FIX] Quests Rewards: Fixed 
