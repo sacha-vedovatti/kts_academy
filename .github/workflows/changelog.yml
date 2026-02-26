@@ -18,19 +18,21 @@ jobs:
       - name: Read CHANGELOG.md
         id: read_changelog
         run: |
-          echo "CHANGELOG_CONTENT<<EOF" >> $GITHUB_ENV
-          cat CHANGELOG.md >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          TITLE=$(grep -m 1 '^# ' CHANGELOG.md | sed 's/^# //')
+          DESCRIPTION=$(tail -n +2 CHANGELOG.md | sed '/^[[:space:]]*$/d' | head -c 4000)
+          echo "TITLE=$TITLE" >> $GITHUB_OUTPUT
+          echo "DESCRIPTION<<EOF" >> $GITHUB_OUTPUT
+          echo "$DESCRIPTION" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send CHANGELOG.md to Discord
         run: |
-          curl -H "Content-Type: multipart/form-data" \
-               -F 'payload_json={
-                 "embeds": [{
-                   "title": "Update pushed",
-                   "description": "Full changelog available in the attached file.",
-                   "color": 3447003
-                 }]
-               }' \
-               -F "file=@CHANGELOG.md" \
+          TITLE="${{ steps.read_changelog.outputs.TITLE }}"
+          DESCRIPTION="${{ steps.read_changelog.outputs.DESCRIPTION }}"
+          PAYLOAD=$(jq -n \
+            --arg title "$TITLE" \
+            --arg desc "$DESCRIPTION" \
+            '{embeds: [{title: $title, description: $desc, color: 3447003}]}')
+          curl -H "Content-Type: application/json" \
+               -d "$PAYLOAD" \
                ${{ secrets.DISCORD_WEBHOOK }}
