@@ -19,7 +19,7 @@ jobs:
         id: read_changelog
         run: |
           TITLE=$(grep -m 1 '^# ' CHANGELOG.md | sed 's/^# //')
-          DESCRIPTION=$(tail -n +2 CHANGELOG.md | sed '/^[[:space:]]*$/d' | head -c 4000)
+          DESCRIPTION=$(tail -n +2 CHANGELOG.md | head -c 4000)
           echo "TITLE=$TITLE" >> $GITHUB_OUTPUT
           echo "DESCRIPTION<<EOF" >> $GITHUB_OUTPUT
           echo "$DESCRIPTION" >> $GITHUB_OUTPUT
