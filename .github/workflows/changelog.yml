@@ -15,29 +15,27 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Read CHANGELOG.md
-        id: read_changelog
+      - name: Build Discord payload
+        id: payload
+        shell: bash
         run: |
           TITLE=$(grep -m 1 '^# ' CHANGELOG.md | sed 's/^# //')
           DESCRIPTION=$(tail -n +2 CHANGELOG.md | head -c 4000)
-          
-          PAYLOAD=$(jq -n \
-            --arg title "$TITLE" \
-            --arg desc "$DESCRIPTION" \
-            '{embeds: [{title: $title, description: $desc, color: 3447003}]}')
-          
-          curl -s -H "Content-Type: application/json" \
-               -d "$PAYLOAD" \
-               "$DISCORD_WEBHOOK"
+          export TITLE DESCRIPTION
+          PAYLOAD=$(python - <<'PY'
+          import json, os
+          title = os.environ.get("TITLE", "")
+          desc = os.environ.get("DESCRIPTION", "")
+          payload = {"embeds": [{"title": title, "description": desc, "color": 3447003}]}
+          print(json.dumps(payload))
+          PY
+          )
+          echo "payload=$PAYLOAD" >> "$GITHUB_OUTPUT"
 
       - name: Send CHANGELOG.md to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          TITLE="${{ steps.read_changelog.outputs.TITLE }}"
-          DESCRIPTION="${{ steps.read_changelog.outputs.DESCRIPTION }}"
-          PAYLOAD=$(jq -n \
-            --arg title "$TITLE" \
-            --arg desc "$DESCRIPTION" \
-            '{embeds: [{title: $title, description: $desc, color: 3447003}]}')
-          curl -H "Content-Type: application/json" \
-               -d "$PAYLOAD" \
-               ${{ secrets.DISCORD_WEBHOOK }}
+          curl -sS -H "Content-Type: application/json" \
+               -d "${{ steps.payload.outputs.payload }}" \
+               "$DISCORD_WEBHOOK"
