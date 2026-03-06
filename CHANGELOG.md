@@ -8,7 +8,7 @@
 
 - **[UPDATE] Mods**:
   - **[ADD] Cobblemon Exp Lock**
-  - **[ADD] Chunk Loader**: Add "Single Chunk Loader" (1x1) and "Basic Chunk Loader" (3x3) items.
+  - **[ADD] Chunk Loader**: Add "Single Chunk Loader" (`1x1`) and "Basic Chunk Loader" (`3x3`) items.
   - **[UPDATE] Cobblemon**: Updated to version `1.7.3`.
   - **[UPDATE] Raids**: Updated to version `0.8.1`.
   - **[REMOVE] Tim Core & Capture XP**: Temporarily removed due to a bug.
