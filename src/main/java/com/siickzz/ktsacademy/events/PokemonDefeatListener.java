@@ -36,14 +36,14 @@ public final class PokemonDefeatListener {
 			return;
 		}
 
-		int level = readLevel(killedPokemon);
-		double reward = PokemonRewardUtil.rewardForDefeat(killedPokemon);
-
-		EconomyManager.get(player).add(reward);
-		player.sendMessage(
-			Text.literal("§a+ " + formatMoney(reward) + " ₽ §7pour avoir vaincu §f" + safeName(killedPokemon, killed) + levelSuffix(level)),
-			false
-		);
+//		int level = readLevel(killedPokemon);
+//		double reward = PokemonRewardUtil.rewardForDefeat(killedPokemon);
+//
+//		EconomyManager.get(player).add(reward);
+//		player.sendMessage(
+//			Text.literal("§a+ " + formatMoney(reward) + " ₽ §7pour avoir vaincu §f" + safeName(killedPokemon, killed) + levelSuffix(level)),
+//			false
+//		);
 	}
 
 	private static String levelSuffix(int level) {

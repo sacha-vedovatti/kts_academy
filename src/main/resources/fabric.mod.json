@@ -28,6 +28,6 @@
 		"cobblemon": ">=1.6.0"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"essentialcommands": "*"
 	}
 }

@@ -183,20 +183,15 @@ public final class PokemonBattleWinListener {
 					LOGGER.info("[CobbleEconomy] Battle event class: {}", event.getClass().getName());
 				}
 
-				Object defeatedPokemon = resolveDefeatedPokemon(event);
-				int level = readLevel(defeatedPokemon);
-				double reward = defeatedPokemon != null
-					? PokemonRewardUtil.rewardForDefeat(defeatedPokemon)
-					: rewardForLevel(level);
+				/* DISABLED */
+//				Object defeatedPokemon = resolveDefeatedPokemon(event);
+//				int level = readLevel(defeatedPokemon);
+//				double reward = defeatedPokemon != null
+//					? PokemonRewardUtil.rewardForDefeat(defeatedPokemon)
+//					: rewardForLevel(level);
+//				EconomyManager.get(player).add(reward);
+//				player.sendMessage(Text.literal("§a+ " + formatMoney(reward) + " ₽ §7(victoire combat)" + levelSuffix(level)), true);
 
-				EconomyManager.get(player).add(reward);
-				// Actionbar is more reliable/visible than chat on many servers.
-				player.sendMessage(
-					Text.literal("§a+ " + formatMoney(reward) + " ₽ §7(victoire combat)" + levelSuffix(level)),
-					true
-				);
-
-				// Progress quests (battle wins)
 				QuestManager.onBattleWon(player);
 			} catch (Throwable t) {
 				if (!LOGGED_HANDLER_ERROR) {

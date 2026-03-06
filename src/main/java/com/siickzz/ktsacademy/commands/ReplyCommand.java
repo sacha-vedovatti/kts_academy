@@ -19,11 +19,22 @@ public final class ReplyCommand {
     public static void register()
     {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            dispatcher.register(literal("r").then(argument("message", StringArgumentType.greedyString()).executes(ReplyCommand::reply)));
+            // /reply est la commande principale (pas de conflit attendu)
+            dispatcher.register(literal("reply")
+                    .then(argument("message", StringArgumentType.greedyString())
+                            .executes(ReplyCommand::reply)));
+            // /r peut être pris par EssentialCommands — on essaie quand même
+            try {
+                dispatcher.register(literal("r")
+                        .then(argument("message", StringArgumentType.greedyString())
+                                .executes(ReplyCommand::reply)));
+            } catch (Exception ignored) {
+                // /r est déjà enregistré par un autre mod
+            }
         });
     }
 
-    private static int reply(CommandContext<ServerCommandSource> ctx) throws com.mojang.brigadier.exceptions.CommandSyntaxException
+    public static int reply(CommandContext<ServerCommandSource> ctx) throws com.mojang.brigadier.exceptions.CommandSyntaxException
     {
         ServerPlayerEntity sender = ctx.getSource().getPlayerOrThrow();
         String message = StringArgumentType.getString(ctx, "message");
@@ -37,8 +48,10 @@ public final class ReplyCommand {
         ServerPlayerEntity target = ctx.getSource().getServer().getPlayerManager().getPlayer(targetUuid);
         if (target == null) {
             sender.sendMessage(Text.literal("§cCe joueur n'est plus connecté."), false);
+            PrivateMsgManager.remove(sender.getUuid());
             return 0;
         }
+
         PrivateMsgManager.setLastConversation(sender.getUuid(), target.getUuid());
         PrivateMsgManager.setLastConversation(target.getUuid(), sender.getUuid());
 
