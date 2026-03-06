@@ -665,16 +665,12 @@ public final class QuestManager {
         String title = effectiveTitle(quest, qp);
         double reward = effectiveReward(quest, qp);
         MinecraftServer server = player.getServer();
-        Text msg = Text.literal(
-            "§6[Quêtes] §e" + player.getName().getString()
-            + " §7a complété : §b" + title
-            + " §7(§e+" + formatMoney(reward) + " $§7)"
-        );
+        Text msg = Text.literal("§e§lQuests » §e" + player.getName().getString()  + " §7a complété : §b" + title + " §7(§e+" + formatMoney(reward) + " $§7)");
 
         if (server != null)
             server.getPlayerManager().broadcast(msg, false);
         else
-            player.sendMessage(Text.literal("§aQuête terminée : §b" + title + " §7— ouvre §f/quests §7pour réclamer."), false);
+            player.sendMessage(Text.literal("§d§lQuests terminée » §7Vous avez terminé la quête \"§a" + title + "§7\" (§f/quests§7)."), false);
     }
 
     private static void tryRollTierDrops(ServerPlayerEntity player, QuestDef quest, int tierIdx)
@@ -706,11 +702,12 @@ public final class QuestManager {
                 int max = entry.max != null ? Math.max(min, entry.max) : min;
                 int count = min == max ? min : min + DROP_RNG.nextInt(max - min + 1);
                 ItemStack stack = new ItemStack(item, count);
+                String itemName = stack.getName().getString();
 
                 if (!player.getInventory().insertStack(stack) && cfg.dropOnGroundIfFull && !stack.isEmpty())
                     player.dropItem(stack, false);
                 if (cfg.notifyPlayer)
-                    player.sendMessage(Text.literal("§d[Quêtes] §7Bonus : §f" + stack.getName().getString() + " §7x" + count), false);
+                    player.sendMessage(Text.literal("§d§lQuests » §7Bonus : §f" + itemName + " §7x" + count), false);
             }
         }
     }

@@ -27,14 +27,16 @@ public final class MsgCommand {
     public static void register()
     {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            dispatcher.register(literal("msg").then(argument("player", StringArgumentType.word()).suggests(PLAYER_SUGGESTIONS)
-                .then(argument("message", StringArgumentType.greedyString()).executes(MsgCommand::sendMessage))));
-            dispatcher.register(literal("w").then(argument("player", StringArgumentType.word()).suggests(PLAYER_SUGGESTIONS)
-                .then(argument("message", StringArgumentType.greedyString()).executes(MsgCommand::sendMessage))));
+            dispatcher.register(literal("msg")
+                    .then(argument("player", StringArgumentType.word()).suggests(PLAYER_SUGGESTIONS)
+                    .then(argument("message", StringArgumentType.greedyString()).executes(MsgCommand::sendMessage))));
+            dispatcher.register(literal("w")
+                    .then(argument("player", StringArgumentType.word()).suggests(PLAYER_SUGGESTIONS)
+                    .then(argument("message", StringArgumentType.greedyString()).executes(MsgCommand::sendMessage))));
         });
     }
 
-    private static int sendMessage(CommandContext<ServerCommandSource> ctx) throws com.mojang.brigadier.exceptions.CommandSyntaxException
+    public static int sendMessage(CommandContext<ServerCommandSource> ctx) throws com.mojang.brigadier.exceptions.CommandSyntaxException
     {
         ServerPlayerEntity sender = ctx.getSource().getPlayerOrThrow();
         String targetName = StringArgumentType.getString(ctx, "player");
@@ -49,6 +51,7 @@ public final class MsgCommand {
             sender.sendMessage(Text.literal("§cVous ne pouvez pas vous envoyer un message à vous-même."), false);
             return 0;
         }
+
         PrivateMsgManager.setLastConversation(sender.getUuid(), target.getUuid());
         PrivateMsgManager.setLastConversation(target.getUuid(), sender.getUuid());
 

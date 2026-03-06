@@ -228,15 +228,15 @@ public final class PokedexMilestoneListener {
 		int lastTier = account.getPokedexRewardTier();
 		if (tier <= lastTier) return;
 
-		int gainedTiers = tier - lastTier;
-		double reward = gainedTiers * REWARD_PER_TIER;
-		account.setPokedexRewardTier(tier);
-		account.add(reward);
-
-		player.sendMessage(
-			Text.literal("§a+ " + formatMoney(reward) + " ₽ §7(Pokédex: " + (tier * POKEMON_PER_TIER) + " capturés)"),
-			false
-		);
+		/* Disabled rewards */
+//		int gainedTiers = tier - lastTier;
+//		double reward = gainedTiers * REWARD_PER_TIER;
+//		account.setPokedexRewardTier(tier);
+// 		account.add(reward);
+//		player.sendMessage(
+//			Text.literal("§a+ " + formatMoney(reward) + " ₽ §7(Pokédex: " + (tier * POKEMON_PER_TIER) + " capturés)"),
+//			false
+//		);
 	}
 
 	private static int computeCaughtCount(Object pokedexEvent) {

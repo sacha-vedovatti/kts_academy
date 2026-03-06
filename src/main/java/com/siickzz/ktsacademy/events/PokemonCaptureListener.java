@@ -199,19 +199,13 @@ public final class PokemonCaptureListener {
                 if (!(playerObj instanceof ServerPlayerEntity player))
                     return defaultReturn(method);
 
-                Object pokemon = callNoArg(event, "getPokemon");
-                double reward = calculateReward(pokemon);
+                /* DISABLED */
+//                Object pokemon = callNoArg(event, "getPokemon");
+//                double reward = calculateReward(pokemon);
+//                EconomyManager.get(player).add(reward);
+//                player.sendMessage(Text.literal("§a+ " + formatMoney(reward) + " ₽ §7pour la capture de §f" + pokemonName(pokemon)),false);
 
-                EconomyManager.get(player).add(reward);
-                player.sendMessage(
-                    Text.literal("§a+ " + formatMoney(reward) + " ₽ §7pour la capture de §f" + pokemonName(pokemon)),
-                    false
-                );
-
-				// Progress quests (per-player)
 				QuestManager.onPokemonCaptured(player, pokemon);
-
-				// Also update Pokedex-based quests from a delayed recompute.
 				schedulePokedexRecheck(player, pokemon);
             } catch (Throwable ignored) {
             }
