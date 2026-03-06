@@ -30,12 +30,15 @@ jobs:
           print(json.dumps(payload))
           PY
           )
-          echo "payload=$PAYLOAD" >> "$GITHUB_OUTPUT"
+          echo "payload<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$PAYLOAD" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Send CHANGELOG.md to Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          PAYLOAD: ${{ steps.payload.outputs.payload }}
         run: |
           curl -sS -H "Content-Type: application/json" \
-               -d "${{ steps.payload.outputs.payload }}" \
+               -d "$PAYLOAD" \
                "$DISCORD_WEBHOOK"
