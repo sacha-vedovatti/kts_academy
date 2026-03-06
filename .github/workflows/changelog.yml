@@ -20,10 +20,15 @@ jobs:
         run: |
           TITLE=$(grep -m 1 '^# ' CHANGELOG.md | sed 's/^# //')
           DESCRIPTION=$(tail -n +2 CHANGELOG.md | head -c 4000)
-          echo "TITLE=$TITLE" >> $GITHUB_OUTPUT
-          echo "DESCRIPTION<<EOF" >> $GITHUB_OUTPUT
-          echo "$DESCRIPTION" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          
+          PAYLOAD=$(jq -n \
+            --arg title "$TITLE" \
+            --arg desc "$DESCRIPTION" \
+            '{embeds: [{title: $title, description: $desc, color: 3447003}]}')
+          
+          curl -s -H "Content-Type: application/json" \
+               -d "$PAYLOAD" \
+               "$DISCORD_WEBHOOK"
 
       - name: Send CHANGELOG.md to Discord
         run: |
