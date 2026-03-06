@@ -4,7 +4,7 @@
     - Articuno
     - Zapdos
     - Moltres
-    - Mewtwo
+    - Mewtwo _(texture is bugged, will be fixed in a future update)_
 
 - **[UPDATE] Mods**:
   - **[ADD] Cobblemon Exp Lock**
