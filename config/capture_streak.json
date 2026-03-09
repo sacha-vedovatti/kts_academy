@@ -1,0 +1,88 @@
+{
+  "enabled": true,
+  "resetOnDifferentSpecies": true,
+  "minCountForMessage": 2,
+  "message": "§3§lCapture Streak §7» §f{species} §7(x{count})",
+  "applyBonusesOnCapture": false,
+  "applyShinyOnSpawnPost": true,
+  "applyRadiantOnSpawnPost": true,
+  "logSpawnBoost": true,
+  "perfectIvValue": 31,
+  "spawnBoostRadius": 300.0,
+  "radiantAspects": ["radiant=radiant"],
+  "radiantExtraAspects": ["min_perfect_ivs=3"],
+  "tiers": [
+    {
+      "minStreak": 10,
+      "shinyChance": 1.0,
+      "radiantChance": 0.15,
+      "perfectIvCount": 1,
+      "perfectIvChance": 15.0,
+      "ivBoostMultiplier": 1.25,
+      "ivBoostChance": 20.0
+    },
+    {
+      "minStreak": 25,
+      "shinyChance": 1.5,
+      "radiantChance": 0.25,
+      "perfectIvCount": 1,
+      "perfectIvChance": 25.0,
+      "ivBoostMultiplier": 1.25,
+      "ivBoostChance": 30.0
+    },
+    {
+      "minStreak": 50,
+      "shinyChance": 2.0,
+      "radiantChance": 0.5,
+      "perfectIvCount": 2,
+      "perfectIvChance": 35.0,
+      "ivBoostMultiplier": 1.75,
+      "ivBoostChance": 40.0
+    },
+    {
+      "minStreak": 75,
+      "shinyChance": 2.5,
+      "radiantChance": 0.75,
+      "perfectIvCount": 2,
+      "perfectIvChance": 65.0,
+      "ivBoostMultiplier": 1.75,
+      "ivBoostChance": 75.0
+    },
+    {
+      "minStreak": 100,
+      "shinyChance": 3.0,
+      "radiantChance": 1.0,
+      "perfectIvCount": 3,
+      "perfectIvChance": 75.0,
+      "ivBoostMultiplier": 2.0,
+      "ivBoostChance": 75.0
+    },
+    {
+      "minStreak": 200,
+      "shinyChance": 5.0,
+      "radiantChance": 1.5,
+      "perfectIvCount": 3,
+      "perfectIvChance": 85.0,
+      "ivBoostMultiplier": 2.0,
+      "ivBoostChance": 100.0
+    },
+    {
+      "minStreak": 300,
+      "shinyChance": 6.25,
+      "radiantChance": 2.0,
+      "perfectIvCount": 3,
+      "perfectIvChance": 95.0,
+      "ivBoostMultiplier": 2.0,
+      "ivBoostChance": 100.0
+    },
+    {
+      "minStreak": 500,
+      "shinyChance": 7.5,
+      "radiantChance": 3.75,
+      "perfectIvCount": 3,
+      "perfectIvChance": 100.0,
+      "ivBoostMultiplier": 2.0,
+      "ivBoostChance": 100.0
+    }
+  ]
+}

@@ -206,7 +206,8 @@ public final class PokemonCaptureListener {
 //                EconomyManager.get(player).add(reward);
 //                player.sendMessage(Text.literal("§a+ " + formatMoney(reward) + " ₽ §7pour la capture de §f" + pokemonName(pokemon)),false);
 
-				QuestManager.onPokemonCaptured(player, pokemon);
+                QuestManager.onPokemonCaptured(player, pokemon);
+                CaptureStreakManager.onPokemonCaptured(player, pokemon);
 				schedulePokedexRecheck(player, pokemon);
             } catch (Throwable ignored) {
             }

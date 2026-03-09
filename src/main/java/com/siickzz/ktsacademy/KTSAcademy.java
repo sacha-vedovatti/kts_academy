@@ -13,6 +13,7 @@ import com.siickzz.ktsacademy.events.PokemonTradeListener;
 import com.siickzz.ktsacademy.events.HarvestListener;
 import com.siickzz.ktsacademy.events.PokedexMilestoneListener;
 import com.siickzz.ktsacademy.events.OreMineListener;
+import com.siickzz.ktsacademy.events.PokemonSpawnBoostListener;
 import com.siickzz.ktsacademy.motd.MotdListener;
 import com.siickzz.ktsacademy.messages.PrivateMsgManager;
 import com.siickzz.ktsacademy.quests.QuestManager;
@@ -29,6 +30,7 @@ public class KTSAcademy implements ModInitializer {
         MotdListener.register();
         PokemonBattleWinListener.register();
         PokemonCaptureListener.register();
+        PokemonSpawnBoostListener.register();
         PokemonFishingListener.register();
         PokemonTradeListener.register();
         HarvestListener.register();
