@@ -129,9 +129,9 @@
     "dropOnGroundIfFull": true,
     "notifyPlayer": true,
     "drops": [
-      { "itemId": "cobblemon:rare_candy",   "chance": 50.0,  "min": 1,  "max": 32 },
+      { "itemId": "cobblemon:exp_candy_l",  "chance": 50.0,  "min": 1,  "max": 32 },
       { "itemId": "cobblemon:poke_ball",    "chance": 60.0,  "min": 64, "max": 64 },
-      { "itemId": "cobblemon:ultra_ball",   "chance": 50.0,  "min": 64, "max": 64 },
+      { "itemId": "cobblemon:ultra_ball",   "chance": 50.0,  "min": 1,  "max": 32 },
       { "itemId": "academy:radiant_fossil", "chance": 0.002, "min": 1,  "max": 1  },
       { "itemId": "academy:max_iv_fossil",  "chance": 0.001, "min": 1,  "max": 1  },
       { "itemId": "academy:shiny_fossil",   "chance": 0.005, "min": 1,  "max": 1  },
