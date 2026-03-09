@@ -6,14 +6,14 @@
   "applyBonusesOnCapture": false,
   "applyShinyOnSpawnPost": true,
   "applyRadiantOnSpawnPost": true,
-  "logSpawnBoost": true,
+  "logSpawnBoost": false,
   "perfectIvValue": 31,
   "spawnBoostRadius": 300.0,
   "radiantAspects": ["radiant=radiant"],
   "radiantExtraAspects": ["min_perfect_ivs=3"],
   "tiers": [
     {
-      "minStreak": 10,
+      "minStreak": 25,
       "shinyChance": 1.0,
       "radiantChance": 0.15,
       "perfectIvCount": 1,
@@ -22,7 +22,7 @@
       "ivBoostChance": 20.0
     },
     {
-      "minStreak": 25,
+      "minStreak": 50,
       "shinyChance": 1.5,
       "radiantChance": 0.25,
       "perfectIvCount": 1,
@@ -31,7 +31,7 @@
       "ivBoostChance": 30.0
     },
     {
-      "minStreak": 50,
+      "minStreak": 100,
       "shinyChance": 2.0,
       "radiantChance": 0.5,
       "perfectIvCount": 2,
@@ -40,7 +40,7 @@
       "ivBoostChance": 40.0
     },
     {
-      "minStreak": 75,
+      "minStreak": 250,
       "shinyChance": 2.5,
       "radiantChance": 0.75,
       "perfectIvCount": 2,
@@ -49,7 +49,7 @@
       "ivBoostChance": 75.0
     },
     {
-      "minStreak": 100,
+      "minStreak": 500,
       "shinyChance": 3.0,
       "radiantChance": 1.0,
       "perfectIvCount": 3,
@@ -58,7 +58,7 @@
       "ivBoostChance": 75.0
     },
     {
-      "minStreak": 200,
+      "minStreak": 750,
       "shinyChance": 5.0,
       "radiantChance": 1.5,
       "perfectIvCount": 3,
@@ -67,7 +67,7 @@
       "ivBoostChance": 100.0
     },
     {
-      "minStreak": 300,
+      "minStreak": 1000,
       "shinyChance": 6.25,
       "radiantChance": 2.0,
       "perfectIvCount": 3,
@@ -76,7 +76,7 @@
       "ivBoostChance": 100.0
     },
     {
-      "minStreak": 500,
+      "minStreak": 1500,
       "shinyChance": 7.5,
       "radiantChance": 3.75,
       "perfectIvCount": 3,
