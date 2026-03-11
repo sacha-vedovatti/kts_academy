@@ -1,0 +1,86 @@
+{
+  "chests": [
+    {
+      "id": "trial",
+      "displayName": "Coffre mystere",
+      "enabled": true,
+      "keyItemId": "minecraft:trial_key",
+      "requireEnchantedKey": true,
+      "rolls": 1,
+      "dropOnGroundIfFull": true,
+      "notifyPlayer": true,
+      "blockIds": [
+        "minecraft:chest"
+      ],
+      "positions": [
+        {
+          "world": "minecraft:overworld",
+          "x": 0,
+          "y": 64,
+          "z": 0
+        }
+      ],
+      "drops": [
+        {
+          "itemId": "minecraft:diamond",
+          "chance": 10.0,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "itemId": "minecraft:emerald",
+          "chance": 20.0,
+          "min": 2,
+          "max": 5
+        },
+        {
+          "itemId": "minecraft:gold_ingot",
+          "chance": 70.0,
+          "min": 4,
+          "max": 12
+        }
+      ]
+    },
+    {
+      "id": "ominous",
+      "displayName": "Coffre mystere ominous",
+      "enabled": true,
+      "keyItemId": "minecraft:ominous_trial_key",
+      "requireEnchantedKey": true,
+      "rolls": 1,
+      "dropOnGroundIfFull": true,
+      "notifyPlayer": true,
+      "blockIds": [
+        "minecraft:chest"
+      ],
+      "positions": [
+        {
+          "world": "minecraft:overworld",
+          "x": 2,
+          "y": 64,
+          "z": 0
+        }
+      ],
+      "drops": [
+        {
+          "itemId": "minecraft:netherite_ingot",
+          "chance": 2.0,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "itemId": "minecraft:diamond",
+          "chance": 25.0,
+          "min": 2,
+          "max": 4
+        },
+        {
+          "itemId": "minecraft:gold_ingot",
+          "chance": 73.0,
+          "min": 6,
+          "max": 16
+        }
+      ]
+    }
+  ]
+}
