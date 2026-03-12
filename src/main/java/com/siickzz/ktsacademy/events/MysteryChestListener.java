@@ -115,19 +115,33 @@ public final class MysteryChestListener {
             if (player == null)
                 continue;
 
-            List<ItemStack> loot = MysteryChestManager.rollLoot(pending.chest);
+            List<MysteryChestManager.Reward> loot = MysteryChestManager.rollLoot(pending.chest);
             if (loot.isEmpty()) {
                 if (pending.chest.notifyPlayer)
                     player.sendMessage(Text.literal("§d§lMystery Box §7» §cAucun loot configure."), false);
                 continue;
             }
-            ItemStack reward = loot.get(0);
-            if (reward == null || reward.isEmpty())
+            MysteryChestManager.Reward reward = loot.get(0);
+            ItemStack rewardStack = reward.stack();
+            if (rewardStack == null || rewardStack.isEmpty())
                 continue;
-            ItemStack display = reward.copy();
+            ItemStack display = rewardStack.copy();
             showFinalReward(pending, display);
-            if (!player.getInventory().insertStack(reward) && pending.chest.dropOnGroundIfFull && !reward.isEmpty())
-                player.dropItem(reward, false);
+
+            boolean givenByCommand = false;
+            MysteryChestConfig.DropEntryConfig dropEntry = reward.entry();
+            if (dropEntry != null && dropEntry.giveCommand != null && !dropEntry.giveCommand.isBlank()) {
+                String cmd = dropEntry.giveCommand
+                    .replace("{player}", player.getName().getString())
+                    .replace("{count}", Integer.toString(rewardStack.getCount()));
+                player.getServer().getCommandManager().executeWithPrefix(player.getServer().getCommandSource(), cmd);
+                givenByCommand = true;
+            }
+
+            if (!givenByCommand) {
+                if (!player.getInventory().insertStack(rewardStack) && pending.chest.dropOnGroundIfFull && !rewardStack.isEmpty())
+                    player.dropItem(rewardStack, false);
+            }
             if (pending.chest.notifyPlayer)
                 player.sendMessage(Text.literal("§d§lMystery Box §7» §b" + display.getName().getString() + " §7x" + display.getCount()), false);
         }

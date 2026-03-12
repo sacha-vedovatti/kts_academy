@@ -12,6 +12,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentLevelEntry;
+import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -133,7 +136,7 @@ public final class MysteryChestManager {
         return true;
     }
 
-    public static List<ItemStack> rollLoot(MysteryChestConfig.ChestConfig chest)
+    public static List<Reward> rollLoot(MysteryChestConfig.ChestConfig chest)
     {
         if (chest == null || chest.drops == null || chest.drops.isEmpty())
             return List.of();
@@ -157,13 +160,13 @@ public final class MysteryChestManager {
 
             int min = entry.min != null ? Math.max(1, entry.min) : 1;
             int max = entry.max != null ? Math.max(min, entry.max) : min;
-            entries.add(new ResolvedDrop(baseStack, chance, min, max));
+            entries.add(new ResolvedDrop(baseStack, chance, min, max, entry));
         }
         if (entries.isEmpty())
             return List.of();
 
         int rolls = chest.rolls != null ? Math.max(1, chest.rolls) : 1;
-        List<ItemStack> result = new ArrayList<>();
+        List<Reward> result = new ArrayList<>();
         double totalWeight = entries.stream().mapToDouble(ResolvedDrop::weight).sum();
         if (totalWeight <= 0)
             return List.of();
@@ -178,7 +181,7 @@ public final class MysteryChestManager {
             ItemStack stack = pick.baseStack.copy();
             stack.setCount(count);
             applyKeyGlintIfNeeded(stack);
-            result.add(stack);
+            result.add(new Reward(stack, pick.entry));
         }
         return result;
     }
@@ -533,13 +536,15 @@ public final class MysteryChestManager {
             return null;
 
         ItemStack stack = new ItemStack(item);
-        if ("academy:booster_pack".equalsIgnoreCase(itemId.trim())) {
+        boolean skipComponents = entry.giveCommand != null && !entry.giveCommand.isBlank();
+        if (!skipComponents && "academy:booster_pack".equalsIgnoreCase(itemId.trim())) {
             if (pack == null || pack.isBlank())
                 pack = "base";
             String targetComponent = componentId != null ? componentId : "academy:booster_pack";
             applyAcademyPackComponent(stack, targetComponent, pack);
         }
-        applyConfigComponents(stack, entry.components);
+        if (!skipComponents)
+            applyConfigComponents(stack, entry.components);
         return stack;
     }
 
@@ -556,6 +561,12 @@ public final class MysteryChestManager {
             if (componentId == null)
                 continue;
 
+            JsonElement json = entry.getValue();
+            if (tryApplyStoredEnchantments(stack, componentId, json))
+                continue;
+            if (tryApplyBoosterPackComponent(stack, componentId, json))
+                continue;
+
             Object componentType = resolveComponentType(componentId);
             if (componentType == null) {
                 String key = componentId.toString().toLowerCase(Locale.ROOT);
@@ -564,7 +575,6 @@ public final class MysteryChestManager {
                 continue;
             }
 
-            JsonElement json = entry.getValue();
             Object decoded = decodeComponentValue(componentType, json);
             boolean applied = decoded != null && setComponentValue(stack, componentId, decoded);
             if (!applied && json != null && json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())
@@ -574,6 +584,111 @@ public final class MysteryChestManager {
                 if (LOGGED_BAD_COMPONENT_IDS.add(key))
                     LOGGER.warn("[KTSAcademy-MysteryChests] impossible d'appliquer le component {}", componentId);
             }
+        }
+    }
+
+    private static boolean tryApplyStoredEnchantments(ItemStack stack, Identifier componentId, JsonElement json)
+    {
+        if (stack == null || componentId == null || json == null)
+            return false;
+        if (!"minecraft:stored_enchantments".equals(componentId.toString()))
+            return false;
+        if (stack.getItem() != Items.ENCHANTED_BOOK)
+            return false;
+        if (!json.isJsonObject())
+            return false;
+
+        JsonObject root = json.getAsJsonObject();
+        JsonObject levels = null;
+        JsonElement levelsElement = root.get("levels");
+        if (levelsElement != null && levelsElement.isJsonObject())
+            levels = levelsElement.getAsJsonObject();
+        else
+            levels = root;
+
+        boolean applied = false;
+        for (var levelEntry : levels.entrySet()) {
+            Identifier enchantmentId = Identifier.tryParse(levelEntry.getKey());
+            if (enchantmentId == null)
+                continue;
+            if (!levelEntry.getValue().isJsonPrimitive())
+                continue;
+            int level = levelEntry.getValue().getAsInt();
+            if (level <= 0)
+                continue;
+            RegistryEntry<Enchantment> enchantmentEntry = resolveEnchantmentEntry(enchantmentId);
+            if (enchantmentEntry == null)
+                continue;
+            if (addStoredEnchantment(stack, enchantmentEntry, level))
+                applied = true;
+        }
+        return applied;
+    }
+
+    private static boolean tryApplyBoosterPackComponent(ItemStack stack, Identifier componentId, JsonElement json)
+    {
+        if (stack == null || componentId == null || json == null)
+            return false;
+        String id = componentId.toString();
+        if (!"academy:booster_pack".equals(id) && !"academy:pack".equals(id))
+            return false;
+        if (!json.isJsonPrimitive() || !json.getAsJsonPrimitive().isString())
+            return false;
+        applyAcademyPackComponent(stack, id, json.getAsString());
+        return true;
+    }
+
+    private static boolean addStoredEnchantment(ItemStack stack, RegistryEntry<Enchantment> enchantmentEntry, int level)
+    {
+        for (Method method : EnchantedBookItem.class.getMethods()) {
+            if (!method.getName().equals("addEnchantment"))
+                continue;
+            Class<?>[] params = method.getParameterTypes();
+            if (params.length == 2
+                && params[0] == ItemStack.class
+                && EnchantmentLevelEntry.class.isAssignableFrom(params[1])) {
+                try {
+                    method.invoke(null, stack, new EnchantmentLevelEntry(enchantmentEntry, level));
+                    return true;
+                } catch (Throwable ignored) {
+                    continue;
+                }
+            }
+            if (params.length == 3
+                && params[0] == ItemStack.class
+                && RegistryEntry.class.isAssignableFrom(params[1])
+                && params[2] == int.class) {
+                try {
+                    method.invoke(null, stack, enchantmentEntry, level);
+                    return true;
+                } catch (Throwable ignored) {
+                    continue;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static RegistryEntry<Enchantment> resolveEnchantmentEntry(Identifier enchantmentId)
+    {
+        if (enchantmentId == null)
+            return null;
+        RegistryWrapper.WrapperLookup lookup = REGISTRY_LOOKUP;
+        if (lookup == null)
+            return null;
+        try {
+            RegistryWrapper<?> wrapper = lookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
+            RegistryKey<?> key = RegistryKey.of(RegistryKeys.ENCHANTMENT, enchantmentId);
+            Method getOptional = wrapper.getClass().getMethod("getOptional", RegistryKey.class);
+            Object opt = getOptional.invoke(wrapper, key);
+            if (!(opt instanceof java.util.Optional<?> entry) || entry.isEmpty())
+                return null;
+            Object entryValue = entry.get();
+            @SuppressWarnings("unchecked")
+            RegistryEntry<Enchantment> result = (RegistryEntry<Enchantment>) entryValue;
+            return result;
+        } catch (Throwable ignored) {
+            return null;
         }
     }
 
@@ -781,5 +896,7 @@ public final class MysteryChestManager {
         return null;
     }
 
-    private record ResolvedDrop(ItemStack baseStack, double weight, int min, int max) {}
+    private record ResolvedDrop(ItemStack baseStack, double weight, int min, int max, MysteryChestConfig.DropEntryConfig entry) {}
+
+    public record Reward(ItemStack stack, MysteryChestConfig.DropEntryConfig entry) {}
 }

@@ -26,5 +26,6 @@ public final class MysteryChestConfig {
         public Integer min = 1;
         public Integer max = 1;
         public JsonObject components;
+        public String giveCommand;
     }
 }
