@@ -2,83 +2,137 @@
   "chests": [
     {
       "id": "trial",
-      "displayName": "Coffre mystere",
+      "displayName": "Mystery Box",
       "enabled": true,
       "keyItemId": "minecraft:trial_key",
       "requireEnchantedKey": true,
       "rolls": 1,
       "dropOnGroundIfFull": true,
       "notifyPlayer": true,
-      "blockIds": [
-        "minecraft:chest"
-      ],
-      "positions": [
-        {
-          "world": "minecraft:overworld",
-          "x": 0,
-          "y": 64,
-          "z": 0
-        }
-      ],
+      "blockIds": ["minecraft:chest"],
       "drops": [
         {
           "itemId": "minecraft:diamond",
+          "chance": 25.0,
+          "min": 1,
+          "max": 5
+        },
+        {
+          "itemId": "cobblemon:rare_candy",
+          "chance": 25.0,
+          "min": 1,
+          "max": 5
+        },
+        {
+          "itemId": "academy:lootbag_megastone",
+          "chance": 15.0,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "itemId": "minecraft:trial_key",
+          "chance": 15.0,
+          "min": 1,
+          "max": 4
+        },
+        {
+          "itemId": "academy:lootbag_gymkey",
           "chance": 10.0,
           "min": 1,
           "max": 2
         },
         {
-          "itemId": "minecraft:emerald",
-          "chance": 20.0,
-          "min": 2,
-          "max": 5
+          "itemId": "minecraft:ominous_trial_key",
+          "chance": 5.0,
+          "min": 1,
+          "max": 2
         },
         {
-          "itemId": "minecraft:gold_ingot",
-          "chance": 70.0,
-          "min": 4,
-          "max": 12
+          "itemId": "academy:booster_pack",
+          "chance": 3.0,
+          "min": 1,
+          "max": 1,
+          "components": { "academy:booster_pack": "base" }
+        },
+        {
+          "itemId": "academy:ha_fossil",
+          "chance": 2.5,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "itemId": "academy:shiny_fossil",
+          "chance": 2.0,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "itemId": "academy:max_iv_fossil",
+          "chance": 0.5,
+          "min": 1,
+          "max": 1
         }
       ]
     },
     {
       "id": "ominous",
-      "displayName": "Coffre mystere ominous",
+      "displayName": "Rare Mystery Box",
       "enabled": true,
       "keyItemId": "minecraft:ominous_trial_key",
       "requireEnchantedKey": true,
       "rolls": 1,
       "dropOnGroundIfFull": true,
       "notifyPlayer": true,
-      "blockIds": [
-        "minecraft:chest"
-      ],
-      "positions": [
-        {
-          "world": "minecraft:overworld",
-          "x": 2,
-          "y": 64,
-          "z": 0
-        }
-      ],
+      "blockIds": ["minecraft:ender_chest"],
       "drops": [
         {
           "itemId": "minecraft:netherite_ingot",
-          "chance": 2.0,
+          "chance": 30.0,
           "min": 1,
-          "max": 1
+          "max": 2
         },
         {
           "itemId": "minecraft:diamond",
-          "chance": 25.0,
+          "chance": 35.0,
           "min": 2,
           "max": 4
         },
         {
-          "itemId": "minecraft:gold_ingot",
-          "chance": 73.0,
-          "min": 6,
-          "max": 16
+          "itemId": "minecraft:ominous_trial_key",
+          "chance": 9.8,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "itemId": "academy:max_iv_fossil",
+          "chance": 7.5,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "itemId": "minecraft:enchanted_book",
+          "chance": 5.0,
+          "min": 1,
+          "max": 1,
+          "components": { "minecraft:stored_enchantments": { "levels": { "minecraft:mending": 1}}}
+        },
+        {
+          "itemId": "academy:radiant_fossil",
+          "chance": 2.5,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "itemId": "academy:lootbag_mythsandlegends",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
+        },
+        {
+          "itemId": "cobblemon:master_ball",
+          "chance": 0.1,
+          "min": 1,
+          "max": 1
         }
       ]
     }
