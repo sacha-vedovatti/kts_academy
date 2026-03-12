@@ -15,20 +15,15 @@ import java.lang.reflect.Proxy;
 import java.util.Locale;
 import java.util.UUID;
 
-/**
- * Awards money only when a Cobblemon Pokémon battle is won.
- * Uses reflection so it stays compatible across Cobblemon versions.
- */
 public final class PokemonBattleWinListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger("CobbleEconomy");
 	private static volatile boolean LOGGED_HANDLER_ERROR = false;
 	private static volatile boolean LOGGED_EVENT_SHAPE = false;
 
-	private PokemonBattleWinListener() {
-	}
+	private PokemonBattleWinListener() {}
 
-	public static void register() {
-		// Try a bunch of likely event names across Cobblemon versions.
+	public static void register()
+	{
 		String[] candidates = {
 			"BATTLE_VICTORY_POST",
 			"BATTLE_VICTORY_PRE",
@@ -52,12 +47,13 @@ public final class PokemonBattleWinListener {
 			"BATTLE_COMPLETED_PRE",
 			"BATTLE_COMPLETED"
 		};
-
 		boolean hooked = false;
 		String hookedName = null;
 		String hookedHolder = null;
+
 		for (String name : candidates) {
 			HookResult r = tryHookCobblemonEvents(name);
+
 			hooked = r.hooked;
 			if (hooked) {
 				hookedName = name;
@@ -65,29 +61,26 @@ public final class PokemonBattleWinListener {
 				break;
 			}
 		}
-
-		if (hooked) {
-			LOGGER.info("[CobbleEconomy] Battle win listener hooked successfully ({} via {})", hookedName, hookedHolder);
-		} else {
-			LOGGER.warn("[CobbleEconomy] Could not hook Cobblemon battle events; no money will be awarded on battle wins.");
-		}
+		if (hooked)
+			LOGGER.info("[KTSAcademy] Battle win listener hooked successfully ({} via {})", hookedName, hookedHolder);
+		else
+			LOGGER.warn("[KTSAcademy] Could not hook Cobblemon battle events; no money will be awarded on battle wins.");
 	}
 
-	private record HookResult(boolean hooked, String holderClass) {
-	}
+	private record HookResult(boolean hooked, String holderClass) {}
 
-	private static HookResult tryHookCobblemonEvents(String name) {
-		// Cobblemon has moved/duplicated event holders across versions.
+	private static HookResult tryHookCobblemonEvents(String name)
+	{
 		String[] holders = {
 			"com.cobblemon.mod.common.api.events.CobblemonEvents",
 			"com.cobblemon.mod.common.api.events.battle.BattleEvents",
 			"com.cobblemon.mod.common.api.events.battle.BattleEventHandler",
 			"com.cobblemon.mod.common.api.events.battle.BattleEventHandlers"
 		};
+
 		for (String holder : holders) {
-			if (tryHookEvent(holder, name)) {
+			if (tryHookEvent(holder, name))
 				return new HookResult(true, holder);
-			}
 		}
 		return new HookResult(false, null);
 	}
@@ -96,19 +89,16 @@ public final class PokemonBattleWinListener {
 		try {
 			Class<?> holder = Class.forName(eventHolderClassName);
 			Object event = getStaticMember(holder, eventFieldName);
-			if (event == null) {
+			if (event == null)
 				return false;
-			}
 
 			Method registerMethod = findRegisterMethod(event);
 			Class<?> listenerType = registerMethod.getParameterTypes()[0];
-
 			Object listener = Proxy.newProxyInstance(
 				listenerType.getClassLoader(),
 				new Class<?>[]{listenerType},
 				new BattleWinHandler()
 			);
-
 			registerMethod.invoke(event, listener);
 			return true;
 		} catch (Throwable ignored) {

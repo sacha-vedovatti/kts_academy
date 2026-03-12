@@ -41,7 +41,7 @@ public final class ReplyCommand {
         UUID targetUuid = PrivateMsgManager.getLastConversation(sender.getUuid());
 
         if (targetUuid == null) {
-            sender.sendMessage(Text.literal("§cAucune conversation récente à laquelle répondre."), false);
+            sender.sendMessage(Text.literal("§cAucune conversation récente à laquelle répondre. Utilisez §e/pm <joueur> <message>§c (ou un alias KTS) pour initialiser."), false);
             return 0;
         }
 
@@ -52,8 +52,7 @@ public final class ReplyCommand {
             return 0;
         }
 
-        PrivateMsgManager.setLastConversation(sender.getUuid(), target.getUuid());
-        PrivateMsgManager.setLastConversation(target.getUuid(), sender.getUuid());
+        PrivateMsgManager.recordConversation(sender.getUuid(), target.getUuid());
 
         Text toSender = Text.literal("§d[MSG] §fVous → §e" + target.getGameProfile().getName() + "§7: §f" + message);
         Text toTarget = Text.literal("§d[MSG] §e" + sender.getGameProfile().getName() + "§7 → §fVous§7: §f" + message);
