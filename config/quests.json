@@ -129,13 +129,19 @@
     "dropOnGroundIfFull": true,
     "notifyPlayer": true,
     "drops": [
-      { "itemId": "cobblemon:exp_candy_l",  "chance": 50.0,  "min": 1,  "max": 32 },
-      { "itemId": "cobblemon:poke_ball",    "chance": 60.0,  "min": 64, "max": 64 },
-      { "itemId": "cobblemon:ultra_ball",   "chance": 50.0,  "min": 1,  "max": 32 },
-      { "itemId": "academy:radiant_fossil", "chance": 0.002, "min": 1,  "max": 1  },
-      { "itemId": "academy:max_iv_fossil",  "chance": 0.001, "min": 1,  "max": 1  },
-      { "itemId": "academy:shiny_fossil",   "chance": 0.005, "min": 1,  "max": 1  },
-      { "itemId": "academy:ha_fossil",      "chance": 0.01,  "min": 1,  "max": 1  }
+      { "itemId": "cobblemon:exp_candy_l",    "chance": 25.0,  "min": 1,  "max": 32 },
+      { "itemId": "cobblemon:healthy_candy",  "chance": 25.0,  "min": 1,  "max": 5  },
+      { "itemId": "cobblemon:mighty_candy",   "chance": 25.0,  "min": 1,  "max": 5  },
+      { "itemId": "cobblemon:tough_candy",    "chance": 25.0,  "min": 1,  "max": 5  },
+      { "itemId": "cobblemon:smart_candy",    "chance": 25.0,  "min": 1,  "max": 5  },
+      { "itemId": "cobblemon:courage_candy",  "chance": 25.0,  "min": 1,  "max": 5  },
+      { "itemId": "cobblemon:quick_candy",    "chance": 25.0,  "min": 1,  "max": 5  },
+      { "itemId": "cobblemon:poke_ball",      "chance": 60.0,  "min": 1,  "max": 32 },
+      { "itemId": "cobblemon:ultra_ball",     "chance": 30.0,  "min": 1,  "max": 32 },
+      { "itemId": "academy:radiant_fossil",   "chance": 0.002, "min": 1,  "max": 1  },
+      { "itemId": "academy:max_iv_fossil",    "chance": 0.001, "min": 1,  "max": 1  },
+      { "itemId": "academy:shiny_fossil",     "chance": 0.005, "min": 1,  "max": 1  },
+      { "itemId": "academy:ha_fossil",        "chance": 0.01,  "min": 1,  "max": 1  }
     ]
   },
   "quests": [
