@@ -402,10 +402,6 @@ public final class QuestManager {
             save();
     }
 
-    // =========================================================================
-    // Réclamer une récompense — utilise la commande Cobblemon Economy
-    // =========================================================================
-
     public static boolean tryClaim(ServerPlayerEntity player, String questId)
     {
         init();
@@ -659,12 +655,12 @@ public final class QuestManager {
         String title = effectiveTitle(quest, qp);
         double reward = effectiveReward(quest, qp);
         MinecraftServer server = player.getServer();
-        Text msg = Text.literal("§e§lQuests » §e" + player.getName().getString()  + " §7a complété : §b" + title + " §7(§e+" + formatMoney(reward) + " $§7)");
+        Text msg = Text.literal("§e§lQuests §7§l» §e" + player.getName().getString()  + " §7a complété : §b" + title + " §7(§e+" + formatMoney(reward) + " $§7)");
 
         if (server != null)
             server.getPlayerManager().broadcast(msg, false);
         else
-            player.sendMessage(Text.literal("§d§lQuests terminée » §7Vous avez terminé la quête \"§a" + title + "§7\" (§f/quests§7)."), false);
+            player.sendMessage(Text.literal("§d§lQuests terminée §7§l» §7Vous avez terminé la quête \"§a" + title + "§7\" (§f/quests§7)."), false);
     }
 
     private static void tryRollTierDrops(ServerPlayerEntity player, QuestDef quest, int tierIdx)
@@ -700,7 +696,7 @@ public final class QuestManager {
                 if (!player.getInventory().insertStack(stack) && cfg.dropOnGroundIfFull && !stack.isEmpty())
                     player.dropItem(stack, false);
                 if (cfg.notifyPlayer)
-                    player.sendMessage(Text.literal("§d§lQuests » §7Bonus : §f" + itemName + " §7x" + count), false);
+                    player.sendMessage(Text.literal("§d§lQuests §7§l» §7Bonus : §f" + itemName + " §7x" + count), false);
             }
         }
     }
