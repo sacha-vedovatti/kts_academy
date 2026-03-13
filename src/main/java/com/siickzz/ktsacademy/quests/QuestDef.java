@@ -16,7 +16,6 @@ public record QuestDef(
 		List<QuestTier> tiers
 	) {
 
-	/** Palier simplifié : seulement objectif + récompense. Le titre est déduit du titre de la quête. */
 	public record QuestTier(int goal, double reward) {}
 
 	public boolean isTiered() {
@@ -36,8 +35,11 @@ public record QuestDef(
 		MINE_ORE,
 		POKEDEX_CAUGHT;
 
-		public static QuestType parse(String raw) {
-			if (raw == null) return CAPTURE_ANY;
+		public static QuestType parse(String raw)
+		{
+			if (raw == null)
+				return CAPTURE_ANY;
+
 			String s = raw.trim().toUpperCase(Locale.ROOT);
 			return switch (s) {
 				case "CAPTURE_SPECIES" -> CAPTURE_SPECIES;

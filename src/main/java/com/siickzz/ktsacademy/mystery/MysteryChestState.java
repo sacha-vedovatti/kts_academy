@@ -15,11 +15,7 @@ public final class MysteryChestState extends PersistentState {
     private static final String DATA_NAME = "ktsacademy_mystery_chests";
     private static final String LIST_KEY = "Chests";
 
-    private static final PersistentState.Type<MysteryChestState> TYPE = new PersistentState.Type<>(
-        MysteryChestState::new,
-        MysteryChestState::fromNbt,
-        null
-    );
+    private static final PersistentState.Type<MysteryChestState> TYPE = new PersistentState.Type<>(MysteryChestState::new, MysteryChestState::fromNbt, null);
 
     private final Map<BlockPos, String> chests = new HashMap<>();
 
@@ -40,6 +36,7 @@ public final class MysteryChestState extends PersistentState {
     {
         if (pos == null)
             return false;
+
         boolean removed = chests.remove(pos) != null;
         if (removed)
             markDirty();
@@ -57,11 +54,13 @@ public final class MysteryChestState extends PersistentState {
     public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries)
     {
         NbtList list = new NbtList();
+
         for (var entry : chests.entrySet()) {
             BlockPos pos = entry.getKey();
             String id = entry.getValue();
             if (pos == null || id == null || id.isBlank())
                 continue;
+
             NbtCompound tag = new NbtCompound();
             tag.putInt("x", pos.getX());
             tag.putInt("y", pos.getY());
@@ -78,11 +77,13 @@ public final class MysteryChestState extends PersistentState {
         MysteryChestState state = new MysteryChestState();
         if (nbt == null || !nbt.contains(LIST_KEY, NbtElement.LIST_TYPE))
             return state;
+
         NbtList list = nbt.getList(LIST_KEY, NbtElement.COMPOUND_TYPE);
         for (int i = 0; i < list.size(); i++) {
             NbtCompound tag = list.getCompound(i);
             if (!tag.contains("id", NbtElement.STRING_TYPE))
                 continue;
+
             String id = tag.getString("id");
             BlockPos pos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
             if (!id.isBlank())

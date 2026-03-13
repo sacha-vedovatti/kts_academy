@@ -27,21 +27,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class PokemonCaptureListener {
     private static final Logger LOGGER = LoggerFactory.getLogger("CobbleEconomy");
-
-    // Cobblemon updates pokedex data asynchronously relative to capture hooks in some versions.
-    // We schedule a short delayed recompute so the POKEDEX_CAUGHT quest stays accurate.
     private static final Map<UUID, Integer> POKEDEX_RECHECK_TICKS = new ConcurrentHashMap<>();
     private static final Map<UUID, String> POKEDEX_RECHECK_SPECIES = new ConcurrentHashMap<>();
     private static volatile boolean TICK_HANDLER_REGISTERED = false;
 
-    private PokemonCaptureListener() {
-    }
+    private PokemonCaptureListener() {}
 
-    public static void register() {
+    public static void register()
+    {
         ensureTickHandlerRegistered();
 
         boolean hooked = tryHookCobblemonEvents("POKEMON_CAPTURED");
-
         if (!hooked)
             hooked = tryHookCobblemonEvents("POKEMON_CAPTURE_PRE");
         if (hooked)
@@ -50,20 +46,22 @@ public final class PokemonCaptureListener {
             LOGGER.warn("[CobbleEconomy] Could not hook Cobblemon capture event; no money will be awarded on capture.");
     }
 
-    private static void ensureTickHandlerRegistered() {
-        if (TICK_HANDLER_REGISTERED) return;
+    private static void ensureTickHandlerRegistered()
+    {
+        if (TICK_HANDLER_REGISTERED)
+            return;
         synchronized (PokemonCaptureListener.class) {
-            if (TICK_HANDLER_REGISTERED) return;
-
+            if (TICK_HANDLER_REGISTERED)
+                return;
             ServerTickEvents.END_SERVER_TICK.register(PokemonCaptureListener::onEndServerTick);
             TICK_HANDLER_REGISTERED = true;
         }
     }
 
-    private static void onEndServerTick(MinecraftServer server) {
-        if (POKEDEX_RECHECK_TICKS.isEmpty()) return;
-
-        // Decrement delays; compute once it reaches 0.
+    private static void onEndServerTick(MinecraftServer server)
+    {
+        if (POKEDEX_RECHECK_TICKS.isEmpty())
+            return;
         for (var it = POKEDEX_RECHECK_TICKS.entrySet().iterator(); it.hasNext(); ) {
             var entry = it.next();
             int left = entry.getValue() - 1;
@@ -75,55 +73,50 @@ public final class PokemonCaptureListener {
             UUID playerId = entry.getKey();
             it.remove();
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(playerId);
-            if (player == null) continue;
+            if (player == null)
+                continue;
 
             int caught = PokedexMilestoneListener.computeCaughtCountForPlayer(player);
             if (caught > 0) {
                 PokedexMilestoneListener.applyPokedexUpdate(player, caught);
             } else {
-                // Fallback: if Cobblemon API can't be read, still keep the quest moving based on unique species.
                 String speciesKey = POKEDEX_RECHECK_SPECIES.remove(playerId);
                 if (speciesKey != null && !speciesKey.isBlank()) {
                     var profile = QuestManager.profile(player);
-                    if (profile.capturedSpecies != null && profile.capturedSpecies.add(speciesKey)) {
+                    if (profile.capturedSpecies != null && profile.capturedSpecies.add(speciesKey))
                         QuestManager.onPokedexCaughtProgress(player, profile.capturedSpecies.size());
-                    }
                 }
             }
         }
     }
 
-    private static void schedulePokedexRecheck(ServerPlayerEntity player, Object pokemon) {
-        if (player == null) return;
-        // 2 ticks tends to be enough for pokedex data to be updated after capture.
+    private static void schedulePokedexRecheck(ServerPlayerEntity player, Object pokemon)
+    {
+        if (player == null)
+            return;
         POKEDEX_RECHECK_TICKS.put(player.getUuid(), 2);
 
         String speciesKey = speciesKey(pokemon);
-        if (speciesKey != null && !speciesKey.isBlank()) {
+        if (speciesKey != null && !speciesKey.isBlank())
             POKEDEX_RECHECK_SPECIES.put(player.getUuid(), speciesKey);
-        }
     }
 
-    private static boolean tryHookCobblemonEvents(String name) {
+    private static boolean tryHookCobblemonEvents(String name)
+    {
         return tryHookEvent("com.cobblemon.mod.common.api.events.CobblemonEvents", name);
     }
 
-    private static boolean tryHookEvent(String eventHolderClassName, String eventFieldName) {
+    private static boolean tryHookEvent(String eventHolderClassName, String eventFieldName)
+    {
         try {
             Class<?> holder = Class.forName(eventHolderClassName);
             Object event = getStaticMember(holder, eventFieldName);
-            if (event == null) {
+            if (event == null)
                 return false;
-            }
+
             Method registerMethod = findRegisterMethod(event);
             Class<?> listenerType = registerMethod.getParameterTypes()[0];
-
-            Object listener = Proxy.newProxyInstance(
-                listenerType.getClassLoader(),
-                new Class<?>[]{listenerType},
-                new CaptureHandler()
-            );
-
+            Object listener = Proxy.newProxyInstance(listenerType.getClassLoader(), new Class<?>[]{listenerType}, new CaptureHandler());
             registerMethod.invoke(event, listener);
             return true;
         } catch (Throwable ignored) {
@@ -131,39 +124,33 @@ public final class PokemonCaptureListener {
         }
     }
 
-    private static Object getStaticMember(Class<?> holder, String name) {
-        // 1) public static field
+    private static Object getStaticMember(Class<?> holder, String name)
+    {
         try {
             Field field = holder.getField(name);
             return field.get(null);
-        } catch (Throwable ignored) {
-        }
-
-        // 2) declared static field
+        } catch (Throwable ignored) {}
         try {
             Field field = holder.getDeclaredField(name);
             field.setAccessible(true);
             return field.get(null);
-        } catch (Throwable ignored) {
-        }
+        } catch (Throwable ignored) {}
 
-        // 3) Kotlin-style getter: getNAME()
         String getter = "get" + name;
         try {
             Method method = holder.getMethod(getter);
             return method.invoke(null);
-        } catch (Throwable ignored) {
-        }
+        } catch (Throwable ignored) {}
         try {
             Method method = holder.getDeclaredMethod(getter);
             method.setAccessible(true);
             return method.invoke(null);
-        } catch (Throwable ignored) {
-        }
+        } catch (Throwable ignored) {}
         return null;
     }
 
-    private static Method findRegisterMethod(Object event) throws NoSuchMethodException {
+    private static Method findRegisterMethod(Object event) throws NoSuchMethodException
+    {
         String[] candidates = {"register", "subscribe", "add", "listen"};
 
         for (String name : candidates) {
@@ -178,11 +165,11 @@ public final class PokemonCaptureListener {
         for (Method method : event.getClass().getMethods()) {
             if (method.getParameterCount() != 1)
                 continue;
+
             String n = method.getName().toLowerCase(Locale.ROOT);
             if (n.contains("subscr") || n.contains("regist") || n.contains("listen"))
                 return method;
         }
-
         throw new NoSuchMethodException("No listener registration method found on: " + event.getClass());
     }
 
@@ -195,10 +182,8 @@ public final class PokemonCaptureListener {
             Object event = args[0];
             try {
                 Object playerObj = callNoArg(event, "getPlayer");
-
                 if (!(playerObj instanceof ServerPlayerEntity player))
                     return defaultReturn(method);
-
 
                 Object pokemon = callNoArg(event, "getPokemon");
                 /* DISABLED */
@@ -209,12 +194,12 @@ public final class PokemonCaptureListener {
                 QuestManager.onPokemonCaptured(player, pokemon);
                 CaptureStreakManager.onPokemonCaptured(player, pokemon);
 				schedulePokedexRecheck(player, pokemon);
-            } catch (Throwable ignored) {
-            }
+            } catch (Throwable ignored) {}
             return defaultReturn(method);
         }
 
-        private static Object defaultReturn(Method method) {
+        private static Object defaultReturn(Method method)
+        {
             Class<?> rt = method.getReturnType();
 
             if (rt == boolean.class)
@@ -237,7 +222,8 @@ public final class PokemonCaptureListener {
         }
     }
 
-    private static Object callNoArg(Object target, String methodName) {
+    private static Object callNoArg(Object target, String methodName)
+    {
         try {
             Method method = target.getClass().getMethod(methodName);
             return method.invoke(target);
@@ -246,128 +232,124 @@ public final class PokemonCaptureListener {
         }
     }
 
-    private static String speciesKey(Object pokemon) {
-        if (pokemon == null) return null;
+    private static String speciesKey(Object pokemon)
+    {
+        if (pokemon == null)
+            return null;
+
         Object species = callNoArg(pokemon, "getSpecies");
         Object name = callNoArg(species, "getName");
-        if (name != null) {
+        if (name != null)
             return name.toString().trim().toLowerCase(Locale.ROOT).replace('-', '_').replace(' ', '_');
-        }
         return null;
     }
 
-    private static String pokemonName(Object pokemon) {
+    private static String pokemonName(Object pokemon)
+    {
         if (pokemon == null)
             return "?";
 
         Object display = callNoArg(pokemon, "getDisplayName");
-
         if (display instanceof Text text)
             return text.getString();
         if (display != null)
             return display.toString();
 
         Object species = callNoArg(pokemon, "getSpecies");
-
         if (species != null) {
             Object name = callNoArg(species, "getName");
-
             if (name != null)
                 return name.toString();
         }
         return pokemon.toString();
     }
 
-    private static double calculateReward(Object pokemon) {
-        if (pokemon == null) {
+    private static double calculateReward(Object pokemon)
+    {
+        if (pokemon == null)
             return 0;
-        }
 
         Object species = callNoArg(pokemon, "getSpecies");
-
-        // Prefer explicit flags when available (Cobblemon versions/mods differ)
-        boolean legendary = isTrue(callNoArg(pokemon, "isLegendary"))
-            || isTrue(callNoArg(pokemon, "isMythical"))
-            || isTrue(callNoArg(species, "isLegendary"))
-            || isTrue(callNoArg(species, "isMythical"))
-            || hasLabel(species, "legendary")
-            || hasLabel(species, "mythical");
-
+        boolean legendary = isTrue(callNoArg(pokemon, "isLegendary")) || isTrue(callNoArg(pokemon, "isMythical")) || isTrue(callNoArg(species, "isLegendary")) || isTrue(callNoArg(species, "isMythical")) || hasLabel(species, "legendary") || hasLabel(species, "mythical");
         String rarityKey = "common";
         Object rarity = callNoArg(pokemon, "getRarity");
-        if (rarity == null && species != null) {
+        if (rarity == null && species != null)
             rarity = callNoArg(species, "getRarity");
-        }
-        if (rarity != null) {
+        if (rarity != null)
             rarityKey = toKey(rarity);
-        }
 
-        double base;
-        if (legendary || rarityKey.contains("legend") || rarityKey.contains("myth")) {
+        double base = 0.0;
+        if (legendary || rarityKey.contains("legend") || rarityKey.contains("myth"))
             base = 1000;
-        } else if (rarityKey.contains("rare")) {
-            // matches "rare", "ultra_rare", etc.
+        else if (rarityKey.contains("rare"))
             base = 150;
-        } else if (rarityKey.contains("uncommon")) {
+        else if (rarityKey.contains("uncommon"))
             base = 50;
-        } else {
+        else
             base = 20;
-        }
-
-        if (isShiny(pokemon)) {
+        if (isShiny(pokemon))
             base += 200;
-        }
         return base;
     }
 
-    private static boolean isTrue(Object v) {
-        if (v instanceof Boolean b) return b;
-        if (v == null) return false;
+    private static boolean isTrue(Object v)
+    {
+        if (v instanceof Boolean b)
+            return b;
+        if (v == null)
+            return false;
+
         String s = v.toString().trim().toLowerCase(Locale.ROOT);
         return s.equals("true");
     }
 
-    private static boolean hasLabel(Object species, String needle) {
-        if (species == null) return false;
+    private static boolean hasLabel(Object species, String needle)
+    {
+        if (species == null)
+            return false;
+
         Object labels = callNoArg(species, "getLabels");
         if (labels instanceof Iterable<?> it) {
             for (Object o : it) {
-                if (o == null) continue;
+                if (o == null)
+                    continue;
+
                 String s = o.toString().toLowerCase(Locale.ROOT);
-                if (s.contains(needle)) return true;
+                if (s.contains(needle))
+                    return true;
             }
         }
         return false;
     }
 
-    private static String toKey(Object rarity) {
-        if (rarity == null) return "";
-        // Try enum.name() first for stability
+    private static String toKey(Object rarity)
+    {
+        if (rarity == null)
+            return "";
         try {
             Method name = rarity.getClass().getMethod("name");
             Object v = name.invoke(rarity);
-            if (v != null) {
+
+            if (v != null)
                 return v.toString().trim().toLowerCase(Locale.ROOT);
-            }
-        } catch (Throwable ignored) {
-        }
+        } catch (Throwable ignored) {}
         return rarity.toString().trim().toLowerCase(Locale.ROOT);
     }
 
-    private static boolean isShiny(Object pokemon) {
-        if (pokemon == null) {
+    private static boolean isShiny(Object pokemon)
+    {
+        if (pokemon == null)
             return false;
-        }
 
         Object v = callNoArg(pokemon, "isShiny");
-        if (v instanceof Boolean b) return b;
-
+        if (v instanceof Boolean b)
+            return b;
         v = callNoArg(pokemon, "getShiny");
-        if (v instanceof Boolean b) return b;
-
+        if (v instanceof Boolean b)
+            return b;
         v = callNoArg(pokemon, "is_shiny");
-        if (v instanceof Boolean b) return b;
-
+        if (v instanceof Boolean b)
+            return b;
         if (v != null) {
             String s = v.toString().trim().toLowerCase(Locale.ROOT);
             return s.equals("true");
@@ -375,7 +357,8 @@ public final class PokemonCaptureListener {
         return false;
     }
 
-    private static String formatMoney(double value) {
+    private static String formatMoney(double value)
+    {
         if (value == (long) value)
             return Long.toString((long) value);
         return String.format(Locale.ROOT, "%.2f", value);

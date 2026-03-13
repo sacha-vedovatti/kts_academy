@@ -88,7 +88,6 @@ public final class MotdManager {
 
         int len = stripped.length();
         MutableText result = Text.empty();
-
         if (len == 0)
             return Text.empty();
         for (int i = 0; i < len; i++) {
@@ -96,11 +95,8 @@ public final class MotdManager {
             float t = (len == 1) ? 0f : (float) i / (len - 1);
             int rgb = interpolateRgb(colorFrom, colorTo, t);
             String mapped = applyFont(String.valueOf(c), fontStyle);
+            MutableText ch = Text.literal(mapped).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(rgb)).withBold(bold));
 
-            MutableText ch = Text.literal(mapped)
-                    .setStyle(Style.EMPTY
-                            .withColor(TextColor.fromRgb(rgb))
-                            .withBold(bold));
             result.append(ch);
         }
         return result;

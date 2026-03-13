@@ -19,18 +19,12 @@ public final class ReplyCommand {
     public static void register()
     {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            // /reply est la commande principale (pas de conflit attendu)
-            dispatcher.register(literal("reply")
-                    .then(argument("message", StringArgumentType.greedyString())
-                            .executes(ReplyCommand::reply)));
-            // /r peut être pris par EssentialCommands — on essaie quand même
+            dispatcher.register(literal("reply").then(argument("message", StringArgumentType.greedyString()).executes(ReplyCommand::reply)));
             try {
                 dispatcher.register(literal("r")
                         .then(argument("message", StringArgumentType.greedyString())
                                 .executes(ReplyCommand::reply)));
-            } catch (Exception ignored) {
-                // /r est déjà enregistré par un autre mod
-            }
+            } catch (Exception ignored) {}
         });
     }
 
@@ -39,9 +33,8 @@ public final class ReplyCommand {
         ServerPlayerEntity sender = ctx.getSource().getPlayerOrThrow();
         String message = StringArgumentType.getString(ctx, "message");
         UUID targetUuid = PrivateMsgManager.getLastConversation(sender.getUuid());
-
         if (targetUuid == null) {
-            sender.sendMessage(Text.literal("§cAucune conversation récente à laquelle répondre. Utilisez §e/pm <joueur> <message>§c (ou un alias KTS) pour initialiser."), false);
+            sender.sendMessage(Text.literal("§9§lKTS §7§l» §cAucune conversation récente à laquelle répondre. Utilisez §e/pm <joueur> <message>§c (ou un alias KTS) pour initialiser."), false);
             return 0;
         }
 
@@ -51,12 +44,10 @@ public final class ReplyCommand {
             PrivateMsgManager.remove(sender.getUuid());
             return 0;
         }
-
         PrivateMsgManager.recordConversation(sender.getUuid(), target.getUuid());
 
         Text toSender = Text.literal("§d[MSG] §fVous → §e" + target.getGameProfile().getName() + "§7: §f" + message);
         Text toTarget = Text.literal("§d[MSG] §e" + sender.getGameProfile().getName() + "§7 → §fVous§7: §f" + message);
-
         sender.sendMessage(toSender, false);
         target.sendMessage(toTarget, false);
         return 1;

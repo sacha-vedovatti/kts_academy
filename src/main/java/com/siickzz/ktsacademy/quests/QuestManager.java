@@ -31,14 +31,14 @@ public final class QuestManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Type STORAGE_TYPE = new TypeToken<Map<String, QuestProfile>>() {}.getType();
 
-    private static final Map<String, QuestDef>      QUESTS     = new LinkedHashMap<>();
+    private static final Map<String, QuestDef> QUESTS = new LinkedHashMap<>();
     private static final Map<String, QuestCategory> CATEGORIES = new LinkedHashMap<>();
-    private static final Map<UUID, QuestProfile>    PROFILES   = new ConcurrentHashMap<>();
-    private static final Map<String, String>        LEGENDARY_ICON_BY_SPECIES = new HashMap<>();
+    private static final Map<UUID, QuestProfile> PROFILES = new ConcurrentHashMap<>();
+    private static final Map<String, String> LEGENDARY_ICON_BY_SPECIES = new HashMap<>();
 
-    private static volatile boolean                     INITIALIZED  = false;
-    private static Path                                 questsFile;
-    private static Path                                 progressFile;
+    private static volatile boolean INITIALIZED  = false;
+    private static Path questsFile;
+    private static Path progressFile;
     private static volatile QuestConfig.TierDropsConfig TIER_DROPS = null;
 
     private static final Set<String> LOGGED_BAD_DROP_IDS = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -50,10 +50,6 @@ public final class QuestManager {
     public record QuestCategory(String name, String displayName, String iconItemId) {}
 
     private QuestManager() {}
-
-    // =========================================================================
-    // Init / Reload
-    // =========================================================================
 
     public static void init()
     {
@@ -83,16 +79,10 @@ public final class QuestManager {
         }
     }
 
-    // =========================================================================
-    // Public accessors
-    // =========================================================================
-
     public static List<QuestCategory> categories()
     {
         init();
-        return CATEGORIES.values().stream()
-            .sorted(Comparator.comparing(QuestCategory::displayName, String.CASE_INSENSITIVE_ORDER))
-            .toList();
+        return CATEGORIES.values().stream().sorted(Comparator.comparing(QuestCategory::displayName, String.CASE_INSENSITIVE_ORDER)).toList();
     }
 
     public static QuestCategory category(String name)
@@ -105,10 +95,8 @@ public final class QuestManager {
     {
         init();
         String cat = normalizeCategory(category);
-        return QUESTS.values().stream()
-            .filter(q -> Objects.equals(q.category(), cat))
-            .sorted(Comparator.comparing(QuestDef::title, String.CASE_INSENSITIVE_ORDER))
-            .toList();
+
+        return QUESTS.values().stream().filter(q -> Objects.equals(q.category(), cat)).sorted(Comparator.comparing(QuestDef::title, String.CASE_INSENSITIVE_ORDER)).toList();
     }
 
     public static QuestDef quest(String id)
@@ -135,10 +123,6 @@ public final class QuestManager {
         return LEGENDARY_ICON_BY_SPECIES.get(normalizeSpeciesKey(speciesKey));
     }
 
-    // =========================================================================
-    // Effective helpers (titre, objectif, récompense selon palier courant)
-    // =========================================================================
-
     public static int effectiveGoal(QuestDef quest, QuestProgress progress)
     {
         if (quest == null)
@@ -161,8 +145,8 @@ public final class QuestManager {
         return Math.max(0, quest.reward());
     }
 
-    /** Titre affiché : titre de la quête + numéro de palier si tiered. */
-    public static String effectiveTitle(QuestDef quest, QuestProgress progress) {
+    public static String effectiveTitle(QuestDef quest, QuestProgress progress)
+    {
         if (quest == null)
             return "";
         if (quest.isTiered() && progress != null) {
@@ -172,15 +156,12 @@ public final class QuestManager {
         return quest.title();
     }
 
-    public static String effectiveDescription(QuestDef quest, QuestProgress progress) {
+    public static String effectiveDescription(QuestDef quest, QuestProgress progress)
+    {
         if (quest == null)
             return "";
         return quest.description() == null ? "" : quest.description();
     }
-
-    // =========================================================================
-    // Progression events
-    // =========================================================================
 
     public static void onPokemonCaptured(ServerPlayerEntity player, Object pokemon) {
         init();
@@ -189,17 +170,12 @@ public final class QuestManager {
 
         QuestProfile profile = profile(player);
         boolean changed = false;
-
-        // Pokedex tracking
-        if (profile.capturedSpecies != null && profile.capturedSpecies.add(speciesKey))
-        {
+        if (profile.capturedSpecies != null && profile.capturedSpecies.add(speciesKey)) {
             onPokedexCaughtProgress(player, profile.capturedSpecies.size());
             changed = true;
         }
-
         for (QuestDef quest : QUESTS.values()) {
             QuestProgress qp = profile.quests.computeIfAbsent(quest.id(), k -> new QuestProgress());
-
             if (qp.claimed && !quest.isTiered())
                 continue;
             if (qp.claimed && quest.isTiered() && qp.tier >= quest.tiers().size() - 1 && qp.claimed)
@@ -286,7 +262,6 @@ public final class QuestManager {
 
         QuestProfile profile = profile(player);
         boolean changed = false;
-
         for (QuestDef quest : QUESTS.values()) {
             if (quest.type() != QuestDef.QuestType.MINE_ORE)
                 continue;
@@ -318,10 +293,8 @@ public final class QuestManager {
 
         String harvested = normalizeItemId(itemId);
         QuestProfile profile = profile(player);
-
         boolean changed = false;
         int matched = 0;
-
         for (QuestDef quest : QUESTS.values()) {
             if (quest.type() != QuestDef.QuestType.HARVEST_ITEM)
                 continue;
@@ -363,7 +336,6 @@ public final class QuestManager {
 
         QuestProfile profile = profile(player);
         boolean changed = false;
-
         for (QuestDef quest : QUESTS.values()) {
             if (quest.type() != QuestDef.QuestType.POKEDEX_CAUGHT)
                 continue;
@@ -374,7 +346,6 @@ public final class QuestManager {
 
             int goalNow = effectiveGoal(quest, qp);
             int next = Math.max(qp.progress, caughtCount);
-
             if (next != qp.progress) {
                 int before = qp.progress;
                 qp.progress = next;
@@ -410,7 +381,6 @@ public final class QuestManager {
 
         double rewardNow = effectiveReward(quest, qp);
         String titleNow  = effectiveTitle(quest, qp);
-
         giveMoneyViaCobblemonEconomy(player, rewardNow);
         qp.claimed = true;
         player.sendMessage(Text.literal("§aRécompense réclamée : §e+" + formatMoney(rewardNow) + " $ §7(" + titleNow + ")"), false);
@@ -426,10 +396,6 @@ public final class QuestManager {
         return true;
     }
 
-    /**
-     * Exécute {@code /balance <joueur> add <montant>} via le serveur
-     * pour créditer le compte Cobblemon Economy du joueur.
-     */
     private static void giveMoneyViaCobblemonEconomy(ServerPlayerEntity player, double amount)
     {
         if (player == null || amount <= 0)
@@ -442,7 +408,6 @@ public final class QuestManager {
         String playerName = player.getName().getString();
         long rounded = Math.round(amount);
         String command = "balance " + playerName + " add " + rounded;
-
         try {
             ServerCommandSource source = server.getCommandSource();
             server.getCommandManager().executeWithPrefix(source, command);
@@ -451,17 +416,12 @@ public final class QuestManager {
         }
     }
 
-    // =========================================================================
-    // Save / Load
-    // =========================================================================
-
     public static void save()
     {
         if (progressFile == null)
             return;
 
         Map<String, QuestProfile> storage = new HashMap<>();
-
         for (var e : PROFILES.entrySet())
             storage.put(e.getKey().toString(), e.getValue());
         try (BufferedWriter writer = Files.newBufferedWriter(progressFile, StandardCharsets.UTF_8)) {
@@ -498,10 +458,6 @@ public final class QuestManager {
         reload();
     }
 
-    // =========================================================================
-    // Internal — Config loading
-    // =========================================================================
-
     private static void loadConfig()
     {
         QUESTS.clear();
@@ -521,25 +477,27 @@ public final class QuestManager {
             for (QuestConfig.QuestCategoryConfig cat : cfg.categories) {
                 if (cat == null || cat.name == null)
                     continue;
+
                 String name = normalizeCategory(cat.name);
                 if (name.isBlank())
                     continue;
+
                 String display = (cat.displayName != null && !cat.displayName.isBlank()) ? cat.displayName : cat.name;
                 CATEGORIES.put(name, new QuestCategory(name, display, cat.iconItemId));
             }
         }
-
         if (cfg.legendaryCategory != null && cfg.legendaryCategory.enabled) {
             QuestConfig.LegendaryCategoryConfig leg = cfg.legendaryCategory;
             if (leg.speciesIcons != null) {
                 for (var e : leg.speciesIcons.entrySet()) {
-                    if (e == null || e.getKey() == null || e.getValue() == null) continue;
+                    if (e == null || e.getKey() == null || e.getValue() == null)
+                        continue;
                     LEGENDARY_ICON_BY_SPECIES.put(normalizeSpeciesKey(e.getKey()), e.getValue().trim());
                 }
             }
+
             String catName = normalizeCategory(leg.category);
-            CATEGORIES.putIfAbsent(catName, new QuestCategory(catName,
-                leg.displayName != null ? leg.displayName : "Légendaires", leg.iconItemId));
+            CATEGORIES.putIfAbsent(catName, new QuestCategory(catName, leg.displayName != null ? leg.displayName : "Légendaires", leg.iconItemId));
 
             List<String> species = leg.species != null ? leg.species : List.of();
             for (String s : species) {
@@ -549,13 +507,7 @@ public final class QuestManager {
 
                 String pretty = prettySpeciesName(s);
                 String icon = LEGENDARY_ICON_BY_SPECIES.getOrDefault(key, leg.iconItemId != null ? leg.iconItemId : "minecraft:nether_star");
-
-                addQuest(new QuestDef(
-                    "legendary_capture_" + key, catName,
-                    QuestDef.QuestType.CAPTURE_SPECIES, key, icon,
-                    1, leg.reward, "Capturer " + pretty,
-                    "Capture " + pretty + ".", null
-                ));
+                addQuest(new QuestDef("legendary_capture_" + key, catName, QuestDef.QuestType.CAPTURE_SPECIES, key, icon, 1, leg.reward, "Capturer " + pretty, "Capture " + pretty + ".", null));
             }
         }
 
@@ -573,12 +525,12 @@ public final class QuestManager {
                 String title = q.title != null ? q.title : q.id;
                 String desc  = q.description != null ? q.description : "";
                 List<QuestDef.QuestTier> tiers = null;
-
                 if (q.tiers != null && !q.tiers.isEmpty()) {
                     tiers = new ArrayList<>();
                     for (QuestConfig.QuestTierConfig t : q.tiers) {
                         if (t == null)
                             continue;
+
                         int tg = t.goal != null ? Math.max(1, t.goal) : 1;
                         double tr = t.reward != null ? Math.max(0, t.reward) : 0;
                         tiers.add(new QuestDef.QuestTier(tg, tr));
@@ -589,7 +541,6 @@ public final class QuestManager {
 
                 int goal = (tiers == null) ? (q.goal != null ? Math.max(1, q.goal) : 1) : 1;
                 double reward = (tiers == null) ? (q.reward != null ? Math.max(0, q.reward) : 0) : 0;
-
                 addQuest(new QuestDef(q.id, category, type, q.target, q.iconItemId, goal, reward, title, desc, tiers));
             }
         }
@@ -609,15 +560,19 @@ public final class QuestManager {
                 try {
                     UUID id = UUID.fromString(e.getKey());
                     QuestProfile profile = e.getValue() != null ? e.getValue() : new QuestProfile();
-                    if (profile.quests == null) profile.quests = new HashMap<>();
-                    if (profile.capturedSpecies == null) profile.capturedSpecies = new HashSet<>();
+
+                    if (profile.quests == null)
+                        profile.quests = new HashMap<>();
+                    if (profile.capturedSpecies == null)
+                        profile.capturedSpecies = new HashSet<>();
                     PROFILES.put(id, profile);
                 } catch (IllegalArgumentException ignored) {}
             }
         } catch (IOException ignored) {}
     }
 
-    private static void writeDefaultConfig(Path path) {
+    private static void writeDefaultConfig(Path path)
+    {
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8))
         {
             GSON.toJson(defaultConfig(), writer);
@@ -627,10 +582,6 @@ public final class QuestManager {
         }
     }
 
-    // =========================================================================
-    // Internal helpers
-    // =========================================================================
-
     private static void incrementQuests(ServerPlayerEntity player, QuestDef.QuestType type, int amount)
     {
         if (player == null)
@@ -638,7 +589,6 @@ public final class QuestManager {
 
         QuestProfile profile = profile(player);
         boolean changed = false;
-
         for (QuestDef quest : QUESTS.values()) {
             if (quest.type() != type)
                 continue;
@@ -703,7 +653,6 @@ public final class QuestManager {
                 int count = min == max ? min : min + DROP_RNG.nextInt(max - min + 1);
                 ItemStack stack = new ItemStack(item, count);
                 String itemName = stack.getName().getString();
-
                 if (!player.getInventory().insertStack(stack) && cfg.dropOnGroundIfFull && !stack.isEmpty())
                     player.dropItem(stack, false);
                 if (cfg.notifyPlayer)
@@ -718,10 +667,6 @@ public final class QuestManager {
             return;
         QUESTS.put(def.id(), def);
     }
-
-    // =========================================================================
-    // Default config
-    // =========================================================================
 
     private static QuestConfig defaultConfig()
     {
@@ -790,10 +735,6 @@ public final class QuestManager {
         return cfg;
     }
 
-    // =========================================================================
-    // Default config helpers
-    // =========================================================================
-
     private static QuestConfig.QuestCategoryConfig cat(String name, String display, String icon)
     {
         QuestConfig.QuestCategoryConfig c = new QuestConfig.QuestCategoryConfig();
@@ -804,17 +745,17 @@ public final class QuestManager {
         return c;
     }
 
-    /** Crée une quête avec paliers. goals/rewards alternés : reward0, goal0, reward1, goal1, ... */
-    private static QuestConfig.QuestDefConfig tieredQuest(
-            String id, String category, String type, String icon, String target,
-            String title, String desc, int[][] tiers) {
+    private static QuestConfig.QuestDefConfig tieredQuest(String id, String category, String type, String icon, String target, String title, String desc, int[][] tiers)
+    {
         QuestConfig.QuestDefConfig q = new QuestConfig.QuestDefConfig();
+
         q.id = id; q.category = category; q.type = type;
         q.iconItemId = icon; q.target = target;
         q.title = title; q.description = desc;
         q.tiers = new ArrayList<>();
         for (int[] t : tiers) {
             QuestConfig.QuestTierConfig tc = new QuestConfig.QuestTierConfig();
+
             tc.reward = (double) t[0]; tc.goal = t[1];
             q.tiers.add(tc);
         }
@@ -826,7 +767,7 @@ public final class QuestManager {
         int[][] result = new int[values.length / 2][2];
 
         for (int i = 0; i < values.length / 2; i++) {
-            result[i][0] = values[i * 2];     // reward
+            result[i][0] = values[i * 2]; // reward
             result[i][1] = values[i * 2 + 1]; // goal
         }
         return result;
@@ -839,10 +780,6 @@ public final class QuestManager {
         d.itemId = itemId; d.chance = chance; d.min = min; d.max = max;
         return d;
     }
-
-    // =========================================================================
-    // Utilities
-    // =========================================================================
 
     private static double normalizeChance(Double raw)
     {
@@ -898,7 +835,6 @@ public final class QuestManager {
             return "";
 
         String s = raw.trim().toLowerCase(Locale.ROOT).replace(' ', '_');
-
         if (s.endsWith("s") && s.length() > 1)
             s = s.substring(0, s.length() - 1);
         if (s.equals("noigrume") || s.equals("noixgrume") || s.equals("apricorn") || s.equals("apricorne"))
@@ -915,7 +851,6 @@ public final class QuestManager {
 
         String path = itemId;
         int idx = itemId.indexOf(':');
-
         if (idx >= 0)
             path = itemId.substring(idx + 1);
         if (target.contains("*")) {

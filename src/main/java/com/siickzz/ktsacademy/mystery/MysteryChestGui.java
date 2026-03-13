@@ -18,24 +18,18 @@ public final class MysteryChestGui {
     {
         int rows = Math.max(1, Math.min(6, (int) Math.ceil(items.size() / 9.0)));
         SimpleInventory inventory = new SimpleInventory(rows * 9);
-        for (int i = 0; i < items.size() && i < inventory.size(); i++) {
-            inventory.setStack(i, items.get(i));
-        }
 
-        player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-            (syncId, playerInv, playerEntity) -> new ReadOnlyContainer(handlerType(rows), syncId, playerInv, inventory, rows),
-            title
-        ));
+        for (int i = 0; i < items.size() && i < inventory.size(); i++)
+            inventory.setStack(i, items.get(i));
+        player.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, playerInv, playerEntity) -> new ReadOnlyContainer(handlerType(rows), syncId, playerInv, inventory, rows), title));
         return inventory;
     }
 
     public static SimpleInventory openAnimation(ServerPlayerEntity player, Text title, int rows)
     {
         SimpleInventory inventory = new SimpleInventory(rows * 9);
-        player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-            (syncId, playerInv, playerEntity) -> new ReadOnlyContainer(handlerType(rows), syncId, playerInv, inventory, rows),
-            title
-        ));
+
+        player.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, playerInv, playerEntity) -> new ReadOnlyContainer(handlerType(rows), syncId, playerInv, inventory, rows), title));
         return inventory;
     }
 
@@ -54,26 +48,27 @@ public final class MysteryChestGui {
     private static final class ReadOnlyContainer extends GenericContainerScreenHandler {
         private final SimpleInventory inv;
 
-        private ReadOnlyContainer(ScreenHandlerType<?> type, int syncId, net.minecraft.entity.player.PlayerInventory playerInv, SimpleInventory inventory, int rows) {
+        private ReadOnlyContainer(ScreenHandlerType<?> type, int syncId, net.minecraft.entity.player.PlayerInventory playerInv, SimpleInventory inventory, int rows)
+        {
             super(type, syncId, playerInv, inventory, rows);
             this.inv = inventory;
         }
 
         @Override
-        public ItemStack quickMove(PlayerEntity player, int slot) {
+        public ItemStack quickMove(PlayerEntity player, int slot)
+        {
             return ItemStack.EMPTY;
         }
 
         @Override
-        public void onSlotClick(int slotIndex, int button, net.minecraft.screen.slot.SlotActionType actionType, PlayerEntity player) {
-        }
+        public void onSlotClick(int slotIndex, int button, net.minecraft.screen.slot.SlotActionType actionType, PlayerEntity player) {}
 
         @Override
-        public void onClosed(PlayerEntity player) {
+        public void onClosed(PlayerEntity player)
+        {
             super.onClosed(player);
-            for (int i = 0; i < this.inv.size(); i++) {
+            for (int i = 0; i < this.inv.size(); i++)
                 this.inv.setStack(i, ItemStack.EMPTY);
-            }
         }
     }
 }

@@ -37,22 +37,10 @@ import java.util.Map;
 public final class QuestConfig
 {
 
-    /** Catégories affichées dans le menu principal. */
     public List<QuestCategoryConfig> categories;
-
-    /**
-     * Génération automatique des quêtes de capture pour les légendaires.
-     * Chaque espèce listée génère une quête "Capturer X" dans la catégorie indiquée.
-     */
     public LegendaryCategoryConfig legendaryCategory;
-
-    /** Liste des quêtes manuelles. */
     public List<QuestDefConfig> quests;
-
-    /** Bonus d'items donnés aléatoirement à chaque palier complété. */
     public TierDropsConfig tierDrops;
-
-    // -------------------------------------------------------------------------
 
     public static final class QuestCategoryConfig
     {
@@ -67,19 +55,14 @@ public final class QuestConfig
         public String category = "LEGENDARIES";
         public String displayName = "Légendaires";
         public String iconItemId = "cobblemon:master_ball";
-        /** Récompense en $ (Cobblemon Economy) pour chaque capture légendaire. */
         public double reward = 2500.0;
-        /** Liste des espèces légendaires à générer comme quêtes. */
         public List<String> species;
-        /** Icône par espèce (optionnel). Ex: {"mewtwo": "cobblemon:cloning_cable"} */
         public Map<String, String> speciesIcons;
     }
 
     public static final class QuestDefConfig
     {
-        /** Identifiant unique de la quête (ex: "capture_10"). */
         public String id;
-        /** Catégorie (doit correspondre à un nom dans "categories"). */
         public String category;
         /**
          * Type de quête :
@@ -89,22 +72,12 @@ public final class QuestConfig
          * HARVEST_ITEM, MINE_ORE, POKEDEX_CAUGHT
          */
         public String type;
-        /** Cible (espèce pour CAPTURE_SPECIES, minerai pour MINE_ORE, item pour HARVEST_ITEM). */
         public String target;
-        /** Item Minecraft affiché comme icône dans le GUI. */
         public String iconItemId;
-        /** Titre de la quête. */
         public String title;
-        /** Description courte de la quête. */
         public String description;
-        /** Objectif (utilisé seulement si pas de tiers). */
         public Integer goal;
-        /** Récompense en $ (utilisée seulement si pas de tiers). */
         public Double reward;
-        /**
-         * Paliers de la quête. Chaque palier a un objectif cumulatif et une récompense.
-         * Si présents, "goal" et "reward" directs sont ignorés.
-         */
         public List<QuestTierConfig> tiers;
     }
 

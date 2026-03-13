@@ -11,6 +11,5 @@ public final class QuestProfile {
 	public String captureStreakSpecies = null;
 	public int captureStreakCount = 0;
 
-	public QuestProfile() {
-	}
+	public QuestProfile() {}
 }

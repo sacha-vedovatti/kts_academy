@@ -27,12 +27,10 @@ import java.util.Locale;
 
 public final class QuestGui {
 
-    // Tout le GUI est en 9×6 (54 slots)
     private static final int ROWS      = 6;
-    private static final int SIZE      = ROWS * 9; // 54
-    private static final int PAGE_SIZE = 45;        // 5 lignes de quêtes, dernière ligne = contrôles
+    private static final int SIZE      = ROWS * 9;  // 54
+    private static final int PAGE_SIZE = 45;        // 5 lignes, dernière ligne = contrôles
 
-    // Slots de contrôle (dernière ligne)
     private static final int SLOT_BACK = 49;
     private static final int SLOT_PREV = 45;
     private static final int SLOT_NEXT = 53;
@@ -42,18 +40,10 @@ public final class QuestGui {
 
     private QuestGui() {}
 
-    // =========================================================================
-    // Entrée publique
-    // =========================================================================
-
     public static void open(ServerPlayerEntity player)
     {
         openCategories(player, 0);
     }
-
-    // =========================================================================
-    // Menu catégories (9×6, texture 0.png)
-    // =========================================================================
 
     private static void openCategories(ServerPlayerEntity player, int page)
     {
@@ -65,7 +55,6 @@ public final class QuestGui {
         int start = page * PAGE_SIZE;
         int end   = Math.min(cats.size(), start + PAGE_SIZE);
 
-        // Contrôles
         inv.setStack(SLOT_BACK, named(Items.BARRIER, "§cFermer"));
         slotCat[SLOT_BACK] = "__close__";
         if (page > 0) {
@@ -81,12 +70,12 @@ public final class QuestGui {
         for (int i = start; i < end; i++) {
             if (slot >= PAGE_SIZE)
                 break;
+
             QuestManager.QuestCategory cat = cats.get(i);
             List<QuestDef> quests = QuestManager.questsByCategory(cat.name());
             int total = quests.size();
             int done  = countAllClaimed(player, quests);
             Item icon = resolveItem(cat.iconItemId(), Items.BOOK);
-
             ItemStack stack = new ItemStack(icon);
             stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§b§l" + cat.displayName()));
 
@@ -105,10 +94,6 @@ public final class QuestGui {
         ));
     }
 
-    // =========================================================================
-    // Liste des quêtes (9×6, texture 1/2/3.png selon page)
-    // =========================================================================
-
     private static void openCategory(ServerPlayerEntity player, String category, int page)
     {
         Inventory inv = new SimpleInventory(SIZE);
@@ -124,8 +109,6 @@ public final class QuestGui {
 
         int start = page * PAGE_SIZE;
         int end   = Math.min(quests.size(), start + PAGE_SIZE);
-
-        // Contrôles
         inv.setStack(SLOT_BACK, named(Items.ARROW, "§eRetour"));
         slotQuest[SLOT_BACK] = "__back__";
         if (page > 0) {
@@ -144,14 +127,13 @@ public final class QuestGui {
 
             QuestDef quest = quests.get(i);
             QuestProgress qp = QuestManager.progress(player, quest.id());
-            int    goal    = QuestManager.effectiveGoal(quest, qp);
-            double reward  = QuestManager.effectiveReward(quest, qp);
-            String title   = QuestManager.effectiveTitle(quest, qp);
-            String desc    = QuestManager.effectiveDescription(quest, qp);
-            boolean done   = qp.progress >= goal;
+            int goal = QuestManager.effectiveGoal(quest, qp);
+            double reward = QuestManager.effectiveReward(quest, qp);
+            String title = QuestManager.effectiveTitle(quest, qp);
+            String desc = QuestManager.effectiveDescription(quest, qp);
+            boolean done = qp.progress >= goal;
             boolean claimed = qp.claimed;
             Item icon = questIcon(category, quest, qp);
-
             ItemStack stack = new ItemStack(icon);
             stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§b" + title));
 
@@ -176,15 +158,8 @@ public final class QuestGui {
 
         QuestManager.QuestCategory catDef = QuestManager.category(category);
         String catTitle = catDef != null ? catDef.displayName() : category;
-        player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-            (id, pInv, p) -> new QuestHandler(id, pInv, inv, slotQuest, category, page, false),
-            Text.literal("§0Quêtes — " + catTitle)
-        ));
+        player.openHandledScreen(new SimpleNamedScreenHandlerFactory((id, pInv, p) -> new QuestHandler(id, pInv, inv, slotQuest, category, page, false), Text.literal("§0Quêtes — " + catTitle)));
     }
-
-    // =========================================================================
-    // Handler unique (catégories ET liste)
-    // =========================================================================
 
     private static final class QuestHandler extends GenericContainerScreenHandler
     {
@@ -193,8 +168,7 @@ public final class QuestGui {
         private final int      page;
         private final boolean  isCategoryMenu;
 
-        QuestHandler(int syncId, PlayerInventory pInv, Inventory inv,
-                     String[] slots, String category, int page, boolean isCategoryMenu)
+        QuestHandler(int syncId, PlayerInventory pInv, Inventory inv, String[] slots, String category, int page, boolean isCategoryMenu)
         {
             super(ScreenHandlerType.GENERIC_9X6, syncId, pInv, inv, ROWS);
             this.slots          = slots;
@@ -210,7 +184,6 @@ public final class QuestGui {
                 super.onSlotClick(slotIndex, button, action, player);
                 return;
             }
-            // Bloquer tout transfert d'items
             if (slotIndex < 0 || slotIndex >= SIZE)
                 return;
             if (action != SlotActionType.PICKUP)
@@ -222,9 +195,9 @@ public final class QuestGui {
             if (isCategoryMenu) {
                 switch (id) {
                     case "__close__" -> sp.closeHandledScreen();
-                    case "__prev__"  -> openCategories(sp, Math.max(0, page - 1));
-                    case "__next__"  -> openCategories(sp, page + 1);
-                    default          -> openCategory(sp, id, 0);
+                    case "__prev__" -> openCategories(sp, Math.max(0, page - 1));
+                    case "__next__" -> openCategories(sp, page + 1);
+                    default -> openCategory(sp, id, 0);
                 }
             } else {
                 switch (id) {
@@ -256,10 +229,6 @@ public final class QuestGui {
             return true;
         }
     }
-
-    // =========================================================================
-    // Helpers
-    // =========================================================================
 
     private static Item questIcon(String category, QuestDef quest, QuestProgress progress)
     {
@@ -302,7 +271,8 @@ public final class QuestGui {
         };
     }
 
-    private static String progressBar(int progress, int goal) {
+    private static String progressBar(int progress, int goal)
+    {
         int width  = 10;
         int filled = (int) Math.round((Math.max(0, Math.min(progress, goal)) / (double) Math.max(1, goal)) * width);
         StringBuilder sb = new StringBuilder("§7[");
@@ -321,7 +291,8 @@ public final class QuestGui {
         return 2;
     }
 
-    private static int countAllClaimed(ServerPlayerEntity player, List<QuestDef> quests) {
+    private static int countAllClaimed(ServerPlayerEntity player, List<QuestDef> quests)
+    {
         int count = 0;
 
         for (QuestDef q : quests) {

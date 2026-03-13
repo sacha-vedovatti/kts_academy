@@ -44,12 +44,12 @@ public final class CrateCommand {
         ItemStack stack = MysteryChestManager.createChestItem(chestId);
 
         if (stack.isEmpty()) {
-            ctx.getSource().sendFeedback(() -> Text.literal("§d§lKTS Academy §7» §cCoffre introuvable: " + chestId), false);
+            ctx.getSource().sendFeedback(() -> Text.literal("§d§lKTS Academy §7§l» §cCoffre introuvable: " + chestId), false);
             return 0;
         }
         if (!player.getInventory().insertStack(stack))
             player.dropItem(stack, false);
-        ctx.getSource().sendFeedback(() -> Text.literal("§d§lKTS Academy §7» §aYou received a §f" + chestId + " §achest."), false);
+        ctx.getSource().sendFeedback(() -> Text.literal("§d§lKTS Academy §7§l» §aYou received a §f" + chestId + " §achest."), false);
         return 1;
     }
 
@@ -59,12 +59,12 @@ public final class CrateCommand {
         ItemStack stack = MysteryChestManager.createKeyItem(chestId);
 
         if (stack.isEmpty()) {
-            ctx.getSource().sendFeedback(() -> Text.literal("§d§lKTS Academy §7» §cClé introuvable: " + chestId), false);
+            ctx.getSource().sendFeedback(() -> Text.literal("§d§lKTS Academy §7§l» §cClé introuvable: " + chestId), false);
             return 0;
         }
         if (!player.getInventory().insertStack(stack))
             player.dropItem(stack, false);
-        ctx.getSource().sendFeedback(() -> Text.literal("§d§lKTS Academy §7» §aYou received a §f" + chestId + " §akey."), false);
+        ctx.getSource().sendFeedback(() -> Text.literal("§d§lKTS Academy §7§l» §aYou received a §f" + chestId + " §akey."), false);
         return 1;
     }
 }

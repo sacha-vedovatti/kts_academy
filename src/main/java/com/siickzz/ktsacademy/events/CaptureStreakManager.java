@@ -57,9 +57,9 @@ public final class CaptureStreakManager {
             if (!Files.exists(configPath))
                 createDefault();
             CONFIG = load();
-            LOGGER.info("[KTSAcademy-CaptureStreak] Using config: {}", configPath.toAbsolutePath());
+            LOGGER.info("[KTS Streak] Using config: {}", configPath.toAbsolutePath());
             if (LOGGER.isDebugEnabled())
-                LOGGER.debug("[KTSAcademy-CaptureStreak] Config loaded. enabled={} spawnRadius={}", CONFIG.enabled, CONFIG.spawnBoostRadius);
+                LOGGER.debug("[KTS Streak] Config loaded. enabled={} spawnRadius={}", CONFIG.enabled, CONFIG.spawnBoostRadius);
             INITIALIZED = true;
         }
     }
@@ -400,7 +400,8 @@ public final class CaptureStreakManager {
         return false;
     }
 
-    private static boolean setRadiantAspect(Pokemon pokemon, boolean value) {
+    private static boolean setRadiantAspect(Pokemon pokemon, boolean value)
+    {
         if (pokemon == null)
             return false;
 
@@ -436,15 +437,17 @@ public final class CaptureStreakManager {
         return changed;
     }
 
-    private static List<String> radiantApplyAspects() {
+    private static List<String> radiantApplyAspects()
+    {
         List<String> keys = new ArrayList<>(radiantAspectKeys());
-        if (CONFIG != null && CONFIG.radiantExtraAspects != null) {
+
+        if (CONFIG != null && CONFIG.radiantExtraAspects != null)
             keys.addAll(CONFIG.radiantExtraAspects);
-        }
         return keys;
     }
 
-    private static List<String> radiantAspectKeys() {
+    private static List<String> radiantAspectKeys()
+    {
         if (CONFIG == null || CONFIG.radiantAspects == null || CONFIG.radiantAspects.isEmpty())
             return List.of("radiant", "radiant=radiant");
         return CONFIG.radiantAspects;
@@ -510,24 +513,32 @@ public final class CaptureStreakManager {
         }
     }
 
-    private static void setRandomPerfectIvs(Pokemon pokemon, int count, int perfectIvValue) {
-        if (pokemon == null || count <= 0) return;
+    private static void setRandomPerfectIvs(Pokemon pokemon, int count, int perfectIvValue)
+    {
+        if (pokemon == null || count <= 0)
+            return;
+
         List<Object> stats = resolveCobblemonStats();
-        if (stats.isEmpty()) return;
+        if (stats.isEmpty())
+            return;
         Collections.shuffle(stats, new java.util.Random());
+
         Method setter = findPokemonIvSetter(pokemon);
-        if (setter == null) return;
+        if (setter == null)
+            return;
+
         int limit = Math.min(count, stats.size());
         for (int i = 0; i < limit; i++) {
             try {
                 setter.invoke(pokemon, stats.get(i), perfectIvValue);
-            } catch (Throwable ignored) {
-            }
+            } catch (Throwable ignored) {}
         }
     }
 
-    private static void applyIvBoost(Object pokemon, double multiplier, int maxIv) {
-        if (pokemon == null || multiplier <= 1.0) return;
+    private static void applyIvBoost(Object pokemon, double multiplier, int maxIv)
+    {
+        if (pokemon == null || multiplier <= 1.0)
+            return;
         if (pokemon instanceof Pokemon p) {
             applyIvBoost(p, multiplier, maxIv);
             return;
@@ -540,15 +551,18 @@ public final class CaptureStreakManager {
             ivs = callNoArg(pokemon, "ivs");
 
         List<Object> stats = resolveCobblemonStats();
-        if (stats.isEmpty()) return;
+        if (stats.isEmpty())
+            return;
 
         Method setter = findIvsSetter(ivs);
         Method getter = findIvsGetter(ivs);
-        if (setter == null || getter == null) return;
-
+        if (setter == null || getter == null)
+            return;
         for (Object stat : stats) {
             Integer current = readIv(getter, ivs, stat);
-            if (current == null) continue;
+            if (current == null)
+                continue;
+
             int boosted = boostIv(current, multiplier, maxIv);
             try {
                 if (setter.getParameterTypes()[1] == int.class)
@@ -559,15 +573,21 @@ public final class CaptureStreakManager {
         }
     }
 
-    private static void applyIvBoost(Pokemon pokemon, double multiplier, int maxIv) {
+    private static void applyIvBoost(Pokemon pokemon, double multiplier, int maxIv)
+    {
         List<Object> stats = resolveCobblemonStats();
-        if (stats.isEmpty()) return;
+        if (stats.isEmpty())
+            return;
+
         Method setter = findPokemonIvSetter(pokemon);
         Method getter = findPokemonIvGetter(pokemon);
-        if (setter == null || getter == null) return;
+        if (setter == null || getter == null)
+            return;
         for (Object stat : stats) {
             Integer current = readIv(getter, pokemon, stat);
-            if (current == null) continue;
+            if (current == null)
+                continue;
+
             int boosted = boostIv(current, multiplier, maxIv);
             try {
                 setter.invoke(pokemon, stat, boosted);
@@ -575,80 +595,118 @@ public final class CaptureStreakManager {
         }
     }
 
-    private static Integer readIv(Method getter, Object target, Object stat) {
+    private static Integer readIv(Method getter, Object target, Object stat)
+    {
         try {
             Object v = getter.invoke(target, stat);
-            if (v instanceof Integer i) return i;
-            if (v instanceof Number n) return n.intValue();
+
+            if (v instanceof Integer i)
+                return i;
+            if (v instanceof Number n)
+                return n.intValue();
         } catch (Throwable ignored) {}
         return null;
     }
 
-    private static int boostIv(int current, double multiplier, int maxIv) {
+    private static int boostIv(int current, double multiplier, int maxIv)
+    {
         int boosted = (int) Math.ceil(current * multiplier);
-        if (boosted > maxIv) boosted = maxIv;
-        if (boosted < current) boosted = current;
+
+        if (boosted > maxIv)
+            boosted = maxIv;
+        if (boosted < current)
+            boosted = current;
         return boosted;
     }
 
-    private static Method findPokemonIvGetter(Pokemon pokemon) {
+    private static Method findPokemonIvGetter(Pokemon pokemon)
+    {
         for (Method m : pokemon.getClass().getMethods()) {
-            if (!m.getName().equals("getIV")) continue;
-            if (m.getParameterCount() != 1) continue;
+            if (!m.getName().equals("getIV"))
+                continue;
+            if (m.getParameterCount() != 1)
+                continue;
+
             Class<?> rt = m.getReturnType();
-            if (rt != int.class && rt != Integer.class) continue;
+            if (rt != int.class && rt != Integer.class)
+                continue;
             return m;
         }
         return null;
     }
 
-    private static Method findPokemonIvSetter(Pokemon pokemon) {
+    private static Method findPokemonIvSetter(Pokemon pokemon)
+    {
         for (Method m : pokemon.getClass().getMethods()) {
-            if (!m.getName().equals("setIV")) continue;
-            if (m.getParameterCount() != 2) continue;
+            if (!m.getName().equals("setIV"))
+                continue;
+            if (m.getParameterCount() != 2)
+                continue;
+
             Class<?>[] types = m.getParameterTypes();
-            if (types[1] != int.class && types[1] != Integer.class) continue;
+            if (types[1] != int.class && types[1] != Integer.class)
+                continue;
             return m;
         }
         return null;
     }
 
-    private static Method findIvsGetter(Object ivs) {
-        if (ivs == null) return null;
+    private static Method findIvsGetter(Object ivs)
+    {
+        if (ivs == null)
+            return null;
         for (Method m : ivs.getClass().getMethods()) {
-            if (m.getParameterCount() != 1) continue;
+            if (m.getParameterCount() != 1)
+                continue;
+
             Class<?> rt = m.getReturnType();
-            if (rt != int.class && rt != Integer.class) continue;
+            if (rt != int.class && rt != Integer.class)
+                continue;
+
             String name = m.getName().toLowerCase(Locale.ROOT);
-            if (name.contains("get")) return m;
+            if (name.contains("get"))
+                return m;
         }
         return null;
     }
 
-    private static Method findIvsSetter(Object ivs) {
-        if (ivs == null) return null;
+    private static Method findIvsSetter(Object ivs)
+    {
+        if (ivs == null)
+            return null;
         for (Method m : ivs.getClass().getMethods()) {
-            if (m.getParameterCount() != 2) continue;
+            if (m.getParameterCount() != 2)
+                continue;
+
             Class<?>[] types = m.getParameterTypes();
-            if (!(types[1] == int.class || types[1] == Integer.class)) continue;
+            if (!(types[1] == int.class || types[1] == Integer.class))
+                continue;
+
             String name = m.getName().toLowerCase(Locale.ROOT);
-            if (name.contains("set")) return m;
+            if (name.contains("set"))
+                return m;
         }
         return null;
     }
 
-    private static List<Object> resolveStatValues(Class<?> statType) {
-        if (statType == null) return List.of();
+    private static List<Object> resolveStatValues(Class<?> statType)
+    {
+        if (statType == null)
+            return List.of();
+
         Object[] constants = statType.getEnumConstants();
         if (constants != null && constants.length > 0) {
             List<Object> list = new ArrayList<>();
+
             for (Object c : constants) {
-                if (c != null) list.add(c);
+                if (c != null)
+                    list.add(c);
             }
             return list;
         }
         if (statType == String.class) {
             List<Object> list = new ArrayList<>();
+
             list.add("hp");
             list.add("attack");
             list.add("defense");
@@ -660,62 +718,60 @@ public final class CaptureStreakManager {
         return List.of();
     }
 
-    private static List<Object> resolveCobblemonStats() {
+    private static List<Object> resolveCobblemonStats()
+    {
         List<Object> list = new ArrayList<>();
+
         try {
             Class<?> statClass = Class.forName("com.cobblemon.mod.common.api.pokemon.stats.Stat");
             Object[] constants = statClass.getEnumConstants();
-            if (constants != null) {
-                for (Object c : constants) if (c != null) list.add(c);
-            }
-        } catch (Throwable ignored) {
-        }
 
+            if (constants != null) {
+                for (Object c : constants) {
+                    if (c != null)
+                        list.add(c);
+                }
+            }
+        } catch (Throwable ignored) {}
         if (list.isEmpty()) {
             try {
                 Class<?> statsClass = Class.forName("com.cobblemon.mod.common.api.pokemon.stats.Stats");
+
                 for (var field : statsClass.getFields()) {
                     Object v = field.get(null);
-                    if (v != null) list.add(v);
-                }
-            } catch (Throwable ignored) {
-            }
-        }
 
+                    if (v != null)
+                        list.add(v);
+                }
+            } catch (Throwable ignored) {}
+        }
         if (!list.isEmpty()) {
             List<Object> filtered = new ArrayList<>();
+
             for (Object stat : list) {
                 String name = stat.toString().toLowerCase(Locale.ROOT);
-                if (name.contains("hp")
-                    || name.contains("attack")
-                    || name.contains("defense")
-                    || name.contains("special_attack")
-                    || name.contains("special_defense")
-                    || name.contains("speed")) {
+
+                if (name.contains("hp") || name.contains("attack") || name.contains("defense") || name.contains("special_attack") || name.contains("special_defense") || name.contains("speed"))
                     filtered.add(stat);
-                }
             }
             return filtered.isEmpty() ? list : filtered;
         }
         return list;
     }
 
-    private static void trySyncPokemonEntity(PokemonEntity entity) {
-        if (entity == null) return;
-        String[] candidates = {
-            "syncToClients",
-            "syncToTracking",
-            "sendUpdate",
-            "markDirty",
-            "sync"
-        };
+    private static void trySyncPokemonEntity(PokemonEntity entity)
+    {
+        if (entity == null)
+            return;
+
+        String[] candidates = {"syncToClients", "syncToTracking", "sendUpdate", "markDirty", "sync"};
         for (String name : candidates) {
             try {
                 Method m = entity.getClass().getMethod(name);
+
                 m.invoke(entity);
                 return;
-            } catch (Throwable ignored) {
-            }
+            } catch (Throwable ignored) {}
         }
     }
 

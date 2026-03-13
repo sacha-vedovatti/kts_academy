@@ -13,10 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * Cobblemon distributes its own ApricornBlock. In some server stacks, intercepting vanilla
- * interaction layers is unreliable; this mixin guarantees we see the right-click.
- */
 @Mixin(targets = "com.cobblemon.mod.common.block.ApricornBlock")
 public abstract class CobblemonApricornBlockUseMixin
 {

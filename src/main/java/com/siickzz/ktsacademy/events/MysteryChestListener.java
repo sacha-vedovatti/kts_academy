@@ -54,7 +54,6 @@ public final class MysteryChestListener {
             MysteryChestConfig.ChestConfig chest = MysteryChestManager.matchChest(crateId, world.getBlockState(pos));
             if (chest == null)
                 return ActionResult.PASS;
-
             if (!MysteryChestManager.isValidKey(chest, held)) {
                 if (chest.notifyPlayer) {
                     List<ItemStack> preview = MysteryChestManager.previewItems(chest, 54);
@@ -63,16 +62,13 @@ public final class MysteryChestListener {
                 }
                 return ActionResult.SUCCESS;
             }
-
             if (PENDING_ROLLS.containsKey(serverPlayer.getUuid())) {
                 if (chest.notifyPlayer)
-                    serverPlayer.sendMessage(Text.literal("§d§lMystery Box §7» §cTirage deja en cours."), false);
+                    serverPlayer.sendMessage(Text.literal("§d§lMystery Box §7§l» §cTirage deja en cours."), false);
                 return ActionResult.SUCCESS;
             }
-
             if (!serverPlayer.getAbilities().creativeMode)
                 held.decrement(1);
-
             if (chest.notifyPlayer)
                 serverPlayer.sendMessage(Text.literal("§7Tirage en cours..."), true);
 
@@ -109,8 +105,8 @@ public final class MysteryChestListener {
                 updateAnimationSlots(pending);
                 continue;
             }
-
             it.remove();
+
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(entry.getKey());
             if (player == null)
                 continue;
@@ -118,13 +114,15 @@ public final class MysteryChestListener {
             List<MysteryChestManager.Reward> loot = MysteryChestManager.rollLoot(pending.chest);
             if (loot.isEmpty()) {
                 if (pending.chest.notifyPlayer)
-                    player.sendMessage(Text.literal("§d§lMystery Box §7» §cAucun loot configure."), false);
+                    player.sendMessage(Text.literal("§d§lMystery Box §7§l» §cAucun loot configure."), false);
                 continue;
             }
+
             MysteryChestManager.Reward reward = loot.get(0);
             ItemStack rewardStack = reward.stack();
             if (rewardStack == null || rewardStack.isEmpty())
                 continue;
+
             ItemStack display = rewardStack.copy();
             showFinalReward(pending, display);
 
@@ -137,13 +135,12 @@ public final class MysteryChestListener {
                 player.getServer().getCommandManager().executeWithPrefix(player.getServer().getCommandSource(), cmd);
                 givenByCommand = true;
             }
-
             if (!givenByCommand) {
                 if (!player.getInventory().insertStack(rewardStack) && pending.chest.dropOnGroundIfFull && !rewardStack.isEmpty())
                     player.dropItem(rewardStack, false);
             }
             if (pending.chest.notifyPlayer)
-                player.sendMessage(Text.literal("§d§lMystery Box §7» §b" + display.getName().getString() + " §7x" + display.getCount()), false);
+                player.sendMessage(Text.literal("§d§lMystery Box §7§l» §b" + display.getName().getString() + " §7x" + display.getCount()), false);
         }
     }
 
@@ -157,6 +154,7 @@ public final class MysteryChestListener {
             ItemStack next = pending.inventory.getStack(slots[i + 1]);
             pending.inventory.setStack(slots[i], next);
         }
+
         ItemStack random = pending.displayItems.get(pending.random.nextInt(pending.displayItems.size())).copy();
         pending.inventory.setStack(slots[slots.length - 1], random);
     }

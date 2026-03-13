@@ -33,7 +33,8 @@ public abstract class ItemEntityPickupMixin {
 	private Item cobbleEconomy$prePickupItem = null;
 
 	@Inject(method = "onPlayerCollision", at = @At("HEAD"))
-	private void cobbleEconomy$onPlayerCollisionHead(PlayerEntity player, CallbackInfo ci) {
+	private void cobbleEconomy$onPlayerCollisionHead(PlayerEntity player, CallbackInfo ci)
+	{
 		ItemEntity self = (ItemEntity) (Object) this;
 		ItemStack stack = self.getStack();
 		if (stack == null || stack.isEmpty()) {
@@ -48,6 +49,7 @@ public abstract class ItemEntityPickupMixin {
 			cobbleEconomy$prePickupItem = null;
 			return;
 		}
+
 		Identifier id = Registries.ITEM.getId(stack.getItem());
 		cobbleEconomy$prePickupItem = stack.getItem();
 		cobbleEconomy$prePickupItemId = id == null ? null : id.toString();
@@ -55,29 +57,33 @@ public abstract class ItemEntityPickupMixin {
 	}
 
 	@Inject(method = "onPlayerCollision", at = @At("TAIL"))
-	private void cobbleEconomy$onPlayerCollisionTail(PlayerEntity player, CallbackInfo ci) {
-		if (!(player instanceof ServerPlayerEntity serverPlayer)) return;
-		if (cobbleEconomy$preInvCount < 0 || cobbleEconomy$prePickupItemId == null || cobbleEconomy$prePickupItem == null) return;
+	private void cobbleEconomy$onPlayerCollisionTail(PlayerEntity player, CallbackInfo ci)
+	{
+		if (!(player instanceof ServerPlayerEntity serverPlayer))
+			return;
+		if (cobbleEconomy$preInvCount < 0 || cobbleEconomy$prePickupItemId == null || cobbleEconomy$prePickupItem == null)
+			return;
 
 		int afterInv = countItemInInventory(serverPlayer, cobbleEconomy$prePickupItem);
 		int delta = afterInv - cobbleEconomy$preInvCount;
-		if (delta <= 0) return;
+		if (delta <= 0)
+			return;
 
 		String itemId = cobbleEconomy$prePickupItemId;
 		String lower = itemId.toLowerCase(java.util.Locale.ROOT);
 		String path = lower;
 		int idx = lower.indexOf(':');
-		if (idx >= 0 && idx + 1 < lower.length()) {
+		if (idx >= 0 && idx + 1 < lower.length())
 			path = lower.substring(idx + 1);
-		}
 
-		// Count only actual apricorn/noigrume items (all colors), not seeds/saplings.
 		boolean looksLikeApricorn = path.endsWith("apricorn") || path.contains("_apricorn");
-		if (!looksLikeApricorn) return;
-		if (path.contains("seed") || path.contains("sapling")) return;
-		if (HarvestListener.shouldSkipApricornPickup(serverPlayer)) return;
+		if (!looksLikeApricorn)
+			return;
+		if (path.contains("seed") || path.contains("sapling"))
+			return;
+		if (HarvestListener.shouldSkipApricornPickup(serverPlayer))
+			return;
 
-		// Log occasionally so we can confirm the hook is active on the server.
 		long now = System.currentTimeMillis();
 		java.util.UUID uuid = serverPlayer.getUuid();
 		Long last = COBBLE_ECONOMY_LAST_PICKUP_LOG.get(uuid);
@@ -85,20 +91,22 @@ public abstract class ItemEntityPickupMixin {
 			COBBLE_ECONOMY_LAST_PICKUP_LOG.put(uuid, now);
 			COBBLE_ECONOMY_LOGGER.info("[CobbleEconomy] Apricorn pickup detected: player={} item={} amount={}", serverPlayer.getName().getString(), itemId, delta);
 		}
-
-		// Quest progression is credited via the harvest window started on right-click.
-		// We keep this mixin only for occasional logging/diagnostics.
 	}
 
 	@Unique
-	private static int countItemInInventory(ServerPlayerEntity player, Item item) {
-		if (player == null || item == null) return 0;
+	private static int countItemInInventory(ServerPlayerEntity player, Item item)
+	{
+		if (player == null || item == null)
+			return 0;
+
 		int total = 0;
 		var inv = player.getInventory();
 		for (int i = 0; i < inv.size(); i++) {
 			ItemStack st = inv.getStack(i);
-			if (st == null || st.isEmpty()) continue;
-			if (st.getItem() != item) continue;
+			if (st == null || st.isEmpty())
+				continue;
+			if (st.getItem() != item)
+				continue;
 			total += st.getCount();
 		}
 		return total;

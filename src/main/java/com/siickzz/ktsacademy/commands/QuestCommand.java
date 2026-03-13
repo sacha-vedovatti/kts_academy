@@ -36,7 +36,7 @@ public final class QuestCommand {
 
 	private static int reload(CommandContext<ServerCommandSource> ctx) {
 		QuestManager.reload();
-		ctx.getSource().sendFeedback(() -> Text.literal("§aQuêtes: reload OK."), true);
+		ctx.getSource().sendFeedback(() -> Text.literal("§e§lQuêtes §7§l» §areloaded."), true);
 		return 1;
 	}
 }

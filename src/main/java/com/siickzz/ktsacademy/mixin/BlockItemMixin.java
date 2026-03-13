@@ -25,7 +25,6 @@ public class BlockItemMixin {
         String crateId = MysteryChestManager.crateIdFromStack(context.getStack());
         if (crateId == null)
             return;
-
         MysteryChestState.get(serverWorld).set(context.getBlockPos(), crateId);
     }
 }

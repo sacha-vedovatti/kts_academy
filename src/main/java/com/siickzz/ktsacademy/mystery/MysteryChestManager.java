@@ -178,6 +178,7 @@ public final class MysteryChestManager {
             int count = pick.min == pick.max ? pick.min : pick.min + RNG.nextInt(pick.max - pick.min + 1);
             if (count <= 0)
                 continue;
+
             ItemStack stack = pick.baseStack.copy();
             stack.setCount(count);
             applyKeyGlintIfNeeded(stack);
@@ -380,6 +381,7 @@ public final class MysteryChestManager {
     {
         if (cfg == null || cfg.chests == null)
             return Set.of();
+
         Set<String> ids = new HashSet<>();
         for (MysteryChestConfig.ChestConfig chest : cfg.chests) {
             if (chest == null || chest.keyItemId == null || chest.keyItemId.isBlank())
@@ -389,7 +391,8 @@ public final class MysteryChestManager {
         return ids.isEmpty() ? Set.of() : ids;
     }
 
-    private static MysteryChestConfig.DropEntryConfig drop(String itemId, double chance, int min, int max) {
+    private static MysteryChestConfig.DropEntryConfig drop(String itemId, double chance, int min, int max)
+    {
         MysteryChestConfig.DropEntryConfig entry = new MysteryChestConfig.DropEntryConfig();
 
         entry.itemId = itemId;
@@ -419,9 +422,11 @@ public final class MysteryChestManager {
         for (String idStr : blockIds) {
             if (idStr == null || idStr.isBlank())
                 continue;
+
             Identifier id = Identifier.tryParse(idStr.trim());
             if (id == null)
                 continue;
+
             Item item = Registries.ITEM.get(id);
             if (item != Items.AIR)
                 return item;
@@ -435,6 +440,7 @@ public final class MysteryChestManager {
             for (String idStr : blockIds) {
                 if (idStr == null || idStr.isBlank())
                     continue;
+
                 Identifier id = Identifier.tryParse(idStr.trim());
                 if (id == null)
                     continue;
