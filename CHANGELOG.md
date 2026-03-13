@@ -9,13 +9,15 @@
 
 - **[ADD] Mystery Box**: Added 2 new mystery boxes in the spawn. A `Mystery Key` can be obtained in the shop.
 - **[ADD] Capture Streak**: Added a capture streak system that increase shiny, radiant and Pokémon IVs for consecutive captures of the same Pokémon species.
-- **[ADD] Quests** : Added new quests.
+- **[ADD] Quests** : Added new quests: see command `/quests`.
+- **[ADD] Random Teleportation**: Added a random teleportation system that can be used by players to teleport to a random location in the world using `/rtp` or `/randomteleport`.
+- **[ADD] Warp Command**: Added a warp command that can be used by players to teleport to predefined locations in the world using `/warp list` or `/warp tp <name>`.
+
+- **[BUFF] Quests Rewards**: Added new rewards : additive IVs candies.
 
 - **[UPDATE] Client**: [version 2.1.1](https://github.com/sacha-vedovatti/kts_academy/releases) _(this version is not required to play on the server, but it's recommended)_.
     - **[FIX] Crash**: Fixed a crash that occurred when player tried to join the server.
     - **[FIX] Legendaries Textures**: Updated textures for some legendary Pokémon (like Mewtwo or Celebi).
-
-- **[BUFF] Quests Rewards**: Added new rewards : additive IVs candies.
 
 - **[FIX] Home Limit**: Redefined the home limit to 5.
 
