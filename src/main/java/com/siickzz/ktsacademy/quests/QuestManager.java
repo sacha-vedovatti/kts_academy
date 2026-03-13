@@ -218,6 +218,50 @@ public final class QuestManager {
             save();
     }
 
+    public static void onEggHatched(ServerPlayerEntity player, Object pokemon)
+    {
+        init();
+        if (player == null)
+            return;
+
+        String speciesKey = normalizeSpeciesKey(extractSpeciesKey(pokemon));
+        QuestProfile profile = profile(player);
+        boolean changed = false;
+        for (QuestDef quest : QUESTS.values()) {
+            QuestProgress qp = profile.quests.computeIfAbsent(quest.id(), k -> new QuestProgress());
+            if (qp.claimed && !quest.isTiered())
+                continue;
+            if (qp.claimed && quest.isTiered() && qp.tier >= quest.tiers().size() - 1 && qp.claimed)
+                continue;
+
+            int goalNow = effectiveGoal(quest, qp);
+            switch (quest.type()) {
+                case HATCH_EGG_ANY -> {
+                    if (qp.progress < goalNow) {
+                        int before = qp.progress;
+                        qp.progress++;
+                        changed = true;
+                        if (before < goalNow && qp.progress >= goalNow)
+                            onQuestCompleted(player, quest, qp);
+                    }
+                }
+                case HATCH_EGG_SPECIES -> {
+                    String target = normalizeSpeciesKey(quest.target());
+                    if (!target.isBlank() && target.equals(speciesKey) && qp.progress < goalNow) {
+                        int before = qp.progress;
+                        qp.progress = goalNow;
+                        changed = true;
+                        if (before < goalNow)
+                            onQuestCompleted(player, quest, qp);
+                    }
+                }
+                default -> {}
+            }
+        }
+        if (changed)
+            save();
+    }
+
     public static void onBattleWon(ServerPlayerEntity player)
     {
         init();
@@ -703,6 +747,9 @@ public final class QuestManager {
         cfg.quests.add(tieredQuest("fish_pokemon", "POKEMON", "FISH_POKEMON_ANY",
             "minecraft:fishing_rod", null, "Pêcheur", "Pêche des Pokémon.",
             tiers(100,10, 250,25, 500,50, 1000,100, 2500,250, 5000,500)));
+        cfg.quests.add(tieredQuest("hatch_eggs", "POKEMON", "HATCH_EGG_ANY",
+            "daycareplus:pokemon_egg", null, "Eleveur", "Fais éclore des oeufs.",
+            tiers(150,5, 400,15, 800,30, 1500,60, 3000,120, 6000,250)));
         cfg.quests.add(tieredQuest("pokedex", "POKEMON", "POKEDEX_CAUGHT",
             "minecraft:knowledge_book", null, "Pokédex", "Complète ton Pokédex.",
             tiers(500,50, 1200,100, 3000,250, 7000,500, 15000,1000)));

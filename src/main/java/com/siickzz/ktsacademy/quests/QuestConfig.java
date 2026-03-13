@@ -67,6 +67,7 @@ public final class QuestConfig
         /**
          * Type de quête :
          * CAPTURE_ANY, CAPTURE_SPECIES, CAPTURE_SHINY_ANY,
+         * HATCH_EGG_ANY, HATCH_EGG_SPECIES,
          * BATTLE_WIN_ANY, TRADE_ANY, FISH_POKEMON_ANY,
          * SHOP_BUY_ANY, SHOP_SELL_ANY,
          * HARVEST_ITEM, MINE_ORE, POKEDEX_CAUGHT
