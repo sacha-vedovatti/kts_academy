@@ -16,7 +16,6 @@ public record QuestDef(
 		List<QuestTier> tiers
 	) {
 
-	/** Palier simplifié : seulement objectif + récompense. Le titre est déduit du titre de la quête. */
 	public record QuestTier(int goal, double reward) {}
 
 	public boolean isTiered() {
@@ -27,6 +26,8 @@ public record QuestDef(
 		CAPTURE_ANY,
 		CAPTURE_SPECIES,
 		CAPTURE_SHINY_ANY,
+		HATCH_EGG_ANY,
+		HATCH_EGG_SPECIES,
 		BATTLE_WIN_ANY,
 		TRADE_ANY,
 		FISH_POKEMON_ANY,
@@ -36,13 +37,18 @@ public record QuestDef(
 		MINE_ORE,
 		POKEDEX_CAUGHT;
 
-		public static QuestType parse(String raw) {
-			if (raw == null) return CAPTURE_ANY;
+		public static QuestType parse(String raw)
+		{
+			if (raw == null)
+				return CAPTURE_ANY;
+
 			String s = raw.trim().toUpperCase(Locale.ROOT);
 			return switch (s) {
 				case "CAPTURE_SPECIES" -> CAPTURE_SPECIES;
 				case "CAPTURE_ANY" -> CAPTURE_ANY;
 				case "CAPTURE_SHINY_ANY", "CAPTURE_SHINY", "SHINY_CAPTURE_ANY", "SHINY_ANY" -> CAPTURE_SHINY_ANY;
+							case "HATCH_EGG_ANY", "HATCH_ANY", "EGG_HATCH_ANY", "HATCH_EGG" -> HATCH_EGG_ANY;
+							case "HATCH_EGG_SPECIES", "HATCH_SPECIES", "EGG_HATCH_SPECIES" -> HATCH_EGG_SPECIES;
 				case "BATTLE_WIN_ANY" -> BATTLE_WIN_ANY;
 				case "TRADE_ANY" -> TRADE_ANY;
 				case "FISH_POKEMON_ANY", "POKEMON_FISHED_ANY", "POKEFISH_ANY" -> FISH_POKEMON_ANY;

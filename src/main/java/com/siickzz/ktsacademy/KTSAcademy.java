@@ -6,16 +6,21 @@ import com.siickzz.ktsacademy.commands.PokedexCommand;
 import com.siickzz.ktsacademy.commands.QuestCommand;
 import com.siickzz.ktsacademy.commands.ReplyCommand;
 import com.siickzz.ktsacademy.commands.TrashCommand;
+import com.siickzz.ktsacademy.commands.CrateCommand;
 import com.siickzz.ktsacademy.events.PokemonBattleWinListener;
 import com.siickzz.ktsacademy.events.PokemonCaptureListener;
 import com.siickzz.ktsacademy.events.PokemonFishingListener;
+import com.siickzz.ktsacademy.events.PokemonEggHatchListener;
 import com.siickzz.ktsacademy.events.PokemonTradeListener;
 import com.siickzz.ktsacademy.events.HarvestListener;
 import com.siickzz.ktsacademy.events.PokedexMilestoneListener;
 import com.siickzz.ktsacademy.events.OreMineListener;
+import com.siickzz.ktsacademy.events.PokemonSpawnBoostListener;
+import com.siickzz.ktsacademy.events.MysteryChestListener;
 import com.siickzz.ktsacademy.motd.MotdListener;
 import com.siickzz.ktsacademy.messages.PrivateMsgManager;
 import com.siickzz.ktsacademy.quests.QuestManager;
+import com.siickzz.ktsacademy.mystery.MysteryChestManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -29,17 +34,26 @@ public class KTSAcademy implements ModInitializer {
         MotdListener.register();
         PokemonBattleWinListener.register();
         PokemonCaptureListener.register();
+        PokemonSpawnBoostListener.register();
         PokemonFishingListener.register();
+        PokemonEggHatchListener.register();
         PokemonTradeListener.register();
         HarvestListener.register();
         PokedexMilestoneListener.register();
         OreMineListener.register();
+        MysteryChestListener.register();
         PokeBoardCommand.register();
         PokedexCommand.register();
         QuestCommand.register();
         TrashCommand.register();
-        MsgCommand.register();
-        ReplyCommand.register();
+        //MsgCommand.register();
+        //ReplyCommand.register();
+        CrateCommand.register();
+
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+                MysteryChestManager.setRegistryLookup(server.getRegistryManager());
+                //MsgCommand.wrapExistingCommands(server.getCommandManager().getDispatcher());
+        });
 
         /* Shop commands disabled. */
 //      ShopCommand.register();

@@ -14,8 +14,7 @@ import static net.minecraft.server.command.CommandManager.argument;
 
 public final class EconomyAdminCommand
 {
-	private EconomyAdminCommand()
-	{}
+	private EconomyAdminCommand() {}
 
 	public static void register()
 	{
@@ -47,14 +46,14 @@ public final class EconomyAdminCommand
 		ShopRegistry.reload();
 		EconomyManager.reload();
 		QuestManager.reload();
-		ctx.getSource().sendFeedback(() -> Text.literal("§aEconomy: reload OK (shop + accounts + quests)."), true);
+		ctx.getSource().sendFeedback(() -> Text.literal("§d§lKTS Academy §7» §aReloaded."), true);
 		return 1;
 	}
 
 	private static int resetAllQuests(CommandContext<ServerCommandSource> ctx)
 	{
 		QuestManager.resetAllProgress();
-		ctx.getSource().sendFeedback(() -> Text.literal("§eQuêtes: progression reset pour tous les joueurs."), true);
+		ctx.getSource().sendFeedback(() -> Text.literal("§e§lQuests §7» §aProgression reset pour tous les joueurs."), true);
 		return 1;
 	}
 
@@ -64,10 +63,10 @@ public final class EconomyAdminCommand
 			var player = EntityArgumentType.getPlayer(ctx, "player");
 
 			QuestManager.resetProgress(player.getUuid());
-			ctx.getSource().sendFeedback(() -> Text.literal("§eQuêtes: progression reset pour " + player.getName().getString() + "."), true);
+			ctx.getSource().sendFeedback(() -> Text.literal("§e§lQuests §7§l» §aProgression reset pour §b" + player.getName().getString()), true);
 			return 1;
 		} catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) {
-			ctx.getSource().sendError(Text.literal("§cJoueur introuvable."));
+			ctx.getSource().sendError(Text.literal("§e§lQuests §7§l» §cJoueur introuvable."));
 			return 0;
 		}
 	}
@@ -75,7 +74,7 @@ public final class EconomyAdminCommand
 	private static int resetQuestConfig(CommandContext<ServerCommandSource> ctx)
 	{
 		QuestManager.resetConfigToDefaults();
-		ctx.getSource().sendFeedback(() -> Text.literal("§eQuêtes: config quests.json régénérée (défauts)."), true);
+		ctx.getSource().sendFeedback(() -> Text.literal("§e§lQuests §7§l» §aConfig '§7quests.json§a' reseted by default."), true);
 		return 1;
 	}
 }

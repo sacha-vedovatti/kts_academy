@@ -28,10 +28,10 @@ import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 public final class ShopCommand {
-    private ShopCommand() {
-    }
+    private ShopCommand() {}
 
-    public static void register() {
+    public static void register()
+    {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(literal("balance").executes(ShopCommand::balance));
             dispatcher.register(
@@ -80,48 +80,51 @@ public final class ShopCommand {
         });
     }
 
-    private static int balance(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
+    private static int balance(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException
+    {
         ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
         double bal = EconomyManager.get(player).getBalance();
-        player.sendMessage(Text.literal("§6💰 Balance: §e" + formatMoney(bal) + " ₽"), false);
+
+        player.sendMessage(Text.literal("§e§lKTS Economy §7§l» §6" + formatMoney(bal) + " ₽"), false);
         return 1;
     }
 
-    private static int moneySetOther(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
+    private static int moneySetOther(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException
+    {
         ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
         double amount = DoubleArgumentType.getDouble(ctx, "amount");
         EconomyManager.get(target).setBalance(amount);
         EconomyManager.save();
 
         ctx.getSource().sendFeedback(
-            () -> Text.literal("§aMoney set: §f" + target.getName().getString() + " §7= §e" + formatMoney(amount) + " ₽"),
+            () -> Text.literal("§e§lKTS Economy §7§l» §f" + target.getName().getString() + " §abalance is now §e" + formatMoney(amount) + " ₽"),
             true
         );
-        target.sendMessage(Text.literal("§aTon argent a été défini à §e" + formatMoney(amount) + " ₽"), false);
+        target.sendMessage(Text.literal("§e§lKTS Economy §7§l» §aYour balance has changed : §e" + formatMoney(amount) + " ₽"), false);
         return 1;
     }
 
-    private static int moneyAddOther(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
+    private static int moneyAddOther(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException
+    {
         ServerPlayerEntity target = EntityArgumentType.getPlayer(ctx, "player");
         double amount = DoubleArgumentType.getDouble(ctx, "amount");
         EconomyManager.get(target).add(amount);
         EconomyManager.save();
 
         double newBal = EconomyManager.get(target).getBalance();
-        ctx.getSource().sendFeedback(
-            () -> Text.literal("§aMoney add: §f" + target.getName().getString() + " §7+ §e" + formatMoney(amount) + " ₽ §7(= §e" + formatMoney(newBal) + " ₽§7)"),
-            true
-        );
-        target.sendMessage(Text.literal("§a+" + formatMoney(amount) + " ₽ §7(Nouveau solde: §e" + formatMoney(newBal) + " ₽§7)"), false);
+        ctx.getSource().sendFeedback(() -> Text.literal("§e§lKTS Economy §7§l» §e" + formatMoney(amount) + " ₽ §ahas been added to §b" + target.getName().getString() + " §abalance."), true);
+        target.sendMessage(Text.literal("§e§lKTS Economy §7§l» §e" + formatMoney(amount) + " §ahas been added to your balance."), false);
         return 1;
     }
 
-    private static int moneySetSelf(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
+    private static int moneySetSelf(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException
+    {
         ServerPlayerEntity self = ctx.getSource().getPlayerOrThrow();
         double amount = DoubleArgumentType.getDouble(ctx, "amount");
+
         EconomyManager.get(self).setBalance(amount);
         EconomyManager.save();
-        self.sendMessage(Text.literal("§aTon argent a été défini à §e" + formatMoney(amount) + " ₽"), false);
+        self.sendMessage(Text.literal("§e§lKTS Economy §7§l» §aYou defined your balance: §e" + formatMoney(amount) + " ₽"), false);
         return 1;
     }
 
@@ -130,23 +133,26 @@ public final class ShopCommand {
         double amount = DoubleArgumentType.getDouble(ctx, "amount");
         EconomyManager.get(self).add(amount);
         EconomyManager.save();
+
         double newBal = EconomyManager.get(self).getBalance();
-        self.sendMessage(Text.literal("§a+" + formatMoney(amount) + " ₽ §7(Nouveau solde: §e" + formatMoney(newBal) + " ₽§7)"), false);
+        self.sendMessage(Text.literal("§e§lKTS Economy §7§l» §e" + formatMoney(amount) + " ₽ §aadded to your balance."), false);
         return 1;
     }
 
-    private static int list(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
+    private static int list(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException
+    {
         ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+
         if (ShopRegistry.allItemsSorted().isEmpty()) {
-            player.sendMessage(Text.literal("§cShop désactivé: configuration manquante ou vide."), false);
+            player.sendMessage(Text.literal("§e§lKTS Economy §7§l» §cShop disabled: configuration file is missing."), false);
             return 0;
         }
         player.sendMessage(Text.literal("§a--- Shop ---"), false);
         java.util.HashSet<String> seen = new java.util.HashSet<>();
         for (ShopItem item : ShopRegistry.allItemsSorted()) {
-            if (!seen.add(item.displayName().toLowerCase(java.util.Locale.ROOT))) {
+            if (!seen.add(item.displayName().toLowerCase(java.util.Locale.ROOT)))
                 continue;
-            }
+
             String suffix = item.amount() > 1 ? " §8(x" + item.amount() + ")" : "";
             player.sendMessage(Text.literal("§7- §b" + item.displayName() + suffix + "§7 : §e" + formatMoney(item.buyPrice()) + " ₽"), false);
         }
@@ -155,39 +161,42 @@ public final class ShopCommand {
         return 1;
     }
 
-    private static int open(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
+    private static int open(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException
+    {
         ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+
         if (ShopRegistry.allItemsSorted().isEmpty()) {
-            player.sendMessage(Text.literal("§cShop désactivé: configuration manquante ou vide."), false);
+            player.sendMessage(Text.literal("§e§lKTS Economy §7§l» §cShop disabled: wrong configuration file."), false);
             return 0;
         }
         ShopGui.openShop(player);
         return 1;
     }
 
-    private static int buy(CommandContext<ServerCommandSource> ctx, int amount) throws CommandSyntaxException {
+    private static int buy(CommandContext<ServerCommandSource> ctx, int amount) throws CommandSyntaxException
+    {
         ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
         if (ShopRegistry.allItemsSorted().isEmpty()) {
-            player.sendMessage(Text.literal("§cShop désactivé: configuration manquante ou vide."), false);
+            player.sendMessage(Text.literal("§e§lKTS Economy §7§l» §cShop disabled: wrong configuration file."), false);
             return 0;
         }
+
         String key = StringArgumentType.getString(ctx, "item");
         ShopItem shopItem = ShopRegistry.get(key);
         if (shopItem == null) {
-            player.sendMessage(Text.literal("§cItem inconnu: §f" + key), false);
+            player.sendMessage(Text.literal("§e§lKTS Economy §7§l» §cUnknown item: §f" + key), false);
             return 0;
         }
 
         double total = shopItem.buyPrice() * amount;
         var account = EconomyManager.get(player);
         if (!account.remove(total)) {
-            player.sendMessage(Text.literal("§cFonds insuffisants. Coût: §e" + formatMoney(total) + " ₽"), false);
+            player.sendMessage(Text.literal("§e§lKTS Economy §7§l» §cMissing funds. §e" + formatMoney(total) + " ₽"), false);
             return 0;
         }
 
         int perUnit = Math.max(1, shopItem.amount());
         int totalGive = amount * perUnit;
-
         if (shopItem.giveCommand() != null && !shopItem.giveCommand().isBlank()) {
             String cmd = shopItem.giveCommand()
                 .replace("{player}", player.getName().getString())
@@ -199,21 +208,20 @@ public final class ShopCommand {
                 int stackSize = Math.min(64, remaining);
                 ItemStack stack = new ItemStack(shopItem.item(), stackSize);
                 boolean inserted = player.getInventory().insertStack(stack);
-                if (!inserted && !stack.isEmpty()) {
+
+                if (!inserted && !stack.isEmpty())
                     player.dropItem(stack, false);
-                }
                 remaining -= stackSize;
             }
         }
-
-        player.sendMessage(Text.literal("§aAchat réussi: §f" + key + " x" + totalGive + " §7(-" + formatMoney(total) + " ₽)"), false);
+        player.sendMessage(Text.literal("§e§lKTS Economy §7§l» §aSuccessful pruchase!"), false);
         return 1;
     }
 
-    private static String formatMoney(double value) {
-        if (value == (long) value) {
+    private static String formatMoney(double value)
+    {
+        if (value == (long) value)
             return Long.toString((long) value);
-        }
         return String.format(java.util.Locale.ROOT, "%.2f", value);
     }
 }

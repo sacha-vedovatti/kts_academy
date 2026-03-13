@@ -20,20 +20,29 @@ import java.util.Locale;
 @Mixin(ServerPlayerInteractionManager.class)
 public abstract class ServerPlayerInteractionManagerApricornMixin {
 	@Inject(method = "interactBlock", at = @At("HEAD"))
-	private void cobbleEconomy$beforeInteractBlock(ServerPlayerEntity player, World world, ItemStack stack, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<?> cir) {
-		if (world == null || world.isClient) return;
-		if (player == null || hitResult == null) return;
+	private void cobbleEconomy$beforeInteractBlock(ServerPlayerEntity player, World world, ItemStack stack, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<?> cir)
+	{
+		if (world == null || world.isClient)
+			return;
+		if (player == null || hitResult == null)
+			return;
 
 		BlockState state = world.getBlockState(hitResult.getBlockPos());
-		if (!looksLikeApricornBlock(state)) return;
+		if (!looksLikeApricornBlock(state))
+			return;
 		HarvestListener.onApricornBlockInteracted(player);
 	}
 
 	@Unique
-	private static boolean looksLikeApricornBlock(BlockState state) {
-		if (state == null) return false;
+	private static boolean looksLikeApricornBlock(BlockState state)
+	{
+		if (state == null)
+			return false;
+
 		Identifier id = Registries.BLOCK.getId(state.getBlock());
-		if (id == null) return false;
+		if (id == null)
+			return false;
+
 		String path = id.getPath().toLowerCase(Locale.ROOT);
 		return path.contains("apricorn") || path.contains("noigrume");
 	}

@@ -47,14 +47,12 @@ public final class HarvestListener {
 		try {
 			Class<?> holder = Class.forName(eventHolderClassName);
 			Object event = getStaticMember(holder, eventFieldName);
-
 			if (event == null) {
 				LOGGER.warn("[CobbleEconomy] Cobblemon event field not found: {}.{}", eventHolderClassName, eventFieldName);
 				return false;
 			}
 
 			boolean ok = trySubscribe(event);
-	
 			if (ok)
 				LOGGER.warn("[CobbleEconomy] Hooked Cobblemon event {}.{} via {}", eventHolderClassName, eventFieldName, event.getClass().getName());
 			return ok;
@@ -74,7 +72,6 @@ public final class HarvestListener {
 
 		Method[] methods = event.getClass().getMethods();
 		String[] nameHints = {"subscribe", "register", "listen", "add"};
-
 		for (String hint : nameHints) {
 			for (Method method : methods) {
 				if (!method.getName().equals(hint))
@@ -123,32 +120,28 @@ public final class HarvestListener {
 		try {
 			Field field = holder.getField(name);
 			return field.get(null);
-		} catch (Throwable ignored) {
-		}
+		} catch (Throwable ignored) {}
 		try {
 			Field field = holder.getDeclaredField(name);
 			field.setAccessible(true);
 			return field.get(null);
-		} catch (Throwable ignored) {
-		}
+		} catch (Throwable ignored) {}
 
 		String getter = "get" + name;
 		try {
 			Method method = holder.getMethod(getter);
+
 			return method.invoke(null);
-		} catch (Throwable ignored) {
-		}
+		} catch (Throwable ignored) {}
 		try {
 			Method method = holder.getDeclaredMethod(getter);
+
 			method.setAccessible(true);
 			return method.invoke(null);
-		} catch (Throwable ignored) {
-		}
-
+		} catch (Throwable ignored) {}
 		return null;
 	}
 
-	// Kept for backwards compatibility with older builds; superseded by trySubscribe().
 	@SuppressWarnings("unused")
 	private static Method findRegisterMethod(Object event) throws NoSuchMethodException
 	{
@@ -158,8 +151,10 @@ public final class HarvestListener {
 	private static final class ApricornHarvestHandler implements InvocationHandler
 	{
 		@Override
-		public Object invoke(Object proxy, Method method, Object[] args) {
+		public Object invoke(Object proxy, Method method, Object[] args)
+		{
 			Object event = (args == null || args.length == 0) ? null : args[0];
+
 			try {
 				if (!LOGGED_APRICORN_EVENT_RECEIVED && event != null) {
 					LOGGED_APRICORN_EVENT_RECEIVED = true;
@@ -167,15 +162,12 @@ public final class HarvestListener {
 				}
 
 				Object playerObj = callNoArg(event, "getPlayer");
-
 				if (playerObj instanceof ServerPlayerEntity player) {
 					String itemId = resolveApricornItemId(event);
-					if (itemId == null || itemId.isBlank()) {
+					if (itemId == null || itemId.isBlank())
 						itemId = "apricorn";
-					}
-
 					QuestManager.onHarvested(player, itemId, 1);
-					// Rate-limited log so we can confirm it fires on the server.
+
 					long now = System.currentTimeMillis();
 					UUID id = player.getUuid();
 					Long last = LAST_APRICORN_EVENT_LOG_MS.get(id);
@@ -188,7 +180,8 @@ public final class HarvestListener {
 			return defaultReturn(method);
 		}
 
-		private static String resolveApricornItemId(Object event) {
+		private static String resolveApricornItemId(Object event)
+		{
 			Object apricorn = callNoArg(event, "getApricorn");
 			Object itemObj = firstNonNull(
 				callNoArg(apricorn, "item"),
@@ -201,36 +194,53 @@ public final class HarvestListener {
 			return "apricorn";
 		}
 
-		private static Object defaultReturn(Method method) {
+		private static Object defaultReturn(Method method)
+		{
 			Class<?> rt = method.getReturnType();
-			if (rt == boolean.class) return false;
-			if (rt == byte.class) return (byte) 0;
-			if (rt == short.class) return (short) 0;
-			if (rt == int.class) return 0;
-			if (rt == long.class) return 0L;
-			if (rt == float.class) return 0f;
-			if (rt == double.class) return 0d;
-			if (rt == char.class) return (char) 0;
+
+			if (rt == boolean.class)
+				return false;
+			if (rt == byte.class)
+				return (byte) 0;
+			if (rt == short.class)
+				return (short) 0;
+			if (rt == int.class)
+				return 0;
+			if (rt == long.class)
+				return 0L;
+			if (rt == float.class)
+				return 0f;
+			if (rt == double.class)
+				return 0d;
+			if (rt == char.class)
+				return (char) 0;
 			try {
 				Class<?> unit = Class.forName("kotlin.Unit");
+
 				if (rt == unit || rt == Object.class) {
 					Field f = unit.getField("INSTANCE");
 					return f.get(null);
 				}
-			} catch (Throwable ignored) {
-			}
+			} catch (Throwable ignored) {}
 			return null;
 		}
 	}
 
-	private static Object firstNonNull(Object... values) {
-		if (values == null) return null;
-		for (Object v : values) if (v != null) return v;
+	private static Object firstNonNull(Object... values)
+	{
+		if (values == null)
+			return null;
+		for (Object v : values) {
+			if (v != null)
+				return v;
+		}
 		return null;
 	}
 
-	private static Object callNoArg(Object target, String methodName) {
-		if (target == null) return null;
+	private static Object callNoArg(Object target, String methodName)
+	{
+		if (target == null)
+			return null;
 		try {
 			Method method = target.getClass().getMethod(methodName);
 			return method.invoke(target);
@@ -239,16 +249,12 @@ public final class HarvestListener {
 		}
 	}
 
-	// Compatibility helpers (older builds/mixins may still reference these).
-	public static void onApricornBlockInteracted(ServerPlayerEntity player) {
-		// No-op: we now count only via Cobblemon APRICORN_HARVESTED.
-	}
+	public static void onApricornBlockInteracted(ServerPlayerEntity player) {}
 
-	public static void onApricornPickedUp(ServerPlayerEntity player, String itemId, int amount) {
-		// No-op: we now count only via Cobblemon APRICORN_HARVESTED.
-	}
+	public static void onApricornPickedUp(ServerPlayerEntity player, String itemId, int amount) {}
 
-	public static boolean shouldSkipApricornPickup(ServerPlayerEntity player) {
+	public static boolean shouldSkipApricornPickup(ServerPlayerEntity player)
+	{
 		return false;
 	}
 

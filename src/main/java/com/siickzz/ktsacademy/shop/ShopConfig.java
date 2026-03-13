@@ -44,7 +44,7 @@ public final class ShopConfig {
 		/**
 		 * Optional server command template to give the item.
 		 * Supports placeholders: {player} and {count}.
-		 * Example: "give {player} academy:booster_pack[academy:pack=\"base\"] {count}"
+		 * Example: "give {player} academy:booster_pack[academy:booster_pack=\"base\"] {count}"
 		 */
 		public String giveCommand;
 		public double buyPrice;

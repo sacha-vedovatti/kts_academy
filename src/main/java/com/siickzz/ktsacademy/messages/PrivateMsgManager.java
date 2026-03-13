@@ -15,6 +15,12 @@ public final class PrivateMsgManager {
         lastConversation.put(from, to);
     }
 
+    public static void recordConversation(UUID playerA, UUID playerB)
+    {
+        setLastConversation(playerA, playerB);
+        setLastConversation(playerB, playerA);
+    }
+
     public static UUID getLastConversation(UUID player)
     {
         return lastConversation.get(player);

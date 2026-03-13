@@ -5,8 +5,7 @@ public final class QuestProgress {
 	public boolean claimed;
 	public int tier;
 
-	public QuestProgress() {
-	}
+	public QuestProgress() {}
 
 	public QuestProgress(int progress, boolean claimed) {
 		this.progress = Math.max(0, progress);
