@@ -1,12 +1,21 @@
 {
   "lines": [
     {
-      "text":"                KTS Academy",
-      "font":"small_caps",
-      "bold":true,
+      "text": "                KTS Academy",
+      "font": "small_caps",
+      "bold": true,
       "gradient": {
-        "from":"#F573BA",
-        "to":"#929CF6"
+        "from": "#F573BA",
+        "to": "#929CF6"
+      }
+    },
+    {
+      "text": "                   Join Us!",
+      "font": "small_caps",
+      "bold": true,
+      "gradiant": {
+        "from": "#F573BA",
+        "to": "#929CF6"
       }
     }
   ]

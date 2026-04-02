@@ -19,13 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class MotdManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger("KTSAcademy-MOTD");
+    private static final Logger LOGGER = LoggerFactory.getLogger("KTS");
     private static final Gson GSON = new Gson();
 
-    private static Path getConfigPath()
-    {
-        return FabricLoader.getInstance().getConfigDir().resolve("ktsacademy").resolve("motd.json");
-    }
+    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("ktsacademy").resolve("motd.json");
 
     private static final String SMALL_CAPS = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ";
     private static final int FULLWIDTH_UPPER_OFFSET = 'Ａ' - 'A';
@@ -35,21 +32,19 @@ public final class MotdManager {
 
     public static MotdConfig load()
     {
-        Path configPath = getConfigPath();
-
-        if (!Files.exists(configPath))
+        if (!Files.exists(CONFIG_PATH))
             createDefault();
-        try (Reader r = Files.newBufferedReader(configPath)) {
+        try (Reader r = Files.newBufferedReader(CONFIG_PATH)) {
             MotdConfig cfg = GSON.fromJson(r, MotdConfig.class);
 
             if (cfg == null || cfg.lines == null || cfg.lines.isEmpty()) {
-                LOGGER.warn("[KTS Academy] motd.json empty or not valid.");
+                LOGGER.warn("[Server] wrong motd.json file: empty or not valid.");
                 return defaultConfig();
             }
-            LOGGER.info("[KTS Academy] MOTD configuration loaded in {}", configPath);
+            LOGGER.info("[Server] MOTd configuration loaded in {}", CONFIG_PATH);
             return cfg;
         } catch (IOException e) {
-            LOGGER.error("[KTS Academy] cannot read MOTD config file : {}", e.getMessage());
+            LOGGER.error("[Server] cannot read MOTD config file: {}", e.getMessage());
             return defaultConfig();
         }
     }
@@ -237,31 +232,25 @@ public final class MotdManager {
         l1.font = "small_caps";
 
         MotdConfig.GradientConfig g = new MotdConfig.GradientConfig();
-        g.from = "#FFD700"; g.to = "#FF4500";
+        g.from = "#FFD700";
+        g.to = "#FF4500";
         l1.gradient = g;
         cfg.lines.add(l1);
-
-        MotdConfig.LineConfig l2 = new MotdConfig.LineConfig();
-        l2.text = "§7Serveur Cobblemon §f• §aBienvenue !";
-        l2.font = "normal";
-        cfg.lines.add(l2);
         return cfg;
     }
 
     private static void createDefault()
     {
-        Path configPath = getConfigPath();
-
         try {
-            Files.createDirectories(configPath.getParent());
+            Files.createDirectories(CONFIG_PATH.getParent());
             MotdConfig def = defaultConfig();
 
-            try (Writer w = Files.newBufferedWriter(configPath)) {
+            try (Writer w = Files.newBufferedWriter(CONFIG_PATH)) {
                 new Gson().toJson(def, w);
             }
-            LOGGER.info("[MOTD] Fichier motd.json créé avec la config par défaut.");
+            LOGGER.info("[Server] MOTd configuration file created.");
         } catch (IOException e) {
-            LOGGER.error("[MOTD] Impossible de créer motd.json : {}", e.getMessage());
+            LOGGER.error("[Server] Cannot create MOTd configuration file: {}", e.getMessage());
         }
     }
 }
